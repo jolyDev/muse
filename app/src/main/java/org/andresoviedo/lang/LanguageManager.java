@@ -26,6 +26,9 @@ public class LanguageManager {
         data.put(Tokens.language, InitUIText(Tokens.language, "Мова", "Язык"));
         data.put(Tokens.settings, InitUIText(Tokens.settings, "Мова", "Язык"));
         data.put(Tokens.loading, InitUIText(Tokens.loading, "Завантаження", "Загрузка"));
+        data.put(Tokens.english, InitUIText(Tokens.english, "Англійська", "Английский"));
+        data.put(Tokens.ukrainian, InitUIText(Tokens.ukrainian, "Українська", "Украинский"));
+        data.put(Tokens.russian, InitUIText(Tokens.russian, "Російська", "Русский"));
     }
 
     private Map<String, UIText> data = new HashMap<String, UIText>();

@@ -43,14 +43,14 @@ public class MenuActivity extends ListActivity {
 
 
     private enum Action {
-        LOAD_MODEL, LANGUAGE, GITHUB, SETTINGS, HELP, ABOUT, EXIT, UNKNOWN, DEMO
+        LOAD_MODEL, LANGUAGES, GITHUB, SETTINGS, HELP, ABOUT, EXIT, UNKNOWN, DEMO
     }
 
     /**
      * Load file user data
      */
     private Map<String, Object> loadModelParameters = new HashMap<>();
-    private LanguageManager lang;
+    private LanguageManager lang = new LanguageManager();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,8 +85,9 @@ public class MenuActivity extends ListActivity {
                 case LOAD_MODEL:
                     loadModel();
                     break;
-                case LANGUAGE:
+                case LANGUAGES:
                     LanguageSettings();
+                    break;
                 case ABOUT:
                     Intent aboutIntent = new Intent(MenuActivity.this.getApplicationContext(), TextActivity.class);
                     aboutIntent.putExtra("title", selectedItem);
@@ -137,7 +138,7 @@ public class MenuActivity extends ListActivity {
                 new String[]{
                         lang.Get(Tokens.english),
                         lang.Get(Tokens.ukrainian),
-                        lang.Get(Tokens.russioan)},
+                        lang.Get(Tokens.russian)},
                         (dialog, which) ->
                         {
                             switch(which) {

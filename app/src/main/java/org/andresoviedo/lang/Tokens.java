@@ -8,5 +8,5 @@ public class Tokens
     static public final String loading = "Loading...";
     static public final String english = "English";
     static public final String ukrainian = "Ukrainian";
-    static public final String russioan = "russioan";
+    static public final String russian = "Russian";
 }
