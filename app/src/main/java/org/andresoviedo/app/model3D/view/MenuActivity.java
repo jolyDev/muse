@@ -17,6 +17,8 @@ import android.widget.Toast;
 
 import org.andresoviedo.android_3d_model_engine.services.wavefront.WavefrontLoader;
 import org.andresoviedo.dddmodel2.R;
+import org.andresoviedo.lang.LanguageManager;
+import org.andresoviedo.lang.Tokens;
 import org.andresoviedo.util.android.AndroidUtils;
 import org.andresoviedo.util.android.AssetUtils;
 import org.andresoviedo.util.android.ContentUtils;
@@ -41,13 +43,14 @@ public class MenuActivity extends ListActivity {
 
 
     private enum Action {
-        LOAD_MODEL, GITHUB, SETTINGS, HELP, ABOUT, EXIT, UNKNOWN, DEMO
+        LOAD_MODEL, LANGUAGE, GITHUB, SETTINGS, HELP, ABOUT, EXIT, UNKNOWN, DEMO
     }
 
     /**
      * Load file user data
      */
     private Map<String, Object> loadModelParameters = new HashMap<>();
+    private LanguageManager lang;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +85,8 @@ public class MenuActivity extends ListActivity {
                 case LOAD_MODEL:
                     loadModel();
                     break;
+                case LANGUAGE:
+                    LanguageSettings();
                 case ABOUT:
                     Intent aboutIntent = new Intent(MenuActivity.this.getApplicationContext(), TextActivity.class);
                     aboutIntent.putExtra("title", selectedItem);
@@ -124,6 +129,29 @@ public class MenuActivity extends ListActivity {
             }
         });
 
+    }
+
+    private void LanguageSettings()
+    {
+        ContentUtils.showListDialog(this, lang.Get(Tokens.language),
+                new String[]{
+                        lang.Get(Tokens.english),
+                        lang.Get(Tokens.ukrainian),
+                        lang.Get(Tokens.russioan)},
+                        (dialog, which) ->
+                        {
+                            switch(which) {
+                                case 0:
+                                    lang.code = LanguageManager.ELangCode.ENG;
+                                    break;
+                                case 1:
+                                    lang.code = LanguageManager.ELangCode.UA;
+                                    break;
+                                case 2:
+                                    lang.code = LanguageManager.ELangCode.RUS;
+                                    break;
+                            }
+                        });
     }
 
     private void loadModelFromAssets() {
