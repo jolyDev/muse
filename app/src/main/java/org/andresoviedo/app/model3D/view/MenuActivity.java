@@ -43,7 +43,7 @@ public class MenuActivity extends ListActivity {
 
 
     private enum Action {
-        LOAD_MODEL, LANGUAGES, GITHUB, SETTINGS, HELP, ABOUT, EXIT, UNKNOWN, DEMO
+        LOAD_MODEL, LANGUAGE, GITHUB, SETTINGS, HELP, ABOUT, EXIT, UNKNOWN, DEMO
     }
 
     /**
@@ -52,68 +52,53 @@ public class MenuActivity extends ListActivity {
     private Map<String, Object> loadModelParameters = new HashMap<>();
     private LanguageManager lang = new LanguageManager();
 
+    private void _UpdateMenuItems()
+    {
+        setListAdapter(new ArrayAdapter<>(this, R.layout.activity_menu_item,
+                new String[]{
+                        lang.Get(Tokens.load),
+                        lang.Get(Tokens.language),
+                        lang.Get(Tokens.help),
+                        lang.Get(Tokens.about),
+                        lang.Get(Tokens.exit)
+                }));
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-        setListAdapter(new ArrayAdapter<>(this, R.layout.activity_menu_item,
-                getResources().getStringArray(R.array.menu_items)));
+        _UpdateMenuItems();
     }
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        String selectedItem = (String) getListView().getItemAtPosition(position);
-        // Toast.makeText(getApplicationContext(), "Click ListItem '" + selectedItem + "'", Toast.LENGTH_LONG).show();
-        String selectedAction = selectedItem.replace(' ', '_').toUpperCase(Locale.getDefault());
-        Action action = Action.UNKNOWN;
         try {
-            action = Action.valueOf(selectedAction);
-        } catch (IllegalArgumentException ex) {
-            Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
-        }
-        try {
-            switch (action) {
-                case DEMO:
-                    Intent demoIntent = new Intent(MenuActivity.this.getApplicationContext(), ModelActivity.class);
-                    demoIntent.putExtra("immersiveMode", "true");
-                    demoIntent.putExtra("backgroundColor", "0 0 0 1");
-                    MenuActivity.this.startActivity(demoIntent);
-                    break;
-                case GITHUB:
-                    AndroidUtils.openUrl(this, "https://github.com/andresoviedo/android-3D-model-viewer");
-                    break;
-                case LOAD_MODEL:
-                    loadModel();
-                    break;
-                case LANGUAGES:
-                    LanguageSettings();
-                    break;
-                case ABOUT:
-                    Intent aboutIntent = new Intent(MenuActivity.this.getApplicationContext(), TextActivity.class);
-                    aboutIntent.putExtra("title", selectedItem);
-                    aboutIntent.putExtra("text", getResources().getString(R.string.about_text));
-                    MenuActivity.this.startActivity(aboutIntent);
-                    break;
-                case HELP:
-                    Intent helpIntent = new Intent(MenuActivity.this.getApplicationContext(), TextActivity.class);
-                    helpIntent.putExtra("title", selectedItem);
-                    helpIntent.putExtra("text", getResources().getString(R.string.help_text));
-                    MenuActivity.this.startActivity(helpIntent);
-                    break;
-                case SETTINGS:
-                    break;
-                case EXIT:
-                    MenuActivity.this.finish();
-                    break;
-                case UNKNOWN:
-                    Toast.makeText(getApplicationContext(), "Unrecognized action '" + selectedAction + "'",
-                            Toast.LENGTH_LONG).show();
-                    break;
-            }
-        } catch (Exception ex) {
-            Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
-        }
+            String option = (String) getListView().getItemAtPosition(position);
 
+            if (option == lang.Get(Tokens.load))
+                    loadModel();
+            else if (option == lang.Get(Tokens.language))
+                    LanguageSettings();
+            else if (option == lang.Get(Tokens.about))
+            {
+                Intent aboutIntent = new Intent(MenuActivity.this.getApplicationContext(), TextActivity.class);
+                aboutIntent.putExtra("title", lang.Get(Tokens.about));
+                aboutIntent.putExtra("text", getResources().getString(R.string.about_text));
+                MenuActivity.this.startActivity(aboutIntent);
+            }
+            else if (option == lang.Get(Tokens.help)) {
+                Intent helpIntent = new Intent(MenuActivity.this.getApplicationContext(), TextActivity.class);
+                helpIntent.putExtra("title", lang.Get(Tokens.help));
+                helpIntent.putExtra("text", getResources().getString(R.string.help_text));
+                MenuActivity.this.startActivity(helpIntent);
+            }
+            else if (option == lang.Get(Tokens.exit))
+                    MenuActivity.this.finish();
+            }
+        catch (Exception ex) {
+            Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
+        }
     }
 
     private void loadModel() {
@@ -152,6 +137,7 @@ public class MenuActivity extends ListActivity {
                                     lang.code = LanguageManager.ELangCode.RUS;
                                     break;
                             }
+                            _UpdateMenuItems();
                         });
     }
 
