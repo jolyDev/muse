@@ -3,13 +3,11 @@ package org.andresoviedo.lang;
 import java.util.*;
 
 public class LanguageManager {
-    public enum ELangCode {
-        ENG,
-        UA,
-        RUS
-    }
-
-    public ELangCode code = ELangCode.ENG;
+    public final int ENG = 0;
+    public final int UA = 1;
+    public final int RUS = 2;
+    public final int languages_count = 3;
+    public int code = ENG;
 
     public String Get(String key)
     {
@@ -33,6 +31,13 @@ public class LanguageManager {
         data.put(Tokens.about, InitUIText(Tokens.about, "Інфо", "Інфо"));
         data.put(Tokens.load, InitUIText(Tokens.load, "Завантажити", "Загрузить"));
         data.put(Tokens.exit, InitUIText(Tokens.exit, "Вихід", "Выход"));
+        data.put(Tokens.scanQR, InitUIText(Tokens.scanQR, "Сканувати QR", "Сканировать"));
+        data.put(Tokens.viewItems, InitUIText(Tokens.viewItems, "Експонати", "Экспонаты"));
+        data.put(Tokens.theme, InitUIText(Tokens.theme, "Стиль", "Стиль"));
+        data.put(Tokens.deviceDefault, InitUIText(Tokens.deviceDefault, "Стиль системи", "Стиль системы"));
+        data.put(Tokens.light, InitUIText(Tokens.light, "Світлий", "Светлый"));
+        data.put(Tokens.dark, InitUIText(Tokens.dark, "Темний", "Темный"));
+        data.put(Tokens.holo, InitUIText(Tokens.holo, "Голограма", "Голограмма"));
     }
 
     private Map<String, UIText> data = new HashMap<String, UIText>();
@@ -46,20 +51,12 @@ public class LanguageManager {
 
         public String[] tokens;
 
-        String GetToken(ELangCode code)
+        String GetToken(int index)
         {
-            switch(code)
-            {
-                case ENG:
-                    return tokens[0];
-                case UA:
-                    return tokens[1];
-                case RUS:
-                    return tokens[2];
-                default:
-                    return "#Wrong Lang Code";
-            }
-
+            if (index >= 0 && index < languages_count)
+                return tokens[index];
+            else
+                return "#Wrong Lang Code";
         }
     }
 

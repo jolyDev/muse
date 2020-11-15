@@ -47,4 +47,6 @@
     <!-- To review -->
     <string name="app_logo_desc">Teapot animated logo</string>
 
+    <integer name="language">0</integer>
+
 </resources>

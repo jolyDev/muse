@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -41,22 +42,19 @@ public class MenuActivity extends ListActivity {
     private static final int REQUEST_CODE_OPEN_TEXTURE = 1103;
     private static final String SUPPORTED_FILE_TYPES_REGEX = "(?i).*\\.(obj|stl|dae|gltf)";
 
-
-    private enum Action {
-        LOAD_MODEL, LANGUAGE, GITHUB, SETTINGS, HELP, ABOUT, EXIT, UNKNOWN, DEMO
-    }
-
-    /**
-     * Load file user data
-     */
     private Map<String, Object> loadModelParameters = new HashMap<>();
     private LanguageManager lang = new LanguageManager();
+    SharedPreferences sPref;
+
+    private final String prefsId = "ui";
+    private final String languageId = "style";
 
     private void _UpdateMenuItems()
     {
         setListAdapter(new ArrayAdapter<>(this, R.layout.activity_menu_item,
                 new String[]{
-                        lang.Get(Tokens.load),
+                        lang.Get(Tokens.scanQR),
+                        lang.Get(Tokens.viewItems),
                         lang.Get(Tokens.language),
                         lang.Get(Tokens.help),
                         lang.Get(Tokens.about),
@@ -67,8 +65,39 @@ public class MenuActivity extends ListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        _loadLanguagePreferences();
         setContentView(R.layout.activity_menu);
         _UpdateMenuItems();
+    }
+
+    void _loadLanguagePreferences()
+    {
+        sPref = getSharedPreferences(prefsId, MODE_PRIVATE);
+        lang.code = sPref.getInt(languageId, lang.ENG);
+    }
+
+    void _saveLanguagePreferences()
+    {
+        sPref = getSharedPreferences(prefsId, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sPref.edit();
+        editor.putInt(languageId, lang.code);
+        editor.apply();
+    }
+
+    void about()
+    {
+        Intent aboutIntent = new Intent(MenuActivity.this.getApplicationContext(), TextActivity.class);
+        aboutIntent.putExtra("title", lang.Get(Tokens.about));
+        aboutIntent.putExtra("text", getResources().getString(R.string.about_text));
+        MenuActivity.this.startActivity(aboutIntent);
+    }
+
+    void help()
+    {
+        Intent helpIntent = new Intent(MenuActivity.this.getApplicationContext(), TextActivity.class);
+        helpIntent.putExtra("title", lang.Get(Tokens.help));
+        helpIntent.putExtra("text", getResources().getString(R.string.help_text));
+        MenuActivity.this.startActivity(helpIntent);
     }
 
     @Override
@@ -76,25 +105,16 @@ public class MenuActivity extends ListActivity {
         try {
             String option = (String) getListView().getItemAtPosition(position);
 
-            if (option == lang.Get(Tokens.load))
-                    loadModel();
+            if (option == lang.Get(Tokens.viewItems))
+                loadModel();
             else if (option == lang.Get(Tokens.language))
-                    LanguageSettings();
+                LanguageSettings();
             else if (option == lang.Get(Tokens.about))
-            {
-                Intent aboutIntent = new Intent(MenuActivity.this.getApplicationContext(), TextActivity.class);
-                aboutIntent.putExtra("title", lang.Get(Tokens.about));
-                aboutIntent.putExtra("text", getResources().getString(R.string.about_text));
-                MenuActivity.this.startActivity(aboutIntent);
-            }
-            else if (option == lang.Get(Tokens.help)) {
-                Intent helpIntent = new Intent(MenuActivity.this.getApplicationContext(), TextActivity.class);
-                helpIntent.putExtra("title", lang.Get(Tokens.help));
-                helpIntent.putExtra("text", getResources().getString(R.string.help_text));
-                MenuActivity.this.startActivity(helpIntent);
-            }
+                about();
+            else if (option == lang.Get(Tokens.help))
+                help();
             else if (option == lang.Get(Tokens.exit))
-                    MenuActivity.this.finish();
+                MenuActivity.this.finish();
             }
         catch (Exception ex) {
             Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
@@ -128,15 +148,16 @@ public class MenuActivity extends ListActivity {
                         {
                             switch(which) {
                                 case 0:
-                                    lang.code = LanguageManager.ELangCode.ENG;
+                                    lang.code = lang.ENG;
                                     break;
                                 case 1:
-                                    lang.code = LanguageManager.ELangCode.UA;
+                                    lang.code = lang.UA;
                                     break;
                                 case 2:
-                                    lang.code = LanguageManager.ELangCode.RUS;
+                                    lang.code = lang.RUS;
                                     break;
                             }
+                            _saveLanguagePreferences();
                             _UpdateMenuItems();
                         });
     }
