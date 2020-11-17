@@ -17,6 +17,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import org.andresoviedo.android_3d_model_engine.services.wavefront.WavefrontLoader;
+import org.andresoviedo.app.model3D.network.InteractivePagesObjProvider;
 import org.andresoviedo.dddmodel2.R;
 import org.andresoviedo.lang.LanguageManager;
 import org.andresoviedo.lang.Tokens;
@@ -53,6 +54,7 @@ public class MenuActivity extends ListActivity {
     {
         setListAdapter(new ArrayAdapter<>(this, R.layout.activity_menu_item,
                 new String[]{
+                        lang.Get(Tokens.load),
                         lang.Get(Tokens.scanQR),
                         lang.Get(Tokens.viewItems),
                         lang.Get(Tokens.language),
@@ -105,6 +107,11 @@ public class MenuActivity extends ListActivity {
         try {
             String option = (String) getListView().getItemAtPosition(position);
 
+            if (option == lang.Get(Tokens.load))
+            {
+                InteractivePagesObjProvider provider = new InteractivePagesObjProvider();
+                provider.Download();
+            }
             if (option == lang.Get(Tokens.viewItems))
                 loadModel();
             else if (option == lang.Get(Tokens.language))
