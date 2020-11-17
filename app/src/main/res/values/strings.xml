@@ -15,9 +15,9 @@
     <string-array name="menu_items">
         <item>Load Model</item>
         <!--<item>Models</item>-->
-        <item>Demo</item>
         <item>Help</item>
         <item>About</item>
+        <item>Languages</item>
         <!--<item>GitHub</item>-->
         <item>Exit</item>
     </string-array>
@@ -46,5 +46,7 @@
 
     <!-- To review -->
     <string name="app_logo_desc">Teapot animated logo</string>
+
+    <integer name="language">0</integer>
 
 </resources>
