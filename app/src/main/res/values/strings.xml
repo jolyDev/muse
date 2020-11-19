@@ -13,6 +13,7 @@
     <string name="item">item</string>
 
     <string-array name="menu_items">
+        <item>Read QR Code</item>
         <item>Load Model</item>
         <!--<item>Models</item>-->
         <item>Demo</item>

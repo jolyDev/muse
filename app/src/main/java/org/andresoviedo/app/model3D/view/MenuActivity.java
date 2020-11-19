@@ -1,6 +1,7 @@
 package org.andresoviedo.app.model3D.view;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
@@ -38,10 +39,11 @@ public class MenuActivity extends ListActivity {
     private static final int REQUEST_CODE_OPEN_MATERIAL = 1102;
     private static final int REQUEST_CODE_OPEN_TEXTURE = 1103;
     private static final String SUPPORTED_FILE_TYPES_REGEX = "(?i).*\\.(obj|stl|dae|gltf)";
+    public final static int REQUEST_CODE_QR_CODE = 1104;
 
 
     private enum Action {
-        LOAD_MODEL, GITHUB, SETTINGS, HELP, ABOUT, EXIT, UNKNOWN, DEMO
+        LOAD_MODEL, GITHUB, SETTINGS, HELP, ABOUT, EXIT, UNKNOWN, DEMO, READ_QR_CODE
     }
 
     /**
@@ -75,6 +77,10 @@ public class MenuActivity extends ListActivity {
                     demoIntent.putExtra("immersiveMode", "true");
                     demoIntent.putExtra("backgroundColor", "0 0 0 1");
                     MenuActivity.this.startActivity(demoIntent);
+                    break;
+                case READ_QR_CODE:
+                    Intent qrCodeIntent = new Intent(MenuActivity.this.getApplicationContext(), SimpleScannerActivity.class);
+                    MenuActivity.this.startActivityForResult(qrCodeIntent, REQUEST_CODE_QR_CODE);
                     break;
                 case GITHUB:
                     AndroidUtils.openUrl(this, "https://github.com/andresoviedo/android-3D-model-viewer");
@@ -130,10 +136,16 @@ public class MenuActivity extends ListActivity {
         AssetUtils.createChooserDialog(this, "Select file", null, "models", "(?i).*\\.(obj|stl|dae|gltf)",
                 (String file) -> {
                     if (file != null) {
-                        ContentUtils.provideAssets(this);
-                        launchModelRendererActivity(Uri.parse("assets://" + getPackageName() + "/" + file));
+                        launch(file);
                     }
                 });
+    }
+
+    private void launch(String file){
+        if (file != null) {
+            ContentUtils.provideAssets(this);
+            launchModelRendererActivity(Uri.parse("assets://" + getPackageName() + "/" + file));
+        }
     }
 
     private void loadModelFromRepository() {
@@ -217,6 +229,11 @@ public class MenuActivity extends ListActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         ContentUtils.setThreadActivity(this);
         switch (requestCode) {
+            case REQUEST_CODE_QR_CODE:
+                if(resultCode != Activity.RESULT_CANCELED && data != null){
+                    launch(data.getStringExtra("file"));
+                }
+                break;
             case REQUEST_READ_EXTERNAL_STORAGE:
                 loadModelFromSdCard();
                 break;
@@ -344,4 +361,5 @@ public class MenuActivity extends ListActivity {
 
         startActivity(intent);
     }
+
 }
