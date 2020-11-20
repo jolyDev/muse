@@ -1,15 +1,18 @@
 package org.andresoviedo.app.model3D.view;
 
 import android.Manifest;
+import android.app.DownloadManager;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -102,6 +105,19 @@ public class MenuActivity extends ListActivity {
         MenuActivity.this.startActivity(helpIntent);
     }
 
+    public boolean Download()
+    {
+        DownloadManager downloadmanager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+        Uri uri = Uri.parse("https://www.globalgreyebooks.com/content/books/ebooks/game-of-life.pdf");
+
+        DownloadManager.Request request = new DownloadManager.Request(uri);
+        request.setTitle("My File");
+        request.setDescription("Downloading");//request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,"game-of-life");
+        downloadmanager.enqueue(request);
+        return true;
+    }
+
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         try {
@@ -109,8 +125,7 @@ public class MenuActivity extends ListActivity {
 
             if (option == lang.Get(Tokens.load))
             {
-                InteractivePagesObjProvider provider = new InteractivePagesObjProvider();
-                provider.Download();
+                Download();
             }
             if (option == lang.Get(Tokens.viewItems))
                 loadModel();
