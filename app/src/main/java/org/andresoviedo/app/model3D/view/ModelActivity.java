@@ -149,41 +149,11 @@ public class ModelActivity extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.model_toggle_wireframe:
-                scene.toggleWireframe();
-                break;
-            case R.id.model_toggle_boundingbox:
-                scene.toggleBoundingBox();
-                break;
-            case R.id.model_toggle_textures:
-                scene.toggleTextures();
-                break;
-            case R.id.model_toggle_animation:
-                scene.toggleAnimation();
-                break;
-            case R.id.model_toggle_collision:
-                scene.toggleCollision();
-                break;
             case R.id.model_toggle_lights:
                 scene.toggleLighting();
                 break;
-            case R.id.model_toggle_stereoscopic:
-                scene.toggleStereoscopic();
-                break;
-            case R.id.model_toggle_blending:
-                scene.toggleBlending();
-                break;
-            case R.id.model_toggle_immersive:
-                toggleImmersive();
-                break;
-            case R.id.model_load_texture:
-                Intent target = ContentUtils.createGetContentIntent("image/*");
-                Intent intent = Intent.createChooser(target, "Select a file");
-                try {
-                    startActivityForResult(intent, REQUEST_CODE_LOAD_TEXTURE);
-                } catch (ActivityNotFoundException e) {
-                    // The reason for the existence of aFileChooser
-                }
+            case R.id.model_info:
+                scene.toggleInfo();
                 break;
         }
 
@@ -209,7 +179,6 @@ public class ModelActivity extends Activity {
             return;
         }
         handler.removeCallbacksAndMessages(null);
-        handler.postDelayed(this::hideSystemUI, FULLSCREEN_DELAY);
 
     }
 

@@ -1,5 +1,6 @@
 package org.andresoviedo.app.model3D.demo;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.SystemClock;
 import android.util.Log;
@@ -16,10 +17,15 @@ import org.andresoviedo.android_3d_model_engine.services.gltf.GltfLoaderTask;
 
 import org.andresoviedo.android_3d_model_engine.services.stl.STLLoaderTask;
 import org.andresoviedo.android_3d_model_engine.services.wavefront.WavefrontLoaderTask;
+import org.andresoviedo.app.model3D.view.MenuActivity;
 import org.andresoviedo.app.model3D.view.ModelActivity;
 import org.andresoviedo.app.model3D.view.ModelRenderer;
+import org.andresoviedo.dddmodel2.R;
+import org.andresoviedo.lang.LanguageManager;
+import org.andresoviedo.lang.Tokens;
 import org.andresoviedo.util.android.ContentUtils;
 import org.andresoviedo.util.io.IOUtils;
+import org.andresoviedo.util.view.TextActivity;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -225,16 +231,9 @@ public class SceneLoader implements LoaderTask.Callback {
     }
 
     private void animateLight() {
-        if (!rotatingLight) return;
-
-        // animate light - Do a complete rotation every 5 seconds.
-        long time = SystemClock.uptimeMillis() % 5000L;
-        float angleInDegrees = (360.0f / 5000.0f) * ((int) time);
-        lightPoint.setRotationY(angleInDegrees);
     }
 
     private void animateCamera(){
-        camera.translateCamera(0.0025f, 0f);
     }
 
     synchronized void addObject(Object3DData obj) {
@@ -324,6 +323,15 @@ public class SceneLoader implements LoaderTask.Callback {
             makeToastText("Light on", Toast.LENGTH_SHORT);
         }
         requestRender();
+    }
+
+    public void toggleInfo() {
+        if (selectedObject == null)
+            return;
+        Intent helpIntent = new Intent(parent.getApplicationContext(), TextActivity.class);
+        helpIntent.putExtra("title", LanguageManager.GetInstance().Get(Tokens.info));
+        helpIntent.putExtra("text", LanguageManager.GetInstance().GetInfo(selectedObject.getId()));
+        parent.startActivity(helpIntent);
     }
 
     public void toggleAnimation() {

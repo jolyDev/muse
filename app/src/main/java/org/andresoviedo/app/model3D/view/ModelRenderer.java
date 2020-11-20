@@ -414,7 +414,7 @@ public class ModelRenderer implements GLSurfaceView.Renderer {
 				}
 
 				// Draw bounding box
-				if (scene.isDrawBoundingBox() || scene.getSelectedObject() == objData) {
+				if (false && scene.isDrawBoundingBox() && scene.getSelectedObject() == objData) {
 					Object3DData boundingBoxData = boundingBoxes.get(objData);
                     if (boundingBoxData == null || changed) {
                         boundingBoxData = Object3DBuilder.buildBoundingBox(objData);

@@ -43,7 +43,7 @@ public class MenuActivity extends ListActivity {
     private static final String SUPPORTED_FILE_TYPES_REGEX = "(?i).*\\.(obj|stl|dae|gltf)";
 
     private Map<String, Object> loadModelParameters = new HashMap<>();
-    private LanguageManager lang = new LanguageManager();
+    private LanguageManager lang = LanguageManager.GetInstance();
     SharedPreferences sPref;
 
     private final String prefsId = "ui";
@@ -56,7 +56,6 @@ public class MenuActivity extends ListActivity {
                         lang.Get(Tokens.scanQR),
                         lang.Get(Tokens.viewItems),
                         lang.Get(Tokens.language),
-                        lang.Get(Tokens.help),
                         lang.Get(Tokens.about),
                         lang.Get(Tokens.exit)
                 }));
@@ -88,7 +87,7 @@ public class MenuActivity extends ListActivity {
     {
         Intent aboutIntent = new Intent(MenuActivity.this.getApplicationContext(), TextActivity.class);
         aboutIntent.putExtra("title", lang.Get(Tokens.about));
-        aboutIntent.putExtra("text", getResources().getString(R.string.about_text));
+        aboutIntent.putExtra("text", "# Unimplemented");
         MenuActivity.this.startActivity(aboutIntent);
     }
 
@@ -106,7 +105,7 @@ public class MenuActivity extends ListActivity {
             String option = (String) getListView().getItemAtPosition(position);
 
             if (option == lang.Get(Tokens.viewItems))
-                loadModel();
+                loadModelFromAssets();
             else if (option == lang.Get(Tokens.language))
                 LanguageSettings();
             else if (option == lang.Get(Tokens.about))
@@ -121,24 +120,7 @@ public class MenuActivity extends ListActivity {
         }
     }
 
-    private void loadModel() {
-        ContentUtils.showListDialog(this, "File Provider", new String[]{"Embedded Models", "App Repository",
-                "External Storage ", "Content Provider"}, (DialogInterface dialog, int which) -> {
-            if (which == 0) {
-                loadModelFromAssets();
-            } else if (which == 1) {
-                loadModelFromRepository();
-            } else if (which == 2) {
-                loadModelFromSdCard();
-            } else {
-                loadModelFromContentProvider();
-            }
-        });
-
-    }
-
-    private void LanguageSettings()
-    {
+    private void LanguageSettings(){
         ContentUtils.showListDialog(this, lang.Get(Tokens.language),
                 new String[]{
                         lang.Get(Tokens.english),
