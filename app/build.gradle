@@ -34,4 +34,5 @@ dependencies {
     implementation 'me.dm7.barcodescanner:zxing:1.9.13'
     implementation 'com.android.support.constraint:constraint-layout:2.0.4'
     implementation 'com.google.ar:core:1.21.0'
+    implementation 'com.android.support:appcompat-v7:27.1.1'
 }

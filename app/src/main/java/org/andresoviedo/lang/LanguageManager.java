@@ -34,13 +34,14 @@ public class LanguageManager {
     }
     private LanguageManager()
     {
+        data.put(Tokens.AR, InitUIText(Tokens.AR, "☆ Доповнена Реальність ☆", "☆ Дополненная Реальность ☆"));
         data.put(Tokens.menu, InitUIText(Tokens.menu, "Меню", "Меню"));
         data.put(Tokens.language, InitUIText(Tokens.language, "Мова", "Язык"));
         data.put(Tokens.settings, InitUIText(Tokens.settings, "Мова", "Язык"));
         data.put(Tokens.loading, InitUIText(Tokens.loading, "Завантаження", "Загрузка"));
         data.put(Tokens.english, InitUIText(Tokens.english, "Англійська", "Английский"));
-        data.put(Tokens.ukrainian, InitUIText(Tokens.ukrainian, "Українська", "Украинский"));
-        data.put(Tokens.russian, InitUIText(Tokens.russian, "Російська", "Русский"));
+        data.put(Tokens.ukrainian, InitUIText(Tokens.ukrainian, "\uD83C\uDDFA\uD83C\uDDE6 Українська", "Украинский"));
+        data.put(Tokens.russian, InitUIText(Tokens.russian, "Російська", "\uD83C\uDDF7\uD83C\uDDFA Русский"));
         data.put(Tokens.help, InitUIText(Tokens.help, "Допомога", "Помощь"));
         data.put(Tokens.about, InitUIText(Tokens.about, "Інфо", "Інфо"));
         data.put(Tokens.load, InitUIText(Tokens.load, "Завантажити", "Загрузить"));
