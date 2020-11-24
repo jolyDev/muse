@@ -9,8 +9,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -105,17 +107,30 @@ public class MenuActivity extends ListActivity {
         MenuActivity.this.startActivity(helpIntent);
     }
 
-    public boolean Download()
-    {
-        DownloadManager downloadmanager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
-        Uri uri = Uri.parse("https://www.globalgreyebooks.com/content/books/ebooks/game-of-life.pdf");
+    private static final int PERMISSION_STORAGE_CODE = 1000;
+    private boolean isDenied = false;
 
-        DownloadManager.Request request = new DownloadManager.Request(uri);
-        request.setTitle("My File");
-        request.setDescription("Downloading");//request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,"game-of-life");
-        downloadmanager.enqueue(request);
-        return true;
+    public void Download()
+    {
+            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
+                    PackageManager.PERMISSION_DENIED)
+            {
+                String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+
+                requestPermissions(permissions, PERMISSION_STORAGE_CODE);
+            }
+
+        String url = "https://raw.githubusercontent.com/jolyDev/muse_data_storage/main/test_file.txt";
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+        request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
+        request.setTitle("Download");
+        request.setDescription("Downloading page file ...");
+        request.allowScanningByMediaScanner();
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "test_name");
+
+        DownloadManager manager = (DownloadManager)getSystemService(Context.DOWNLOAD_SERVICE);
+        manager.enqueue(request);
     }
 
     @Override
