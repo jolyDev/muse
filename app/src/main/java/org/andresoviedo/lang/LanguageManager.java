@@ -18,7 +18,21 @@ public class LanguageManager {
         return value.GetToken(code);
     }
 
-    public LanguageManager()
+    public String GetInfo(String objId)
+    {
+        return "$ Unimplemented";
+    }
+
+    static private LanguageManager instance = new LanguageManager();
+
+    static public LanguageManager GetInstance()
+    {
+    if (instance == null)
+        instance = new LanguageManager();
+
+        return instance;
+    }
+    private LanguageManager()
     {
         data.put(Tokens.menu, InitUIText(Tokens.menu, "Меню", "Меню"));
         data.put(Tokens.language, InitUIText(Tokens.language, "Мова", "Язык"));
@@ -38,6 +52,7 @@ public class LanguageManager {
         data.put(Tokens.light, InitUIText(Tokens.light, "Світлий", "Светлый"));
         data.put(Tokens.dark, InitUIText(Tokens.dark, "Темний", "Темный"));
         data.put(Tokens.holo, InitUIText(Tokens.holo, "Голограма", "Голограмма"));
+        data.put(Tokens.info, InitUIText(Tokens.info, "Інфо", "Инфо"));
     }
 
     private Map<String, UIText> data = new HashMap<String, UIText>();

@@ -20,4 +20,5 @@ public class Tokens
     static public final String light = "Light";
     static public final String dark = "Dark";
     static public final String holo = "Holo";
+    static public final String info = "Info";
 }
