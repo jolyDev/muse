@@ -63,9 +63,36 @@ public class MenuActivity extends ListActivity {
                 }));
     }
 
+
+    void _CheckIfARCoreAvailable()
+    {
+        ArCoreApk.Availability availability = ArCoreApk.getInstance().checkAvailability(this);
+        if (availability.isTransient()) {
+            // Re-query at 5Hz while compatibility is checked in the background.
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    _CheckIfARCoreAvailable();
+                }
+            }, 200);
+        }
+        if (availability.isSupported()) {
+            mArButton.setVisibility(View.VISIBLE);
+            mArButton.setEnabled(true);
+            // indicator on the button.
+        } else { // Unsupported or unknown.
+            mArButton.setVisibility(View.INVISIBLE);
+            mArButton.setEnabled(false);
+        }
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        _CheckIfARCoreAvailable();
+
         _loadLanguagePreferences();
         setContentView(R.layout.activity_menu);
         _UpdateMenuItems();

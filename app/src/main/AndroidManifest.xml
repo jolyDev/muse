@@ -20,6 +20,7 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
+
         <activity android:name="org.andresoviedo.app.model3D.view.SimpleScannerActivity"/>
         <activity
             android:name="org.andresoviedo.app.model3D.MainActivity"
@@ -45,6 +46,11 @@
 
             <!-- android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" -->
         </activity>
+
+        <!-- "AR Optional" app, contains non-AR features that can be used when
+             "Google Play Services for AR" (ARCore) is not available. -->
+        <meta-data android:name="com.google.ar.core" android:value="optional" />
+
     </application>
 
 </manifest>
