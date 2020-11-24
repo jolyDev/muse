@@ -1,6 +1,7 @@
 package org.andresoviedo.app.model3D.view;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
@@ -40,6 +41,7 @@ public class MenuActivity extends ListActivity {
     private static final int REQUEST_CODE_OPEN_FILE = 1101;
     private static final int REQUEST_CODE_OPEN_MATERIAL = 1102;
     private static final int REQUEST_CODE_OPEN_TEXTURE = 1103;
+    public static final int REQUEST_CODE_QR_CODE = 1104;
     private static final String SUPPORTED_FILE_TYPES_REGEX = "(?i).*\\.(obj|stl|dae|gltf)";
 
     private Map<String, Object> loadModelParameters = new HashMap<>();
@@ -106,6 +108,9 @@ public class MenuActivity extends ListActivity {
 
             if (option == lang.Get(Tokens.viewItems))
                 loadModelFromAssets();
+            else if(option == lang.Get(Tokens.scanQR)){
+                startQrCodeReader();
+            }
             else if (option == lang.Get(Tokens.language))
                 LanguageSettings();
             else if (option == lang.Get(Tokens.about))
@@ -118,6 +123,11 @@ public class MenuActivity extends ListActivity {
         catch (Exception ex) {
             Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
         }
+    }
+
+    private void startQrCodeReader() {
+        Intent qrCodeIntent = new Intent(MenuActivity.this.getApplicationContext(), SimpleScannerActivity.class);
+        MenuActivity.this.startActivityForResult(qrCodeIntent, REQUEST_CODE_QR_CODE);
     }
 
     private void LanguageSettings(){
@@ -231,10 +241,22 @@ public class MenuActivity extends ListActivity {
         }
     }
 
+    private void launch(String file){
+        if (file != null) {
+            ContentUtils.provideAssets(this);
+            launchModelRendererActivity(Uri.parse("assets://" + getPackageName() + "/" + file));
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         ContentUtils.setThreadActivity(this);
         switch (requestCode) {
+            case REQUEST_CODE_QR_CODE:
+                if(resultCode != Activity.RESULT_CANCELED && data != null){
+                    launch(data.getStringExtra("file"));
+                }
+                break;
             case REQUEST_READ_EXTERNAL_STORAGE:
                 loadModelFromSdCard();
                 break;
