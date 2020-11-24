@@ -11,11 +11,14 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.google.ar.core.ArCoreApk;
 
 import org.andresoviedo.android_3d_model_engine.services.wavefront.WavefrontLoader;
 import org.andresoviedo.dddmodel2.R;
@@ -48,23 +51,36 @@ public class MenuActivity extends ListActivity {
     private LanguageManager lang = LanguageManager.GetInstance();
     SharedPreferences sPref;
 
+    private boolean IsAR_available = false;
+
     private final String prefsId = "ui";
     private final String languageId = "style";
 
     private void _UpdateMenuItems()
     {
-        setListAdapter(new ArrayAdapter<>(this, R.layout.activity_menu_item,
+        String[] menuItems = IsAR_available ?
                 new String[]{
-                        lang.Get(Tokens.scanQR),
-                        lang.Get(Tokens.viewItems),
-                        lang.Get(Tokens.language),
-                        lang.Get(Tokens.about),
-                        lang.Get(Tokens.exit)
-                }));
+                lang.Get(Tokens.AR),
+                lang.Get(Tokens.scanQR),
+                lang.Get(Tokens.viewItems),
+                lang.Get(Tokens.language),
+                lang.Get(Tokens.about),
+                lang.Get(Tokens.exit)
+        } :
+        new String[]{
+                lang.Get(Tokens.AR),
+                lang.Get(Tokens.scanQR),
+                lang.Get(Tokens.viewItems),
+                lang.Get(Tokens.language),
+                lang.Get(Tokens.about),
+                lang.Get(Tokens.exit)
+        };
+
+        setListAdapter(new ArrayAdapter<>(this, R.layout.activity_menu_item, menuItems));
+
     }
 
-
-    void _CheckIfARCoreAvailable()
+    public void AR()
     {
         ArCoreApk.Availability availability = ArCoreApk.getInstance().checkAvailability(this);
         if (availability.isTransient()) {
@@ -72,26 +88,20 @@ public class MenuActivity extends ListActivity {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    _CheckIfARCoreAvailable();
+                    AR();
                 }
             }, 200);
         }
-        if (availability.isSupported()) {
-            mArButton.setVisibility(View.VISIBLE);
-            mArButton.setEnabled(true);
-            // indicator on the button.
-        } else { // Unsupported or unknown.
-            mArButton.setVisibility(View.INVISIBLE);
-            mArButton.setEnabled(false);
+        else
+        {
+            IsAR_available = availability.isSupported();
+            _UpdateMenuItems();
         }
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        _CheckIfARCoreAvailable();
 
         _loadLanguagePreferences();
         setContentView(R.layout.activity_menu);
@@ -133,18 +143,19 @@ public class MenuActivity extends ListActivity {
         try {
             String option = (String) getListView().getItemAtPosition(position);
 
-            if (option == lang.Get(Tokens.viewItems))
+            if (option.equals(lang.Get(Tokens.AR)))
+                AR();
+            else if (option.equals(lang.Get(Tokens.viewItems)))
                 loadModelFromAssets();
-            else if(option == lang.Get(Tokens.scanQR)){
+            else if(option.equals(lang.Get(Tokens.scanQR)))
                 startQrCodeReader();
-            }
-            else if (option == lang.Get(Tokens.language))
+            else if (option.equals(lang.Get(Tokens.language)))
                 LanguageSettings();
-            else if (option == lang.Get(Tokens.about))
+            else if (option.equals(lang.Get(Tokens.about)))
                 about();
-            else if (option == lang.Get(Tokens.help))
+            else if (option.equals(lang.Get(Tokens.help)))
                 help();
-            else if (option == lang.Get(Tokens.exit))
+            else if (option.equals(lang.Get(Tokens.exit)))
                 MenuActivity.this.finish();
             }
         catch (Exception ex) {
@@ -153,6 +164,8 @@ public class MenuActivity extends ListActivity {
     }
 
     private void startQrCodeReader() {
+        // todo some basic checking
+        // i see a white screen
         Intent qrCodeIntent = new Intent(MenuActivity.this.getApplicationContext(), SimpleScannerActivity.class);
         MenuActivity.this.startActivityForResult(qrCodeIntent, REQUEST_CODE_QR_CODE);
     }
