@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.google.ar.core.ArCoreApk;
 
 import org.andresoviedo.android_3d_model_engine.services.wavefront.WavefrontLoader;
+import org.andresoviedo.app.model3D.arcorehelpers.ArCoreHelper;
 import org.andresoviedo.dddmodel2.R;
 import org.andresoviedo.lang.LanguageManager;
 import org.andresoviedo.lang.Tokens;
@@ -92,10 +93,13 @@ public class MenuActivity extends ListActivity {
                 }
             }, 200);
         }
-        else
-        {
+        else {
             IsAR_available = availability.isSupported();
             _UpdateMenuItems();
+            ArCoreHelper.showArObject(
+                    getApplicationContext(),
+                    "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Avocado/glTF/Avocado.gltf",
+                    "Tiger");
         }
     }
 
