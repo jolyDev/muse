@@ -11,13 +11,17 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.ar.core.ArCoreApk;
+
 import org.andresoviedo.android_3d_model_engine.services.wavefront.WavefrontLoader;
+import org.andresoviedo.app.model3D.arcorehelpers.ArCoreHelper;
 import org.andresoviedo.dddmodel2.R;
 import org.andresoviedo.lang.LanguageManager;
 import org.andresoviedo.lang.Tokens;
@@ -48,24 +52,61 @@ public class MenuActivity extends ListActivity {
     private LanguageManager lang = LanguageManager.GetInstance();
     SharedPreferences sPref;
 
+    private boolean IsAR_available = false;
+
     private final String prefsId = "ui";
     private final String languageId = "style";
 
     private void _UpdateMenuItems()
     {
-        setListAdapter(new ArrayAdapter<>(this, R.layout.activity_menu_item,
+        String[] menuItems = IsAR_available ?
                 new String[]{
-                        lang.Get(Tokens.scanQR),
-                        lang.Get(Tokens.viewItems),
-                        lang.Get(Tokens.language),
-                        lang.Get(Tokens.about),
-                        lang.Get(Tokens.exit)
-                }));
+                lang.Get(Tokens.AR),
+                lang.Get(Tokens.scanQR),
+                lang.Get(Tokens.viewItems),
+                lang.Get(Tokens.language),
+                lang.Get(Tokens.about),
+                lang.Get(Tokens.exit)
+        } :
+        new String[]{
+                lang.Get(Tokens.AR),
+                lang.Get(Tokens.scanQR),
+                lang.Get(Tokens.viewItems),
+                lang.Get(Tokens.language),
+                lang.Get(Tokens.about),
+                lang.Get(Tokens.exit)
+        };
+
+        setListAdapter(new ArrayAdapter<>(this, R.layout.activity_menu_item, menuItems));
+
+    }
+
+    public void AR()
+    {
+        ArCoreApk.Availability availability = ArCoreApk.getInstance().checkAvailability(this);
+        if (availability.isTransient()) {
+            // Re-query at 5Hz while compatibility is checked in the background.
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    AR();
+                }
+            }, 200);
+        }
+        else {
+            IsAR_available = availability.isSupported();
+            _UpdateMenuItems();
+            ArCoreHelper.showArObject(
+                    getApplicationContext(),
+                    "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Avocado/glTF/Avocado.gltf",
+                    "Tiger");
+        }
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         _loadLanguagePreferences();
         setContentView(R.layout.activity_menu);
         _UpdateMenuItems();
@@ -106,18 +147,19 @@ public class MenuActivity extends ListActivity {
         try {
             String option = (String) getListView().getItemAtPosition(position);
 
-            if (option == lang.Get(Tokens.viewItems))
+            if (option.equals(lang.Get(Tokens.AR)))
+                AR();
+            else if (option.equals(lang.Get(Tokens.viewItems)))
                 loadModelFromAssets();
-            else if(option == lang.Get(Tokens.scanQR)){
+            else if(option.equals(lang.Get(Tokens.scanQR)))
                 startQrCodeReader();
-            }
-            else if (option == lang.Get(Tokens.language))
+            else if (option.equals(lang.Get(Tokens.language)))
                 LanguageSettings();
-            else if (option == lang.Get(Tokens.about))
+            else if (option.equals(lang.Get(Tokens.about)))
                 about();
-            else if (option == lang.Get(Tokens.help))
+            else if (option.equals(lang.Get(Tokens.help)))
                 help();
-            else if (option == lang.Get(Tokens.exit))
+            else if (option.equals(lang.Get(Tokens.exit)))
                 MenuActivity.this.finish();
             }
         catch (Exception ex) {
@@ -126,6 +168,8 @@ public class MenuActivity extends ListActivity {
     }
 
     private void startQrCodeReader() {
+        // todo some basic checking
+        // i see a white screen
         Intent qrCodeIntent = new Intent(MenuActivity.this.getApplicationContext(), SimpleScannerActivity.class);
         MenuActivity.this.startActivityForResult(qrCodeIntent, REQUEST_CODE_QR_CODE);
     }
