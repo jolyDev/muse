@@ -6,7 +6,8 @@ public class Tokens
     static public final String ua_flag = "\uD83C\uDDFA\uD83C\uDDE6 ";
     static public final String ru_flag = "\uD83C\uDDF7\uD83C\uDDFA ";
 
-    static public final String AR = "☆ AR items ☆";
+    static public final String AR = "☆ View Items ☆";
+    static public final String scanQR_AR = "☆ Scan QR ☆";
     static public final String menu = "Menu";
     static public final String settings = "Settings";
     static public final String language = "Language";
@@ -26,4 +27,8 @@ public class Tokens
     static public final String dark = "Dark";
     static public final String holo = "Holo";
     static public final String info = "Info";
+    static public final String incorrectQR = "incorrect QR was captured";
+    static public final String back = "back";
+    static public final String plane = "Plane";
+    static public final String teapot = "Teapot";
 }

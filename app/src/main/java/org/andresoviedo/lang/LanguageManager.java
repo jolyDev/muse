@@ -34,7 +34,8 @@ public class LanguageManager {
     }
     private LanguageManager()
     {
-        data.put(Tokens.AR, InitUIText(Tokens.AR, "☆ Доповнена Реальність ☆", "☆ Дополненная Реальность ☆"));
+        data.put(Tokens.AR, InitUIText(Tokens.AR, "☆ AR ☆", "☆ AR ☆"));
+        data.put(Tokens.scanQR_AR, InitUIText(Tokens.scanQR_AR, "☆ Сканувати QR ☆", "☆ Сканировать QR ☆"));
         data.put(Tokens.menu, InitUIText(Tokens.menu, "Меню", "Меню"));
         data.put(Tokens.language, InitUIText(Tokens.language, "Мова", "Язык"));
         data.put(Tokens.settings, InitUIText(Tokens.settings, "Мова", "Язык"));
@@ -46,7 +47,7 @@ public class LanguageManager {
         data.put(Tokens.about, InitUIText(Tokens.about, "Інфо", "Інфо"));
         data.put(Tokens.load, InitUIText(Tokens.load, "Завантажити", "Загрузить"));
         data.put(Tokens.exit, InitUIText(Tokens.exit, "Вихід", "Выход"));
-        data.put(Tokens.scanQR, InitUIText(Tokens.scanQR, "Сканувати QR", "Сканировать"));
+        data.put(Tokens.scanQR, InitUIText(Tokens.scanQR, "Сканувати QR", "Сканировать QR"));
         data.put(Tokens.viewItems, InitUIText(Tokens.viewItems, "Експонати", "Экспонаты"));
         data.put(Tokens.theme, InitUIText(Tokens.theme, "Стиль", "Стиль"));
         data.put(Tokens.deviceDefault, InitUIText(Tokens.deviceDefault, "Стиль системи", "Стиль системы"));
@@ -54,6 +55,11 @@ public class LanguageManager {
         data.put(Tokens.dark, InitUIText(Tokens.dark, "Темний", "Темный"));
         data.put(Tokens.holo, InitUIText(Tokens.holo, "Голограма", "Голограмма"));
         data.put(Tokens.info, InitUIText(Tokens.info, "Інфо", "Инфо"));
+        data.put(Tokens.back, InitUIText(Tokens.back, "Назад", "Назад"));
+        data.put(Tokens.plane, InitUIText(Tokens.plane, "Літак", "Самолет"));
+        data.put(Tokens.incorrectQR, InitUIText(Tokens.incorrectQR, "Не корректний QR-код", "Не корректный QR-код"));
+        data.put(Tokens.teapot, InitUIText(Tokens.teapot, "Чайник", "Чайник"));
+        data.put(Tokens.teapot, InitUIText(Tokens.teapot, "Чайник", "Чайник"));
     }
 
     private Map<String, UIText> data = new HashMap<String, UIText>();

@@ -19,8 +19,11 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.ar.core.ArCoreApk;
+import com.google.ar.core.exceptions.UnavailableDeviceNotCompatibleException;
+import com.google.ar.core.exceptions.UnavailableUserDeclinedInstallationException;
 
 import org.andresoviedo.android_3d_model_engine.services.wavefront.WavefrontLoader;
+import org.andresoviedo.app.model3D.DevTools.LinkConventer;
 import org.andresoviedo.app.model3D.arcorehelpers.ArCoreHelper;
 import org.andresoviedo.dddmodel2.R;
 import org.andresoviedo.lang.LanguageManager;
@@ -37,6 +40,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import static com.google.ar.core.ArCoreApk.InstallStatus.INSTALLED;
+
 public class MenuActivity extends ListActivity {
 
     private static final String REPO_URL = "https://github.com/andresoviedo/android-3D-model-viewer/raw/master/models/index";
@@ -52,24 +57,20 @@ public class MenuActivity extends ListActivity {
     private LanguageManager lang = LanguageManager.GetInstance();
     SharedPreferences sPref;
 
-    private boolean IsAR_available = false;
-
     private final String prefsId = "ui";
     private final String languageId = "style";
 
     private void _UpdateMenuItems()
     {
-        String[] menuItems = IsAR_available ?
+        String[] menuItems = checkAR_Permission() ?
                 new String[]{
+                lang.Get(Tokens.scanQR_AR),
                 lang.Get(Tokens.AR),
-                lang.Get(Tokens.scanQR),
-                lang.Get(Tokens.viewItems),
                 lang.Get(Tokens.language),
                 lang.Get(Tokens.about),
                 lang.Get(Tokens.exit)
         } :
         new String[]{
-                lang.Get(Tokens.AR),
                 lang.Get(Tokens.scanQR),
                 lang.Get(Tokens.viewItems),
                 lang.Get(Tokens.language),
@@ -81,25 +82,68 @@ public class MenuActivity extends ListActivity {
 
     }
 
-    public void AR()
+    private boolean checkAR_Permission()
     {
         ArCoreApk.Availability availability = ArCoreApk.getInstance().checkAvailability(this);
-        if (availability.isTransient()) {
+
+        if(availability.isSupported())
+        {
+            try {
+                 return ArCoreApk.getInstance().requestInstall(this, true) == INSTALLED;
+            }
+            catch (Exception e) {
+                // uninstalled for somereason
+                return false;
+            }
+        }
+        else if (availability.isTransient()) {
             // Re-query at 5Hz while compatibility is checked in the background.
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    AR();
+                    checkAR_Permission();
+                    _UpdateMenuItems();
                 }
             }, 200);
         }
-        else {
-            IsAR_available = availability.isSupported();
-            _UpdateMenuItems();
-            ArCoreHelper.showArObject(
-                    getApplicationContext(),
-                    "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Avocado/glTF/Avocado.gltf",
-                    "Tiger");
+
+        return false;
+    }
+
+    public void AR()
+    {
+        if (checkAR_Permission())
+        {
+            ContentUtils.showListDialog(this, lang.Get(Tokens.language),
+                    new String[]{
+                            lang.Get(Tokens.plane),
+                            lang.Get(Tokens.teapot),
+                            lang.Get(Tokens.back)
+                    },
+                    (dialog, which) ->
+                    {
+                        LinkConventer.MuseamObj obj = new LinkConventer.MuseamObj("none", "none", "none");
+
+                        Map<String, LinkConventer.MuseamObj> map = LinkConventer.GetInstance().ConvertManager;
+
+                        switch (which) {
+                            case 0:
+                                if (map.containsKey(LinkConventer.partOneEasterLink))
+                                    obj = map.get(LinkConventer.partOneEasterLink);
+                                break;
+                            case 1:
+                                if (map.containsKey(LinkConventer.partTwoEasterLink))
+                                    obj = map.get(LinkConventer.partTwoEasterLink);
+                                break;
+                            default:
+                                return;
+                        }
+
+                        ArCoreHelper.showArObject(
+                                getApplicationContext(),
+                                obj.ar_link,
+                                obj.name);
+            });
         }
     }
 
@@ -147,12 +191,14 @@ public class MenuActivity extends ListActivity {
         try {
             String option = (String) getListView().getItemAtPosition(position);
 
+            if (option.equals(lang.Get(Tokens.scanQR_AR)))
+                startQRActivity(checkAR_Permission());
             if (option.equals(lang.Get(Tokens.AR)))
                 AR();
             else if (option.equals(lang.Get(Tokens.viewItems)))
                 loadModelFromAssets();
             else if(option.equals(lang.Get(Tokens.scanQR)))
-                startQrCodeReader();
+                startQRActivity(false);
             else if (option.equals(lang.Get(Tokens.language)))
                 LanguageSettings();
             else if (option.equals(lang.Get(Tokens.about)))
@@ -167,10 +213,10 @@ public class MenuActivity extends ListActivity {
         }
     }
 
-    private void startQrCodeReader() {
-        // todo some basic checking
-        // i see a white screen
+    private void startQRActivity(boolean isAR)
+    {
         Intent qrCodeIntent = new Intent(MenuActivity.this.getApplicationContext(), SimpleScannerActivity.class);
+        qrCodeIntent.putExtra(SimpleScannerActivity.AR_Status, isAR);
         MenuActivity.this.startActivityForResult(qrCodeIntent, REQUEST_CODE_QR_CODE);
     }
 
@@ -179,7 +225,9 @@ public class MenuActivity extends ListActivity {
                 new String[]{
                         lang.Get(Tokens.english),
                         lang.Get(Tokens.ukrainian),
-                        lang.Get(Tokens.russian)},
+                        lang.Get(Tokens.russian),
+                        lang.Get(Tokens.back)
+                        },
                         (dialog, which) ->
                         {
                             switch(which) {
@@ -192,6 +240,8 @@ public class MenuActivity extends ListActivity {
                                 case 2:
                                     lang.code = lang.RUS;
                                     break;
+                                default:
+                                    return;
                             }
                             _saveLanguagePreferences();
                             _UpdateMenuItems();
@@ -199,12 +249,34 @@ public class MenuActivity extends ListActivity {
     }
 
     private void loadModelFromAssets() {
-        AssetUtils.createChooserDialog(this, "Select file", null, "models", "(?i).*\\.(obj|stl|dae|gltf)",
-                (String file) -> {
-                    if (file != null) {
-                        ContentUtils.provideAssets(this);
-                        launchModelRendererActivity(Uri.parse("assets://" + getPackageName() + "/" + file));
-                    }
+
+        ContentUtils.showListDialog(this, lang.Get(Tokens.language),
+                new String[]{
+                        lang.Get(Tokens.plane),
+                        lang.Get(Tokens.teapot),
+                        lang.Get(Tokens.back)
+                        },
+                        (dialog, which) ->
+                        {
+                            LinkConventer.MuseamObj obj = new LinkConventer.MuseamObj("none", "none", "none");
+
+                            Map<String, LinkConventer.MuseamObj> map = LinkConventer.GetInstance().ConvertManager;
+
+                            switch (which) {
+                                case 0:
+                                    if (map.containsKey(LinkConventer.partTwoEasterLink))
+                                        obj = map.get(LinkConventer.partTwoEasterLink);
+                                    break;
+                                case 1:
+                                    if (map.containsKey(LinkConventer.partOneEasterLink))
+                                        obj = map.get(LinkConventer.partOneEasterLink);
+                                    break;
+                                default:
+                                    return;
+                            }
+
+                            ContentUtils.provideAssets(this);
+                            launchModelRendererActivity(Uri.parse("assets://" + getPackageName() + "/" + obj.local_link));
                 });
     }
 
