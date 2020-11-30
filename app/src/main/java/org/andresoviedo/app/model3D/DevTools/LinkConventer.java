@@ -33,7 +33,7 @@ public class LinkConventer {
     private LinkConventer()
     {
         ConvertManager.put(partOneEasterLink, new MuseamObj("Android", "models/teapot.obj", partOneOriginLink));
-        ConvertManager.put(partTwoEasterLink, new MuseamObj("Plane", "models/ToyPlane.obj", partTwoOriginlink));
+        ConvertManager.put(partTwoEasterLink, new MuseamObj("Plane", "models/Scull.gltf", partTwoOriginlink));
     }
 
     public static final String partOneEasterLink = "https://raw.githubusercontent.com/jolyDev/muse_data_storage/main/EasterEggBase.png";

@@ -23,6 +23,7 @@ import com.google.ar.core.exceptions.UnavailableDeviceNotCompatibleException;
 import com.google.ar.core.exceptions.UnavailableUserDeclinedInstallationException;
 
 import org.andresoviedo.android_3d_model_engine.services.wavefront.WavefrontLoader;
+import org.andresoviedo.app.model3D.Atlas.AtlasActivity;
 import org.andresoviedo.app.model3D.DevTools.LinkConventer;
 import org.andresoviedo.app.model3D.arcorehelpers.ArCoreHelper;
 import org.andresoviedo.dddmodel2.R;
@@ -66,6 +67,7 @@ public class MenuActivity extends ListActivity {
                 new String[]{
                 lang.Get(Tokens.scanQR_AR),
                 lang.Get(Tokens.AR),
+                lang.Get(Tokens.atlas),
                 lang.Get(Tokens.language),
                 lang.Get(Tokens.about),
                 lang.Get(Tokens.exit)
@@ -73,6 +75,7 @@ public class MenuActivity extends ListActivity {
         new String[]{
                 lang.Get(Tokens.scanQR),
                 lang.Get(Tokens.viewItems),
+                lang.Get(Tokens.atlas),
                 lang.Get(Tokens.language),
                 lang.Get(Tokens.about),
                 lang.Get(Tokens.exit)
@@ -80,6 +83,13 @@ public class MenuActivity extends ListActivity {
 
         setListAdapter(new ArrayAdapter<>(this, R.layout.activity_menu_item, menuItems));
 
+    }
+
+    private void RunAtlas()
+    {
+        Intent atlas = new Intent(MenuActivity.this.getApplicationContext(), AtlasActivity.class);
+        atlas.putExtra("title", lang.Get(Tokens.atlas));
+        MenuActivity.this.startActivity(atlas);
     }
 
     private boolean checkAR_Permission()
@@ -195,6 +205,8 @@ public class MenuActivity extends ListActivity {
                 startQRActivity(checkAR_Permission());
             if (option.equals(lang.Get(Tokens.AR)))
                 AR();
+            else if (option.equals(lang.Get(Tokens.atlas)))
+                RunAtlas();
             else if (option.equals(lang.Get(Tokens.viewItems)))
                 loadModelFromAssets();
             else if(option.equals(lang.Get(Tokens.scanQR)))
