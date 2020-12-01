@@ -32,4 +32,6 @@ public class Tokens
     static public final String back = "back";
     static public final String plane = "Plane";
     static public final String teapot = "Teapot";
+    static public final String scull = "Scull";
+    static public final String android = "Android";
 }

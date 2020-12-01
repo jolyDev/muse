@@ -60,6 +60,7 @@ public class LanguageManager {
         data.put(Tokens.incorrectQR, InitUIText(Tokens.incorrectQR, "Не корректний QR-код", "Не корректный QR-код"));
         data.put(Tokens.atlas, InitUIText(Tokens.atlas, "Атлас", "Атлас"));
         data.put(Tokens.teapot, InitUIText(Tokens.teapot, "Чайник", "Чайник"));
+        data.put(Tokens.scull, InitUIText(Tokens.scull, "Череп", "Череп"));
     }
 
     private Map<String, UIText> data = new HashMap<String, UIText>();

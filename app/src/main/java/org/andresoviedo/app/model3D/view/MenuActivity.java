@@ -126,8 +126,8 @@ public class MenuActivity extends ListActivity {
         {
             ContentUtils.showListDialog(this, lang.Get(Tokens.language),
                     new String[]{
-                            lang.Get(Tokens.plane),
-                            lang.Get(Tokens.teapot),
+                            lang.Get(Tokens.scull),
+                            lang.Get(Tokens.android),
                             lang.Get(Tokens.back)
                     },
                     (dialog, which) ->
@@ -152,7 +152,7 @@ public class MenuActivity extends ListActivity {
                         ArCoreHelper.showArObject(
                                 getApplicationContext(),
                                 obj.ar_link,
-                                obj.name);
+                                lang.Get(obj.name));
             });
         }
     }
@@ -234,12 +234,12 @@ public class MenuActivity extends ListActivity {
 
     private void LanguageSettings(){
         ContentUtils.showListDialog(this, lang.Get(Tokens.language),
-                new String[]{
-                        lang.Get(Tokens.english),
-                        lang.Get(Tokens.ukrainian),
-                        lang.Get(Tokens.russian),
-                        lang.Get(Tokens.back)
-                        },
+                        new String[]{
+                                lang.Get(Tokens.english),
+                                lang.Get(Tokens.ukrainian),
+                                lang.Get(Tokens.russian),
+                                lang.Get(Tokens.back)
+                                },
                         (dialog, which) ->
                         {
                             switch(which) {
@@ -263,10 +263,10 @@ public class MenuActivity extends ListActivity {
     private void loadModelFromAssets() {
 
         ContentUtils.showListDialog(this, lang.Get(Tokens.language),
-                new String[]{
-                        lang.Get(Tokens.plane),
-                        lang.Get(Tokens.teapot),
-                        lang.Get(Tokens.back)
+                        new String[]{
+                                lang.Get(Tokens.scull),
+                                lang.Get(Tokens.android),
+                                lang.Get(Tokens.back)
                         },
                         (dialog, which) ->
                         {

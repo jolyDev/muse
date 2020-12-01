@@ -149,9 +149,6 @@ public class ModelActivity extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.model_toggle_lights:
-                scene.toggleLighting();
-                break;
             case R.id.model_info:
                 scene.toggleInfo();
                 break;
