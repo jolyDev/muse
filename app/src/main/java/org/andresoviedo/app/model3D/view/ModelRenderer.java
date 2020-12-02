@@ -274,20 +274,7 @@ public class ModelRenderer implements GLSurfaceView.Renderer {
 		SceneLoader scene = main.getModelActivity().getScene();
 
 		// draw light
-		if (scene.isDrawLighting()) {
 
-			Object3D lightBulbDrawer = drawer.getPointDrawer();
-
-			Matrix.multiplyMM(modelViewMatrix, 0, viewMatrix, 0, scene.getLightBulb().getModelMatrix(), 0);
-
-			// Calculate position of the light in eye space to support lighting
-			Matrix.multiplyMV(lightPosInEyeSpace, 0, modelViewMatrix, 0, scene.getLightPosition(), 0);
-
-			// Draw a point that represents the light bulb
-			lightBulbDrawer.draw(scene.getLightBulb(), projectionMatrix, viewMatrix, -1, lightPosInEyeSpace,
-					colorMask);
-
-		}
 
 		// draw axis
         if (scene.isDrawAxis()){

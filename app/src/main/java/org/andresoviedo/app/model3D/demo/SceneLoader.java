@@ -95,7 +95,7 @@ public class SceneLoader implements LoaderTask.Callback {
     /**
      * Light toggle feature: whether to draw using lights
      */
-    private boolean drawLighting = true;
+    private boolean drawLighting = false;
     /**
      * Animate model (dae only) or not
      */
@@ -311,18 +311,6 @@ public class SceneLoader implements LoaderTask.Callback {
     }
 
     public void toggleLighting() {
-        if (this.drawLighting && this.rotatingLight) {
-            this.rotatingLight = false;
-            makeToastText("Light stopped", Toast.LENGTH_SHORT);
-        } else if (this.drawLighting && !this.rotatingLight) {
-            this.drawLighting = false;
-            makeToastText("Lights off", Toast.LENGTH_SHORT);
-        } else {
-            this.drawLighting = true;
-            this.rotatingLight = true;
-            makeToastText("Light on", Toast.LENGTH_SHORT);
-        }
-        requestRender();
     }
 
     public void toggleInfo() {

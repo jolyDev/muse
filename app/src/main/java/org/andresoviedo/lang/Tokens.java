@@ -9,6 +9,7 @@ public class Tokens
     static public final String AR = "☆ View Items ☆";
     static public final String scanQR_AR = "☆ Scan QR ☆";
     static public final String menu = "Menu";
+    static public final String atlas = "Atlas";
     static public final String settings = "Settings";
     static public final String language = "Language";
     static public final String loading = "Loading...";
@@ -31,4 +32,6 @@ public class Tokens
     static public final String back = "back";
     static public final String plane = "Plane";
     static public final String teapot = "Teapot";
+    static public final String scull = "Scull";
+    static public final String android = "Android";
 }
