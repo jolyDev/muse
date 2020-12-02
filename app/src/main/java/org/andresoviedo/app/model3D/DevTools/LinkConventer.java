@@ -36,6 +36,9 @@ public class LinkConventer {
     {
         ConvertManager.put(partOneEasterLink, new MuseamObj("Android", "models/android.obj", partOneOriginLink));
         ConvertManager.put(partTwoEasterLink, new MuseamObj(Tokens.scull, "models/Scull.gltf", partTwoOriginlink));
+        ConvertManager.put(t, new MuseamObj("termokauter", "models/Scull.gltf", t));
+        ConvertManager.put(t2, new MuseamObj("termokaute2r", "models/Scull.gltf", t2));
+        ConvertManager.put(t3, new MuseamObj("termokauter3", "models/Scull.gltf", t3));
     }
 
     public static final String partOneEasterLink = "https://raw.githubusercontent.com/jolyDev/muse_data_storage/main/EasterEggBase.png";
@@ -43,4 +46,8 @@ public class LinkConventer {
 
     public static final String partTwoEasterLink = "https://github.com/jolyDev/muse_data_storage/blob/main/TestEaster.jpg?raw=true";
     public static final String partTwoOriginlink = "https://github.com/jolyDev/muse_data_storage/blob/main/Scull.gltf?raw=true";
+
+    public static final String t  = "https://drive.google.com/uc?export=download&id=1WpjKZEnIzuFj6axqwCbs-ROPmbs8oinA";
+    public static final String t2 = "https://drive.google.com/uc?export=download&id=122j1mwihUwsUZxFbSq9XJnAQWcesg1kb";
+    public static final String t3 = "https://drive.google.com/uc?export=download&id=1coqt-1NTWCkP3tX5sm5XjLdNBvHjNTVg";
 }
