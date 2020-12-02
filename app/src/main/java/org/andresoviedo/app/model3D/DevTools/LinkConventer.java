@@ -42,5 +42,5 @@ public class LinkConventer {
     public static final String partOneOriginLink = "https://github.com/jolyDev/muse_data_storage/blob/main/android.glb?raw=true";
 
     public static final String partTwoEasterLink = "https://github.com/jolyDev/muse_data_storage/blob/main/TestEaster.jpg?raw=true";
-    public static final String partTwoOriginlink = "https://github.com/jolyDev/muse_data_storage/blob/main/ToyPlane.glb?raw=true";
+    public static final String partTwoOriginlink = "https://github.com/jolyDev/muse_data_storage/blob/main/Scull.gltf?raw=true";
 }
