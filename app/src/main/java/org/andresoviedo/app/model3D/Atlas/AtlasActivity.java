@@ -87,33 +87,5 @@ public class AtlasActivity extends Activity {
                                 this);
                     }
                 });
-
-        /*//simple animation TODO block flip when zoomed
-        setContentView(R.layout.activity_main);
-
-        addResourses();
-
-        final ConstraintLayout layout = findViewById(R.id.simple_book);
-        final ViewTreeObserver observer= layout.getViewTreeObserver();
-        observer.addOnGlobalLayoutListener(
-                new ViewTreeObserver.OnGlobalLayoutListener() {
-                    @Override
-                    public void onGlobalLayout() {
-                        ViewPager viewPager = findViewById(R.id.viewpager);
-                        PagerAdapter pagerAdapter = new StaticPagerAdapter(MainActivity.this,
-                                new Atlas(resourcesList, getResources(), layout.getWidth(), layout.getHeight()));
-                        viewPager.setAdapter(pagerAdapter);
-
-                        BookFlipPageTransformer bookFlipPageTransformer = new BookFlipPageTransformer();
-                        // Enable / Disable scaling while flipping. If true, then next page will scale in (zoom in). By default, its true.
-                        bookFlipPageTransformer.setEnableScale(false);
-                        // The amount of scale the page will zoom. By default, its 5 percent.
-                        bookFlipPageTransformer.setScaleAmountPercent(10f);
-                        viewPager.setPageTransformer(true, bookFlipPageTransformer);
-
-                        layout.getViewTreeObserver().removeOnGlobalLayoutListener(
-                                this);
-                    }
-                });*/
     }
 }
