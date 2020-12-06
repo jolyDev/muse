@@ -2,12 +2,14 @@ package org.andresoviedo.app.model3D.view;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.DownloadManager;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -25,6 +27,7 @@ import com.google.ar.core.exceptions.UnavailableUserDeclinedInstallationExceptio
 import org.andresoviedo.android_3d_model_engine.services.wavefront.WavefrontLoader;
 import org.andresoviedo.app.model3D.Atlas.AtlasActivity;
 import org.andresoviedo.app.model3D.DevTools.LinkConventer;
+import org.andresoviedo.app.model3D.DevTools.NetworkManager;
 import org.andresoviedo.app.model3D.arcorehelpers.ArCoreHelper;
 import org.andresoviedo.dddmodel2.R;
 import org.andresoviedo.lang.LanguageManager;
@@ -41,6 +44,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import static androidx.core.app.ActivityCompat.requestPermissions;
+import static androidx.core.content.ContextCompat.checkSelfPermission;
+import static androidx.core.content.ContextCompat.getSystemService;
 import static com.google.ar.core.ArCoreApk.InstallStatus.INSTALLED;
 
 public class MenuActivity extends ListActivity {
@@ -52,6 +58,7 @@ public class MenuActivity extends ListActivity {
     private static final int REQUEST_CODE_OPEN_MATERIAL = 1102;
     private static final int REQUEST_CODE_OPEN_TEXTURE = 1103;
     public static final int REQUEST_CODE_QR_CODE = 1104;
+    private static final int PERMISSION_STORAGE_CODE = 1000;
     private static final String SUPPORTED_FILE_TYPES_REGEX = "(?i).*\\.(obj|stl|dae|gltf)";
 
     private Map<String, Object> loadModelParameters = new HashMap<>();
@@ -61,6 +68,7 @@ public class MenuActivity extends ListActivity {
     private final String prefsId = "ui";
     private final String languageId = "style";
 
+    private static int page_id = 0;
     private void _UpdateMenuItems()
     {
         String[] menuItems = checkAR_Permission() ?
@@ -73,6 +81,7 @@ public class MenuActivity extends ListActivity {
                 lang.Get(Tokens.exit)
         } :
         new String[]{
+                lang.Get(Tokens.load),
                 lang.Get(Tokens.scanQR),
                 lang.Get(Tokens.viewItems),
                 lang.Get(Tokens.atlas),
@@ -196,6 +205,20 @@ public class MenuActivity extends ListActivity {
         MenuActivity.this.startActivity(helpIntent);
     }
 
+    void DownloadPage(int index)
+    {
+        if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
+                PackageManager.PERMISSION_DENIED)
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_STORAGE_CODE);
+
+        if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
+                PackageManager.PERMISSION_DENIED)
+            return;
+
+        DownloadManager manager = (DownloadManager)getSystemService(getApplicationContext().DOWNLOAD_SERVICE);
+        NetworkManager.GetInstance().DownloadPage(++page_id, manager);
+    }
+
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         try {
@@ -203,8 +226,10 @@ public class MenuActivity extends ListActivity {
 
             if (option.equals(lang.Get(Tokens.scanQR_AR)))
                 startQRActivity(checkAR_Permission());
-            if (option.equals(lang.Get(Tokens.AR)))
+            else if (option.equals(lang.Get(Tokens.AR)))
                 AR();
+            else if (option.equals(lang.Get(Tokens.load)))
+                DownloadPage(page_id++);
             else if (option.equals(lang.Get(Tokens.atlas)))
                 RunAtlas();
             else if (option.equals(lang.Get(Tokens.viewItems)))
