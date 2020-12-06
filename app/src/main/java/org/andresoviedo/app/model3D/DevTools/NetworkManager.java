@@ -3,6 +3,7 @@ package org.andresoviedo.app.model3D.DevTools;
 import android.Manifest;
 import android.app.Activity;
 import android.app.DownloadManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -31,24 +32,24 @@ public class NetworkManager {
         return instance;
     }
 
-    public String DownloadPage(int index, DownloadManager manager)
+    public void DownloadPage(int index, DownloadManager manager)
     {
         if (index < 0 || index >= links.size())
-            return "";
+            return;
 
         String url = links.get(index);
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
         request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
-        request.setTitle("Download");
+        request.setTitle(LocalStorageManager.GetInstance().GetFileNameForPage(index));
         request.setDescription("Downloading page file ...");
         request.allowScanningByMediaScanner();
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
 
-        String filename = "Atlas_page_" + index;
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, filename);
-
+        request.setDestinationInExternalPublicDir(
+                Environment.DIRECTORY_DOWNLOADS,
+                LocalStorageManager.GetInstance().GetFileNameForPage(index));
+                //.registerReceiver(onComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
         manager.enqueue(request);
-        return Environment.DIRECTORY_DOWNLOADS + filename;
     }
 
     ArrayList<String> links = new ArrayList<String>();

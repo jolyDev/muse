@@ -91,7 +91,6 @@ public class MenuActivity extends ListActivity {
         };
 
         setListAdapter(new ArrayAdapter<>(this, R.layout.activity_menu_item, menuItems));
-
     }
 
     private void RunAtlas()

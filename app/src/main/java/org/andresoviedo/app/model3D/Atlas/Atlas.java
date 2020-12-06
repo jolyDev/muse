@@ -1,7 +1,14 @@
 package org.andresoviedo.app.model3D.Atlas;
+import android.app.DownloadManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+
+import org.andresoviedo.app.model3D.DevTools.LocalStorageManager;
+import org.andresoviedo.app.model3D.DevTools.NetworkManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,25 +16,64 @@ import java.util.HashMap;
 
 public class Atlas {
 
-    private int CAPACITY_HALF = 4;
+    private int CAPACITY_HALF = 2;
     private ArrayList<Integer> images;
     private HashMap<Integer, Bitmap> bitmaps;
     private Resources resources;
     private int screenHeight, screenWidth;
     private int lastPreLoadPage;
+    private DownloadManager manager = null;
 
     private HashMap<Integer, LoadingThread> loadingThreads;
 
     private class LoadingThread extends Thread {
         private int index;
+        private DownloadManager manager = null;
 
-        LoadingThread(int index) {
+        LoadingThread(int index, DownloadManager i_manager) {
             this.index = index;
+            manager = i_manager;
         }
 
         public void run() {
-            bitmaps.put(index, decodeSampledBitmapFromResource(resources,images.get(index)));
-            loadingThreads.remove(index);
+        NetworkManager network = NetworkManager.GetInstance();
+        LocalStorageManager storage = LocalStorageManager.GetInstance();
+
+        Bitmap result = storage.GetBitmapForPage(index);
+
+        if (result == null)
+        {
+            network.DownloadPage(index, manager);
+            while (result == null)
+            {
+                try {
+                    sleep(500);
+                    result = storage.GetBitmapForPage(index);
+                } catch (InterruptedException e) {
+                    result = storage.GetBitmapForPage(index);
+                }
+            }
+        }
+
+        bitmaps.put(index, result);
+        loadingThreads.remove(index);
+        }
+
+        public BroadcastReceiver GetCallback(int downloadID)
+        {
+         return new BroadcastReceiver()
+         {
+             @Override
+             public void onReceive(Context arg0, Intent intent) {
+                 String action = intent.getAction();
+                 if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action))
+                     if (downloadID == intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, 0))
+                     {
+                         bitmaps.put(index, decodeSampledBitmapFromResource(resources,images.get(index)));
+                         loadingThreads.remove(index);
+                     }
+             }
+         };
         }
     }
 
@@ -62,10 +108,11 @@ public class Atlas {
         }
     }
 
-    public Atlas(ArrayList<Integer> resourcesList, Resources resources, int screenWidth, int screenHeight) {
+    public Atlas(ArrayList<Integer> resourcesList, DownloadManager i_manager, Resources resources, int screenWidth, int screenHeight) {
         images = resourcesList;
         bitmaps = new HashMap<>();
         loadingThreads = new HashMap<>();
+        manager = i_manager;
         this.resources = resources;
         this.screenHeight = screenHeight;
         this.screenWidth = screenWidth;
@@ -113,7 +160,7 @@ public class Atlas {
     private void load(int page) {
         LoadingThread loadingThread = loadingThreads.get(page);
         if (loadingThread == null) { // Bitmap didn't start loading - we start loading
-            loadingThread = new LoadingThread(page);
+            loadingThread = new LoadingThread(page, manager);
             loadingThread.start();
             loadingThreads.put(page, loadingThread);
         }
@@ -141,7 +188,7 @@ public class Atlas {
         recyclePages(start, end);
         for (int i = start; i <= end; i++) { // loading
             if (bitmaps.get(i) == null && loadingThreads.get(i) == null) { // if not loaded and not loading
-                LoadingThread loadingThread = new LoadingThread(i);
+                LoadingThread loadingThread = new LoadingThread(i, manager);
                 loadingThread.start();
                 loadingThreads.put(i, loadingThread);
             }

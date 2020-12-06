@@ -8,6 +8,7 @@ import androidx.viewpager.widget.ViewPager;
 import org.andresoviedo.dddmodel2.R;
 
 import android.app.Activity;
+import android.app.DownloadManager;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 public class AtlasActivity extends Activity {
 
     private final ArrayList<Integer> resourcesList = new ArrayList<>();
+    DownloadManager manager = null;
 
     private void addResourses() {
         resourcesList.add(R.drawable.p00);
@@ -71,6 +73,7 @@ public class AtlasActivity extends Activity {
         setContentView(R.layout.curl_activity_main);
 
         addResourses();
+        manager = (DownloadManager)getSystemService(getApplicationContext().DOWNLOAD_SERVICE);
 
         final LinearLayout layout = findViewById(R.id.curl_book);
         final ViewTreeObserver observer= layout.getViewTreeObserver();
@@ -79,7 +82,7 @@ public class AtlasActivity extends Activity {
                     @Override
                     public void onGlobalLayout() {
                         BookLayout bookLayout = new BookLayout(AtlasActivity.this.getApplicationContext(),
-                                new Atlas(resourcesList, getResources(), layout.getWidth(), layout.getHeight()));
+                                new Atlas(resourcesList, manager, getResources(), layout.getWidth(), layout.getHeight()));
                         layout.addView(bookLayout);
                         bookLayout.setVisibility(View.VISIBLE);
 
