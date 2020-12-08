@@ -38,8 +38,6 @@ public class Atlas {
         }
 
         public void run() {
-
-
         NetworkManager network = NetworkManager.GetInstance();
         LocalStorageManager storage = LocalStorageManager.GetInstance();
 
@@ -51,7 +49,7 @@ public class Atlas {
         if (result == null)
         {
             network.DownloadPage(index, manager);
-            while (result == null)
+            for (int i = 0; result == null && i < 10; i++)
             {
                 try {
                     sleep(500);
@@ -60,6 +58,8 @@ public class Atlas {
                     result = storage.GetBitmapForPage(index);
                 }
             }
+            if (result == null)
+                return;
         }
 
         LAST_DOWNLOAD = Math.max(LAST_DOWNLOAD, index);
@@ -107,7 +107,7 @@ public class Atlas {
         this.resources = resources;
         this.screenHeight = screenHeight;
         this.screenWidth = screenWidth;
-        init();
+        bitmaps.put(0, decodeSampledBitmapFromResource(this.resources, resourcesList.get(0)));
     }
 
     public int size() {
@@ -124,11 +124,6 @@ public class Atlas {
 
     public void setCapacity(int capacity) {
         CAPACITY_HALF = capacity/2;
-    }
-
-    private void init() {
-        load(0, CAPACITY_HALF);
-        lastPreLoadPage = 0;
     }
 
     public Bitmap get(int page) {

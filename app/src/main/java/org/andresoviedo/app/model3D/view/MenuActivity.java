@@ -68,7 +68,6 @@ public class MenuActivity extends ListActivity {
     private final String prefsId = "ui";
     private final String languageId = "style";
 
-    private static int page_id = 0;
     private void _UpdateMenuItems()
     {
         String[] menuItems = checkAR_Permission() ?
@@ -204,20 +203,6 @@ public class MenuActivity extends ListActivity {
         MenuActivity.this.startActivity(helpIntent);
     }
 
-    void DownloadPage(int index)
-    {
-        if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
-                PackageManager.PERMISSION_DENIED)
-            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_STORAGE_CODE);
-
-        if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
-                PackageManager.PERMISSION_DENIED)
-            return;
-
-        DownloadManager manager = (DownloadManager)getSystemService(getApplicationContext().DOWNLOAD_SERVICE);
-        NetworkManager.GetInstance().DownloadPage(++page_id, manager);
-    }
-
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         try {
@@ -227,8 +212,6 @@ public class MenuActivity extends ListActivity {
                 startQRActivity(checkAR_Permission());
             else if (option.equals(lang.Get(Tokens.AR)))
                 AR();
-            else if (option.equals(lang.Get(Tokens.load)))
-                DownloadPage(page_id++);
             else if (option.equals(lang.Get(Tokens.atlas)))
                 RunAtlas();
             else if (option.equals(lang.Get(Tokens.viewItems)))
