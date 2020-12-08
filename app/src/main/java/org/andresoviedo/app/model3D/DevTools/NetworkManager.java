@@ -56,11 +56,11 @@ public class NetworkManager {
 
     public NetworkManager()
     {
-        links.add("https://drive.google.com/uc?export=download&id=1Gnja9zJpd87Wyny7zRGT5q-5WlG_xVl9");
-        links.add("https://drive.google.com/uc?export=download&id=17ZJi6X4o7Y6IKwcRblyfJYBDnVXTQFdk");
+        links.add("https://drive.google.com/uc?export=download&id=1nMcr9YsE3cM7biUAmUufvDduWRPAm6iS");
+        links.add("https://drive.google.com/uc?export=download&id=1__qac764XcFuxiNtcu_CqmIoE0YIRQnV");
         links.add("https://drive.google.com/uc?export=download&id=1Gr3K3h5Dc-PxFIobBwLoPEAo2vzbKApb");
         links.add("https://drive.google.com/uc?export=download&id=1Ll_HaxqTwgOPycAQAfLHGiicD9UwmsPh");
         links.add("https://drive.google.com/uc?export=download&id=1TSPsbPY6jp8scoilixvOmBA31rP3G93y");
-        links.add("https://drive.google.com/uc?export=download&id=1ZtPtNzwVZBv2rmv2vXJwwnfwOTWW5PQK");
+        links.add("https://drive.google.com/uc?export=download&id=1nMcr9YsE3cM7biUAmUufvDduWRPAm6iS");
     }
 }

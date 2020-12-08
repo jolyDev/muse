@@ -16,6 +16,7 @@ import java.util.HashMap;
 
 public class Atlas {
 
+    private int LAST_DOWNLOAD = 0;
     private int IMAGE_SIZE = 49;
     private int CAPACITY_HALF = 2;
     private ArrayList<Integer> images;
@@ -37,18 +38,15 @@ public class Atlas {
         }
 
         public void run() {
-            if (index >= 0 && index < images.size())
-            {
-                // first few  items we are getting from resources
-                bitmaps.put(index, decodeSampledBitmapFromResource(resources,images.get(index)));
-                loadingThreads.remove(index);
-                return;
-            }
+
 
         NetworkManager network = NetworkManager.GetInstance();
         LocalStorageManager storage = LocalStorageManager.GetInstance();
 
         Bitmap result = storage.GetBitmapForPage(index);
+
+        if (index >= 0 && index < images.size())
+            result = decodeSampledBitmapFromResource(resources,images.get(index));
 
         if (result == null)
         {
@@ -64,6 +62,7 @@ public class Atlas {
             }
         }
 
+        LAST_DOWNLOAD = Math.max(LAST_DOWNLOAD, index);
         bitmaps.put(index, result);
         loadingThreads.remove(index);
         }
@@ -112,7 +111,7 @@ public class Atlas {
     }
 
     public int size() {
-        return IMAGE_SIZE;
+        return LAST_DOWNLOAD + 1;
     }
 
     public int getScreenWidth() {
