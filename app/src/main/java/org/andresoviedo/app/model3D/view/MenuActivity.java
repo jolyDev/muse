@@ -80,7 +80,6 @@ public class MenuActivity extends ListActivity {
                 lang.Get(Tokens.exit)
         } :
         new String[]{
-                lang.Get(Tokens.load),
                 lang.Get(Tokens.scanQR),
                 lang.Get(Tokens.viewItems),
                 lang.Get(Tokens.atlas),
