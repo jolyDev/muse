@@ -27,43 +27,6 @@ public class AtlasActivity extends Activity {
         resourcesList.add(R.drawable.p02);
         resourcesList.add(R.drawable.p03);
         resourcesList.add(R.drawable.p04);
-        resourcesList.add(R.drawable.p05);
-        resourcesList.add(R.drawable.p00);
-        resourcesList.add(R.drawable.p01);
-        resourcesList.add(R.drawable.p02);
-        resourcesList.add(R.drawable.p03);
-        resourcesList.add(R.drawable.p04);
-        resourcesList.add(R.drawable.p05);
-        resourcesList.add(R.drawable.p00);
-        resourcesList.add(R.drawable.p01);
-        resourcesList.add(R.drawable.p02);
-        resourcesList.add(R.drawable.p03);
-        resourcesList.add(R.drawable.p04);
-        resourcesList.add(R.drawable.p05);
-        resourcesList.add(R.drawable.p00);
-        resourcesList.add(R.drawable.p01);
-        resourcesList.add(R.drawable.p02);
-        resourcesList.add(R.drawable.p03);
-        resourcesList.add(R.drawable.p04);
-        resourcesList.add(R.drawable.p05);
-        resourcesList.add(R.drawable.p00);
-        resourcesList.add(R.drawable.p01);
-        resourcesList.add(R.drawable.p02);
-        resourcesList.add(R.drawable.p03);
-        resourcesList.add(R.drawable.p04);
-        resourcesList.add(R.drawable.p05);
-        resourcesList.add(R.drawable.p00);
-        resourcesList.add(R.drawable.p01);
-        resourcesList.add(R.drawable.p02);
-        resourcesList.add(R.drawable.p03);
-        resourcesList.add(R.drawable.p04);
-        resourcesList.add(R.drawable.p05);
-        resourcesList.add(R.drawable.p00);
-        resourcesList.add(R.drawable.p01);
-        resourcesList.add(R.drawable.p02);
-        resourcesList.add(R.drawable.p03);
-        resourcesList.add(R.drawable.p04);
-        resourcesList.add(R.drawable.p05);
     }
 
     @Override

@@ -16,6 +16,7 @@ import java.util.HashMap;
 
 public class Atlas {
 
+    private int IMAGE_SIZE = 49;
     private int CAPACITY_HALF = 2;
     private ArrayList<Integer> images;
     private HashMap<Integer, Bitmap> bitmaps;
@@ -36,6 +37,14 @@ public class Atlas {
         }
 
         public void run() {
+            if (index >= 0 && index < images.size())
+            {
+                // first few  items we are getting from resources
+                bitmaps.put(index, decodeSampledBitmapFromResource(resources,images.get(index)));
+                loadingThreads.remove(index);
+                return;
+            }
+
         NetworkManager network = NetworkManager.GetInstance();
         LocalStorageManager storage = LocalStorageManager.GetInstance();
 
@@ -58,23 +67,6 @@ public class Atlas {
         bitmaps.put(index, result);
         loadingThreads.remove(index);
         }
-
-        public BroadcastReceiver GetCallback(int downloadID)
-        {
-         return new BroadcastReceiver()
-         {
-             @Override
-             public void onReceive(Context arg0, Intent intent) {
-                 String action = intent.getAction();
-                 if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action))
-                     if (downloadID == intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, 0))
-                     {
-                         bitmaps.put(index, decodeSampledBitmapFromResource(resources,images.get(index)));
-                         loadingThreads.remove(index);
-                     }
-             }
-         };
-        }
     }
 
     private class RecyclingThread extends Thread {
@@ -96,7 +88,7 @@ public class Atlas {
                     }
                 }
             }
-            for (int i = followingStartIndex + 1; i < images.size(); i++) {
+            for (int i = followingStartIndex + 1; i < IMAGE_SIZE; i++) {
                 Bitmap bitmap = bitmaps.get(i);
                 if (bitmap != null) { // if page loaded
                     synchronized(bitmap) {
@@ -120,7 +112,7 @@ public class Atlas {
     }
 
     public int size() {
-        return images.size();
+        return IMAGE_SIZE;
     }
 
     public int getScreenWidth() {
@@ -141,7 +133,7 @@ public class Atlas {
     }
 
     public Bitmap get(int page) {
-        if (page >= images.size()) return null;
+        if (page >= IMAGE_SIZE) return null;
         callPreviousLoadingStart(page);
         Bitmap bitmap = bitmaps.get(page); // try to get Bitmap
         if (bitmap == null) { // Bitmap not loaded
@@ -152,7 +144,7 @@ public class Atlas {
     }
 
     private void load(int startPage, int endPage) {
-        for (int i = startPage; i <= endPage && i < images.size(); i++) {
+        for (int i = startPage; i <= endPage && i < IMAGE_SIZE; i++) {
             load(i);
         }
     }
@@ -184,7 +176,7 @@ public class Atlas {
     private void previousLoadingStart(int curPage) { // start to load pages in advance
         lastPreLoadPage = curPage;
         int start = Math.max(curPage - (CAPACITY_HALF), 0); // previous capacity/2 pages (or first page)
-        int end = Math.min(curPage + (CAPACITY_HALF), images.size() - 1); // next capacity/2 pages (or last)
+        int end = Math.min(curPage + (CAPACITY_HALF), IMAGE_SIZE - 1); // next capacity/2 pages (or last)
         recyclePages(start, end);
         for (int i = start; i <= end; i++) { // loading
             if (bitmaps.get(i) == null && loadingThreads.get(i) == null) { // if not loaded and not loading
