@@ -129,68 +129,6 @@ public class BookView extends View {
         flip();
     }
 
-    /*@Override
-    public boolean onTouchEvent(MotionEvent event) {
-        // TODO Auto-generated method stub
-        if (!onloading) {
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-
-                    oldTouchX = event.getX();
-                    oldTouchY = event.getY();
-                    flip = true;
-                    if (oldTouchX > (width >> 1)) {
-                        xTouchValue = DEFAULT_FLIP_VALUE;
-                        yTouchValue = DEFAULT_FLIP_VALUE;
-                        // set invisible page's content
-                        next = true;
-                    } else {
-
-                        next = false;
-
-                        xTouchValue = width;
-                        yTouchValue = DEFAULT_FLIP_VALUE;
-                    }
-                    break;
-                case MotionEvent.ACTION_UP:
-                    if (onMoving) {
-                        xTouchValue = width - A.x;
-                        onMoving = false;
-                    }
-                    flipping = true;
-                    flip();
-                    break;
-                case MotionEvent.ACTION_MOVE:
-                    onMoving = true;
-                    float xMouse = event.getX();
-                    float yMouse = event.getY();
-                    xTouchValue -= (xMouse - oldTouchX) / 1;
-                    yTouchValue -= yMouse - oldTouchY;
-
-                    if (xMouse < oldTouchX) {
-                        if (!next) {
-                            flip = false;
-                        }
-                        next = true;
-
-                    } else {
-                        if (next) {
-                            flip = false;
-                        }
-                        next = false;
-                    }
-
-                    oldTouchX = event.getX();
-                    oldTouchY = event.getY();
-
-                    this.invalidate();
-
-                    break;
-            }
-        }
-        return true;
-    }*/
-
     public void flip() {
         if (flipping) {
             if (xTouchValue > width || xTouchValue < DEFAULT_FLIP_VALUE) {
