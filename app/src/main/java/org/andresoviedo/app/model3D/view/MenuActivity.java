@@ -133,7 +133,7 @@ public class MenuActivity extends ListActivity {
             ContentUtils.showListDialog(this, lang.Get(Tokens.language),
                     new String[]{
                             lang.Get(Tokens.scull),
-                            lang.Get(Tokens.android),
+                            lang.Get(Tokens.microscope),
                             lang.Get(Tokens.back)
                     },
                     (dialog, which) ->
@@ -144,12 +144,12 @@ public class MenuActivity extends ListActivity {
 
                         switch (which) {
                             case 0:
-                                if (map.containsKey(LinkConventer.partOneEasterLink))
-                                    obj = map.get(LinkConventer.partOneEasterLink);
-                                break;
-                            case 1:
                                 if (map.containsKey(LinkConventer.partTwoEasterLink))
                                     obj = map.get(LinkConventer.partTwoEasterLink);
+                                break;
+                            case 1:
+                                if (map.containsKey(LinkConventer.partOneEasterLink))
+                                    obj = map.get(LinkConventer.partOneEasterLink);
                                 break;
                             default:
                                 return;

@@ -62,7 +62,15 @@ public class ArCoreHelper {
 
     public static void showArObject(final android.content.Context context, String file, String title) {
         Intent sceneViewerIntent = new Intent(Intent.ACTION_VIEW);
-        sceneViewerIntent.setData(Uri.parse("https://arvr.google.com/scene-viewer/1.0?file="+ file));
+        Uri intentUri =
+                Uri.parse("https://arvr.google.com/scene-viewer/1.0")
+                        .buildUpon()
+                        .appendQueryParameter(
+                                "file",
+                                file)
+                        .build();
+        Log.i("in helper", "link=" + intentUri);
+        sceneViewerIntent.setData(intentUri);
         sceneViewerIntent.setPackage("com.google.android.googlequicksearchbox");
         context.startActivity(sceneViewerIntent);
     }
