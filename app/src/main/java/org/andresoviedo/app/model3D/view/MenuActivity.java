@@ -130,10 +130,11 @@ public class MenuActivity extends ListActivity {
     {
         if (checkAR_Permission())
         {
-            ContentUtils.showListDialog(this, lang.Get(Tokens.language),
+            ContentUtils.showListDialog(this, lang.Get(Tokens.items),
                     new String[]{
                             lang.Get(Tokens.scull),
-                            lang.Get(Tokens.android),
+                            lang.Get(Tokens.heart),
+                            lang.Get(Tokens.map),
                             lang.Get(Tokens.back)
                     },
                     (dialog, which) ->
@@ -144,12 +145,16 @@ public class MenuActivity extends ListActivity {
 
                         switch (which) {
                             case 0:
-                                if (map.containsKey(LinkConventer.partOneEasterLink))
-                                    obj = map.get(LinkConventer.partOneEasterLink);
+                                if (map.containsKey(LinkConventer.skull_easter))
+                                    obj = map.get(LinkConventer.skull_easter);
                                 break;
                             case 1:
-                                if (map.containsKey(LinkConventer.partTwoEasterLink))
-                                    obj = map.get(LinkConventer.partTwoEasterLink);
+                                if (map.containsKey(LinkConventer.heart_easter))
+                                    obj = map.get(LinkConventer.heart_easter);
+                                break;
+                            case 2:
+                                if (map.containsKey(LinkConventer.map_easter))
+                                    obj = map.get(LinkConventer.map_easter);
                                 break;
                             default:
                                 return;
@@ -268,10 +273,11 @@ public class MenuActivity extends ListActivity {
 
     private void loadModelFromAssets() {
 
-        ContentUtils.showListDialog(this, lang.Get(Tokens.language),
+        ContentUtils.showListDialog(this, lang.Get(Tokens.items),
                         new String[]{
                                 lang.Get(Tokens.scull),
-                                lang.Get(Tokens.android),
+                                lang.Get(Tokens.heart),
+                                lang.Get(Tokens.map),
                                 lang.Get(Tokens.back)
                         },
                         (dialog, which) ->
@@ -282,12 +288,16 @@ public class MenuActivity extends ListActivity {
 
                             switch (which) {
                                 case 0:
-                                    if (map.containsKey(LinkConventer.partTwoEasterLink))
-                                        obj = map.get(LinkConventer.partTwoEasterLink);
+                                    if (map.containsKey(LinkConventer.skull_easter))
+                                        obj = map.get(LinkConventer.skull_easter);
                                     break;
                                 case 1:
-                                    if (map.containsKey(LinkConventer.partOneEasterLink))
-                                        obj = map.get(LinkConventer.partOneEasterLink);
+                                    if (map.containsKey(LinkConventer.heart_easter))
+                                        obj = map.get(LinkConventer.heart_easter);
+                                    break;
+                                case 2:
+                                    if (map.containsKey(LinkConventer.map_easter))
+                                        obj = map.get(LinkConventer.map_easter);
                                     break;
                                 default:
                                     return;
