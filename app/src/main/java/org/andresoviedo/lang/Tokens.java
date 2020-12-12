@@ -30,9 +30,17 @@ public class Tokens
     static public final String info = "Info";
     static public final String incorrectQR = "incorrect QR was captured";
     static public final String back = "back";
+
+    // items
+    static public final String items = "Items";
+    static public final String heart = "Heart";
     static public final String plane = "Plane";
     static public final String teapot = "Teapot";
     static public final String scull = "Scull";
     static public final String android = "Android";
+<<<<<<< HEAD
     static public final String microscope = "Microscope";
+=======
+    static public final String map = "Map";
+>>>>>>> 56167fd... items added
 }
