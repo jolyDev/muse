@@ -63,6 +63,8 @@ public class LanguageManager {
         data.put(Tokens.scull, InitUIText(Tokens.scull, "Череп", "Череп"));
         data.put(Tokens.heart, InitUIText(Tokens.heart, "Серце", "Сердце"));
         data.put(Tokens.microscope, InitUIText(Tokens.microscope, "Мікроскоп", "Микроскоп"));
+        data.put(Tokens.map, InitUIText(Tokens.map, "Карта", "Карта"));
+        data.put(Tokens.termokauter, InitUIText(Tokens.termokauter, "Термокаутер", "Термокаутер"));
     }
 
     private Map<String, UIText> data = new HashMap<String, UIText>();

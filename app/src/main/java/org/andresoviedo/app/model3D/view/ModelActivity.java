@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import org.andresoviedo.app.model3D.demo.ExampleSceneLoader;
 import org.andresoviedo.app.model3D.demo.SceneLoader;
-import org.andresoviedo.dddmodel2.R;
+import org.nnmu.R;
 import org.andresoviedo.util.android.ContentUtils;
 
 import java.io.IOException;

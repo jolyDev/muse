@@ -2,7 +2,6 @@ package org.andresoviedo.app.model3D.view;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.DownloadManager;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
@@ -21,19 +20,15 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.ar.core.ArCoreApk;
-import com.google.ar.core.exceptions.UnavailableDeviceNotCompatibleException;
-import com.google.ar.core.exceptions.UnavailableUserDeclinedInstallationException;
 
 import org.andresoviedo.android_3d_model_engine.services.wavefront.WavefrontLoader;
 import org.andresoviedo.app.model3D.Atlas.AtlasActivity;
 import org.andresoviedo.app.model3D.DevTools.LinkConventer;
-import org.andresoviedo.app.model3D.DevTools.NetworkManager;
 import org.andresoviedo.app.model3D.arcorehelpers.ArCoreHelper;
-import org.andresoviedo.dddmodel2.R;
+import org.nnmu.R;
 import org.andresoviedo.lang.LanguageManager;
 import org.andresoviedo.lang.Tokens;
 import org.andresoviedo.util.android.AndroidUtils;
-import org.andresoviedo.util.android.AssetUtils;
 import org.andresoviedo.util.android.ContentUtils;
 import org.andresoviedo.util.android.FileUtils;
 import org.andresoviedo.util.view.TextActivity;
@@ -41,12 +36,8 @@ import org.andresoviedo.util.view.TextActivity;
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
-import static androidx.core.app.ActivityCompat.requestPermissions;
-import static androidx.core.content.ContextCompat.checkSelfPermission;
-import static androidx.core.content.ContextCompat.getSystemService;
 import static com.google.ar.core.ArCoreApk.InstallStatus.INSTALLED;
 
 public class MenuActivity extends ListActivity {
@@ -58,12 +49,23 @@ public class MenuActivity extends ListActivity {
     private static final int REQUEST_CODE_OPEN_MATERIAL = 1102;
     private static final int REQUEST_CODE_OPEN_TEXTURE = 1103;
     public static final int REQUEST_CODE_QR_CODE = 1104;
-    private static final int PERMISSION_STORAGE_CODE = 1000;
+    private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 1005;
+    private static final int DUMMY = 1892;
     private static final String SUPPORTED_FILE_TYPES_REGEX = "(?i).*\\.(obj|stl|dae|gltf)";
 
     private Map<String, Object> loadModelParameters = new HashMap<>();
     private LanguageManager lang = LanguageManager.GetInstance();
     SharedPreferences sPref;
+    public static ProgressDialog atlas_loading_dialog = null;
+
+    String [] menu_items = new String[]{
+            lang.Get(Tokens.scull),
+            lang.Get(Tokens.heart),
+            lang.Get(Tokens.map),
+            lang.Get(Tokens.microscope),
+            lang.Get(Tokens.termokauter),
+            lang.Get(Tokens.back)
+    };
 
     private final String prefsId = "ui";
     private final String languageId = "style";
@@ -93,6 +95,12 @@ public class MenuActivity extends ListActivity {
 
     private void RunAtlas()
     {
+        atlas_loading_dialog = new ProgressDialog(MenuActivity.this);
+
+        atlas_loading_dialog.setCancelable(false);
+        atlas_loading_dialog.setMessage(lang.Get(Tokens.loading));
+        atlas_loading_dialog.show();
+
         Intent atlas = new Intent(MenuActivity.this.getApplicationContext(), AtlasActivity.class);
         atlas.putExtra("title", lang.Get(Tokens.atlas));
         MenuActivity.this.startActivity(atlas);
@@ -126,56 +134,62 @@ public class MenuActivity extends ListActivity {
         return false;
     }
 
+    private LinkConventer.MuseamObj GetMuseamObjFromId(String[] menu_items, int id)
+    {
+        LinkConventer.MuseamObj obj = new LinkConventer.MuseamObj("none", "none", "none");
+
+        Map<String, LinkConventer.MuseamObj> map = LinkConventer.GetInstance().ConvertManager;
+
+        String item = menu_items[id];
+        if (item.equals(lang.Get(Tokens.scull)))
+            obj = map.get(LinkConventer.skull_easter);
+        else if (item.equals(lang.Get(Tokens.heart)))
+            obj = map.get(LinkConventer.heart_easter);
+        else if (item.equals(lang.Get(Tokens.map)))
+            obj = map.get(LinkConventer.map_easter);
+        else if (item.equals(lang.Get(Tokens.microscope)))
+            obj = map.get(LinkConventer.microscope_easter);
+        else if (item.equals(lang.Get(Tokens.termokauter)))
+            obj = map.get(LinkConventer.termokauter_easter);
+        else if (item.equals(lang.Get(Tokens.back)))
+            obj = null;
+
+        return obj;
+    }
+
     public void AR()
     {
         if (checkAR_Permission())
         {
             ContentUtils.showListDialog(this, lang.Get(Tokens.items),
-                    new String[]{
-                            lang.Get(Tokens.scull),
-                            lang.Get(Tokens.heart),
-                            lang.Get(Tokens.map),
-                            lang.Get(Tokens.microscope),
-                            lang.Get(Tokens.back)
-                    },
+                    menu_items,
                     (dialog, which) ->
                     {
-                        LinkConventer.MuseamObj obj = new LinkConventer.MuseamObj("none", "none", "none");
+                        LinkConventer.MuseamObj obj = GetMuseamObjFromId(menu_items, which);
 
-                        Map<String, LinkConventer.MuseamObj> map = LinkConventer.GetInstance().ConvertManager;
-
-                        switch (which) {
-                            case 0:
-                                if (map.containsKey(LinkConventer.skull_easter))
-                                    obj = map.get(LinkConventer.skull_easter);
-                                break;
-                            case 1:
-                                if (map.containsKey(LinkConventer.heart_easter))
-                                    obj = map.get(LinkConventer.heart_easter);
-                                break;
-                            case 2:
-                                if (map.containsKey(LinkConventer.map_easter))
-                                    obj = map.get(LinkConventer.map_easter);
-                                break;
-                            case 3:
-                                if (map.containsKey(LinkConventer.microscope_easter))
-                                    obj = map.get(LinkConventer.microscope_easter);
-                                break;
-                            default:
-                                return;
-                        }
+                        if (obj == null)
+                            return;
 
                         ArCoreHelper.showArObject(
                                 getApplicationContext(),
                                 obj.ar_link,
                                 lang.Get(obj.name));
-            });
+                    });
         }
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, DUMMY);
+
+        if (checkSelfPermission(Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED)
+            requestPermissions(new String[]{Manifest.permission.INTERNET}, DUMMY);
+
+        if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
+            requestPermissions(new String[]{Manifest.permission.CAMERA}, DUMMY);
 
         _loadLanguagePreferences();
         setContentView(R.layout.activity_menu);
@@ -277,41 +291,14 @@ public class MenuActivity extends ListActivity {
     }
 
     private void loadModelFromAssets() {
-
         ContentUtils.showListDialog(this, lang.Get(Tokens.items),
-                        new String[]{
-                                lang.Get(Tokens.scull),
-                                lang.Get(Tokens.heart),
-                                lang.Get(Tokens.map),
-                                lang.Get(Tokens.microscope),
-                                lang.Get(Tokens.back)
-                        },
+                        menu_items,
                         (dialog, which) ->
                         {
-                            LinkConventer.MuseamObj obj = new LinkConventer.MuseamObj("none", "none", "none");
+                            LinkConventer.MuseamObj obj = GetMuseamObjFromId(menu_items, which);
 
-                            Map<String, LinkConventer.MuseamObj> map = LinkConventer.GetInstance().ConvertManager;
-
-                            switch (which) {
-                                case 0:
-                                    if (map.containsKey(LinkConventer.skull_easter))
-                                        obj = map.get(LinkConventer.skull_easter);
-                                    break;
-                                case 1:
-                                    if (map.containsKey(LinkConventer.heart_easter))
-                                        obj = map.get(LinkConventer.heart_easter);
-                                    break;
-                                case 2:
-                                    if (map.containsKey(LinkConventer.map_easter))
-                                        obj = map.get(LinkConventer.map_easter);
-                                    break;
-                                case 3:
-                                    if (map.containsKey(LinkConventer.microscope_easter))
-                                        obj = map.get(LinkConventer.microscope_easter);
-                                    break;
-                                default:
-                                    return;
-                            }
+                            if (obj == null)
+                                return;
 
                             ContentUtils.provideAssets(this);
                             launchModelRendererActivity(Uri.parse("assets://" + getPackageName() + "/" + obj.local_link));
@@ -413,6 +400,9 @@ public class MenuActivity extends ListActivity {
                 break;
             case REQUEST_READ_EXTERNAL_STORAGE:
                 loadModelFromSdCard();
+                break;
+            case REQUEST_WRITE_EXTERNAL_STORAGE:
+                RunAtlas();
                 break;
             case REQUEST_INTERNET_ACCESS:
                 loadModelFromRepository();

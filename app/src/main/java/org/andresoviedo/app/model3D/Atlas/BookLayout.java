@@ -15,7 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
-import org.andresoviedo.dddmodel2.R;
+import org.nnmu.R;
 
 import org.andresoviedo.app.model3D.view.SimpleScannerActivity;
 

@@ -40,13 +40,16 @@ public class LinkConventer {
                 "models/heart.dae", heart_origin));
         ConvertManager.put(skull_easter, new MuseamObj(
                 LanguageManager.GetInstance().Get(Tokens.scull)
-                , "models/Scull.obj", skull_origin));
+                , "models/Scull.gltf", skull_origin));
         ConvertManager.put(map_easter, new MuseamObj(
                 LanguageManager.GetInstance().Get(Tokens.map)
-                , "models/map.dae", map_origin));
+                , "models/globe.gltf", map_origin));
         ConvertManager.put(microscope_easter, new MuseamObj(
                 LanguageManager.GetInstance().Get(Tokens.microscope)
                 , "models/microscope.obj", microscope_origin));
+        ConvertManager.put(termokauter_easter, new MuseamObj(
+                LanguageManager.GetInstance().Get(Tokens.termokauter)
+                , "models/Termokauter.dae", termokauter_origin));
 
         ConvertManager.put(t, new MuseamObj("termokauter", "models/Scull.gltf", t));
         ConvertManager.put(t2, new MuseamObj("termokaute2r", "models/Scull.gltf", t2));
@@ -60,11 +63,14 @@ public class LinkConventer {
     public static final String heart_easter = "https://github.com/jolyDev/muse_data_storage/blob/main/TestEaster.jpg?raw=true";
     public static final String heart_origin = "https://github.com/jolyDev/muse_data_storage/blob/main/Scull.gltf?raw=true";
 
-    public static final String map_easter = "https://github.com/jolyDev/muse_data_storage/blob/main/TestEaster2.jpg?raw=true";
+    public static final String map_easter = "httasdasdps://github.com/jolyDev/muse_data_storage/blob/main/TestEaster2.jpg?raw=true";
     public static final String map_origin = "https://github.com/jolyDev/muse_data_storage/blob/main/Scull.gltf?raw=true";
 
-    public static final String microscope_easter = "https://github.com/jolyDev/muse_data_storage/blob/main/TestEaster2.jpg?raw=true";
+    public static final String microscope_easter = "httpasdasgdgs://github.com/jolyDev/muse_data_storage/blob/main/TestEaster2.jpg?raw=true";
     public static final String microscope_origin = "https://github.com/jolyDev/muse_data_storage/blob/main/Scull.gltf?raw=true";
+
+    public static final String termokauter_easter = "httpjkhjkjhs://github.com/jolyDev/muse_data_storage/blob/main/TestEaster2.jpg?raw=true";
+    public static final String termokauter_origin = "https://github.com/jolyDev/muse_data_storage/blob/main/Scull.gltf?raw=true";
 
     public static final String t  = "https://drive.google.com/uc?export=download&id=1WpjKZEnIzuFj6axqwCbs-ROPmbs8oinA";
     public static final String t2 = "https://drive.google.com/uc?export=download&id=122j1mwihUwsUZxFbSq9XJnAQWcesg1kb";

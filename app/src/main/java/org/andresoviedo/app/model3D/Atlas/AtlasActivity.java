@@ -5,7 +5,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import org.andresoviedo.dddmodel2.R;
+import org.andresoviedo.app.model3D.view.MenuActivity;
+import org.nnmu.R;
 
 import android.app.Activity;
 import android.app.DownloadManager;
@@ -51,6 +52,9 @@ public class AtlasActivity extends Activity {
 
                         layout.getViewTreeObserver().removeOnGlobalLayoutListener(
                                 this);
+
+                        if (MenuActivity.atlas_loading_dialog.isShowing())
+                            MenuActivity.atlas_loading_dialog.dismiss();
                     }
                 });
     }

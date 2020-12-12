@@ -9,7 +9,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Environment;
 
-import org.andresoviedo.dddmodel2.R;
+import org.nnmu.R;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
