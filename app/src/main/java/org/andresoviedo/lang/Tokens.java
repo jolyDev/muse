@@ -42,5 +42,9 @@ public class Tokens
     static public final String microscope = "Microscope";
 =======
     static public final String map = "Map";
+<<<<<<< HEAD
 >>>>>>> 56167fd... items added
+=======
+    static public final String microscope = "Microscope";
+>>>>>>> 25126c8... microscope added
 }

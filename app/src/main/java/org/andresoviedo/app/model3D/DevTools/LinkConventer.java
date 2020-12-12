@@ -48,7 +48,13 @@ public class LinkConventer {
         ConvertManager.put(map_easter, new MuseamObj(
                 LanguageManager.GetInstance().Get(Tokens.map)
                 , "models/map.dae", map_origin));
+<<<<<<< HEAD
 >>>>>>> 56167fd... items added
+=======
+        ConvertManager.put(microscope_easter, new MuseamObj(
+                LanguageManager.GetInstance().Get(Tokens.microscope)
+                , "models/microscope.obj", microscope_origin));
+>>>>>>> 25126c8... microscope added
         ConvertManager.put(t, new MuseamObj("termokauter", "models/Scull.gltf", t));
         ConvertManager.put(t2, new MuseamObj("termokaute2r", "models/Scull.gltf", t2));
         ConvertManager.put(t3, new MuseamObj("termokauter3", "models/Scull.gltf", t3));
@@ -71,6 +77,9 @@ public class LinkConventer {
     public static final String map_easter = "https://github.com/jolyDev/muse_data_storage/blob/main/TestEaster2.jpg?raw=true";
     public static final String map_origin = "https://github.com/jolyDev/muse_data_storage/blob/main/Scull.gltf?raw=true";
 >>>>>>> 56167fd... items added
+
+    public static final String microscope_easter = "https://github.com/jolyDev/muse_data_storage/blob/main/TestEaster2.jpg?raw=true";
+    public static final String microscope_origin = "https://github.com/jolyDev/muse_data_storage/blob/main/Scull.gltf?raw=true";
 
     public static final String t  = "https://drive.google.com/uc?export=download&id=1WpjKZEnIzuFj6axqwCbs-ROPmbs8oinA";
     public static final String t2 = "https://drive.google.com/uc?export=download&id=122j1mwihUwsUZxFbSq9XJnAQWcesg1kb";

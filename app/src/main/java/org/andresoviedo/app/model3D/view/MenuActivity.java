@@ -138,7 +138,11 @@ public class MenuActivity extends ListActivity {
 =======
                             lang.Get(Tokens.heart),
                             lang.Get(Tokens.map),
+<<<<<<< HEAD
 >>>>>>> 56167fd... items added
+=======
+                            lang.Get(Tokens.microscope),
+>>>>>>> 25126c8... microscope added
                             lang.Get(Tokens.back)
                     },
                     (dialog, which) ->
@@ -168,6 +172,10 @@ public class MenuActivity extends ListActivity {
                             case 1:
                                 if (map.containsKey(LinkConventer.partOneEasterLink))
                                     obj = map.get(LinkConventer.partOneEasterLink);
+                                break;
+                            case 3:
+                                if (map.containsKey(LinkConventer.microscope_easter))
+                                    obj = map.get(LinkConventer.microscope_easter);
                                 break;
                             default:
                                 return;
@@ -291,6 +299,7 @@ public class MenuActivity extends ListActivity {
                                 lang.Get(Tokens.scull),
                                 lang.Get(Tokens.heart),
                                 lang.Get(Tokens.map),
+                                lang.Get(Tokens.microscope),
                                 lang.Get(Tokens.back)
                         },
                         (dialog, which) ->
@@ -311,6 +320,10 @@ public class MenuActivity extends ListActivity {
                                 case 2:
                                     if (map.containsKey(LinkConventer.map_easter))
                                         obj = map.get(LinkConventer.map_easter);
+                                    break;
+                                case 3:
+                                    if (map.containsKey(LinkConventer.microscope_easter))
+                                        obj = map.get(LinkConventer.microscope_easter);
                                     break;
                                 default:
                                     return;
