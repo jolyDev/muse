@@ -39,4 +39,5 @@ public class Tokens
     static public final String scull = "Scull";
     static public final String android = "Android";
     static public final String map = "Map";
+    static public final String microscope = "Microscope";
 }
