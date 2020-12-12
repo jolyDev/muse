@@ -35,10 +35,6 @@ public class LinkConventer {
 
     private LinkConventer()
     {
-<<<<<<< HEAD
-        ConvertManager.put(partOneEasterLink, new MuseamObj(Tokens.microscope, "models/android.obj", partOneOriginLink)); //todo
-        ConvertManager.put(partTwoEasterLink, new MuseamObj(Tokens.scull, "models/Scull.gltf", partTwoOriginlink));
-=======
         ConvertManager.put(heart_easter, new MuseamObj(
                 LanguageManager.GetInstance().Get(Tokens.heart),
                 "models/heart.dae", heart_origin));
@@ -48,26 +44,16 @@ public class LinkConventer {
         ConvertManager.put(map_easter, new MuseamObj(
                 LanguageManager.GetInstance().Get(Tokens.map)
                 , "models/map.dae", map_origin));
-<<<<<<< HEAD
->>>>>>> 56167fd... items added
-=======
         ConvertManager.put(microscope_easter, new MuseamObj(
                 LanguageManager.GetInstance().Get(Tokens.microscope)
                 , "models/microscope.obj", microscope_origin));
->>>>>>> 25126c8... microscope added
+
         ConvertManager.put(t, new MuseamObj("termokauter", "models/Scull.gltf", t));
         ConvertManager.put(t2, new MuseamObj("termokaute2r", "models/Scull.gltf", t2));
         ConvertManager.put(t3, new MuseamObj("termokauter3", "models/Scull.gltf", t3));
         ConvertManager.put(t4, new MuseamObj("termokauter4", "models/Scull.gltf", t4));
     }
 
-<<<<<<< HEAD
-    public static final String partOneEasterLink = "https://raw.githubusercontent.com/jolyDev/muse_data_storage/main/EasterEggBase.png";
-    public static final String partOneOriginLink = "https://drive.google.com/uc?export=download&id=1NbM3ii1LUA_AD_Nd1bmY5LdICSDCNt9M";
-
-    public static final String partTwoEasterLink = "https://github.com/jolyDev/muse_data_storage/blob/main/TestEaster.jpg?raw=true";
-    public static final String partTwoOriginlink = "https://drive.google.com/uc?export=download&id=1JHE4nigfXBfhKu762ovBbWbvdQOerpiL";
-=======
     public static final String skull_easter = "https://raw.githubusercontent.com/jolyDev/muse_data_storage/main/EasterEggBase.png";
     public static final String skull_origin = "https://github.com/jolyDev/muse_data_storage/blob/main/android.glb?raw=true";
 
@@ -76,7 +62,6 @@ public class LinkConventer {
 
     public static final String map_easter = "https://github.com/jolyDev/muse_data_storage/blob/main/TestEaster2.jpg?raw=true";
     public static final String map_origin = "https://github.com/jolyDev/muse_data_storage/blob/main/Scull.gltf?raw=true";
->>>>>>> 56167fd... items added
 
     public static final String microscope_easter = "https://github.com/jolyDev/muse_data_storage/blob/main/TestEaster2.jpg?raw=true";
     public static final String microscope_origin = "https://github.com/jolyDev/muse_data_storage/blob/main/Scull.gltf?raw=true";

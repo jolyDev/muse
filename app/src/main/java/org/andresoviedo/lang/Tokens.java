@@ -38,13 +38,6 @@ public class Tokens
     static public final String teapot = "Teapot";
     static public final String scull = "Scull";
     static public final String android = "Android";
-<<<<<<< HEAD
-    static public final String microscope = "Microscope";
-=======
     static public final String map = "Map";
-<<<<<<< HEAD
->>>>>>> 56167fd... items added
-=======
     static public final String microscope = "Microscope";
->>>>>>> 25126c8... microscope added
 }

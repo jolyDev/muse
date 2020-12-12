@@ -133,16 +133,9 @@ public class MenuActivity extends ListActivity {
             ContentUtils.showListDialog(this, lang.Get(Tokens.items),
                     new String[]{
                             lang.Get(Tokens.scull),
-<<<<<<< HEAD
-                            lang.Get(Tokens.microscope),
-=======
                             lang.Get(Tokens.heart),
                             lang.Get(Tokens.map),
-<<<<<<< HEAD
->>>>>>> 56167fd... items added
-=======
                             lang.Get(Tokens.microscope),
->>>>>>> 25126c8... microscope added
                             lang.Get(Tokens.back)
                     },
                     (dialog, which) ->
@@ -153,10 +146,6 @@ public class MenuActivity extends ListActivity {
 
                         switch (which) {
                             case 0:
-<<<<<<< HEAD
-                                if (map.containsKey(LinkConventer.partTwoEasterLink))
-                                    obj = map.get(LinkConventer.partTwoEasterLink);
-=======
                                 if (map.containsKey(LinkConventer.skull_easter))
                                     obj = map.get(LinkConventer.skull_easter);
                                 break;
@@ -167,11 +156,6 @@ public class MenuActivity extends ListActivity {
                             case 2:
                                 if (map.containsKey(LinkConventer.map_easter))
                                     obj = map.get(LinkConventer.map_easter);
->>>>>>> 56167fd... items added
-                                break;
-                            case 1:
-                                if (map.containsKey(LinkConventer.partOneEasterLink))
-                                    obj = map.get(LinkConventer.partOneEasterLink);
                                 break;
                             case 3:
                                 if (map.containsKey(LinkConventer.microscope_easter))
