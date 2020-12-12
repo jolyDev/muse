@@ -29,7 +29,7 @@ import org.andresoviedo.app.model3D.Atlas.AtlasActivity;
 import org.andresoviedo.app.model3D.DevTools.LinkConventer;
 import org.andresoviedo.app.model3D.DevTools.NetworkManager;
 import org.andresoviedo.app.model3D.arcorehelpers.ArCoreHelper;
-import org.andresoviedo.dddmodel2.R;
+import org.nnmu.R;
 import org.andresoviedo.lang.LanguageManager;
 import org.andresoviedo.lang.Tokens;
 import org.andresoviedo.util.android.AndroidUtils;
@@ -64,6 +64,15 @@ public class MenuActivity extends ListActivity {
     private Map<String, Object> loadModelParameters = new HashMap<>();
     private LanguageManager lang = LanguageManager.GetInstance();
     SharedPreferences sPref;
+
+    String [] menu_items = new String[]{
+            lang.Get(Tokens.scull),
+            lang.Get(Tokens.heart),
+            lang.Get(Tokens.map),
+            lang.Get(Tokens.microscope),
+            lang.Get(Tokens.termokauter),
+            lang.Get(Tokens.back)
+    };
 
     private final String prefsId = "ui";
     private final String languageId = "style";
@@ -126,50 +135,47 @@ public class MenuActivity extends ListActivity {
         return false;
     }
 
+    private LinkConventer.MuseamObj GetMuseamObjFromId(String[] menu_items, int id)
+    {
+        LinkConventer.MuseamObj obj = new LinkConventer.MuseamObj("none", "none", "none");
+
+        Map<String, LinkConventer.MuseamObj> map = LinkConventer.GetInstance().ConvertManager;
+
+        String item = menu_items[id];
+        if (item.equals(lang.Get(Tokens.scull)))
+            obj = map.get(LinkConventer.skull_easter);
+        else if (item.equals(lang.Get(Tokens.heart)))
+            obj = map.get(LinkConventer.heart_easter);
+        else if (item.equals(lang.Get(Tokens.map)))
+            obj = map.get(LinkConventer.map_easter);
+        else if (item.equals(lang.Get(Tokens.microscope)))
+            obj = map.get(LinkConventer.microscope_easter);
+        else if (item.equals(lang.Get(Tokens.termokauter)))
+            obj = map.get(LinkConventer.termokauter_easter);
+        else if (item.equals(lang.Get(Tokens.back)))
+            obj = null;
+
+        return obj;
+    }
+
     public void AR()
     {
         if (checkAR_Permission())
         {
             ContentUtils.showListDialog(this, lang.Get(Tokens.items),
-                    new String[]{
-                            lang.Get(Tokens.scull),
-                            lang.Get(Tokens.heart),
-                            lang.Get(Tokens.map),
-                            lang.Get(Tokens.microscope),
-                            lang.Get(Tokens.back)
-                    },
+                    menu_items,
                     (dialog, which) ->
                     {
-                        LinkConventer.MuseamObj obj = new LinkConventer.MuseamObj("none", "none", "none");
+                        LinkConventer.MuseamObj obj = GetMuseamObjFromId(menu_items, which);
 
-                        Map<String, LinkConventer.MuseamObj> map = LinkConventer.GetInstance().ConvertManager;
-
-                        switch (which) {
-                            case 0:
-                                if (map.containsKey(LinkConventer.skull_easter))
-                                    obj = map.get(LinkConventer.skull_easter);
-                                break;
-                            case 1:
-                                if (map.containsKey(LinkConventer.heart_easter))
-                                    obj = map.get(LinkConventer.heart_easter);
-                                break;
-                            case 2:
-                                if (map.containsKey(LinkConventer.map_easter))
-                                    obj = map.get(LinkConventer.map_easter);
-                                break;
-                            case 3:
-                                if (map.containsKey(LinkConventer.microscope_easter))
-                                    obj = map.get(LinkConventer.microscope_easter);
-                                break;
-                            default:
-                                return;
-                        }
+                        if (obj == null)
+                            return;
 
                         ArCoreHelper.showArObject(
                                 getApplicationContext(),
                                 obj.ar_link,
                                 lang.Get(obj.name));
-            });
+                    });
         }
     }
 
@@ -277,41 +283,14 @@ public class MenuActivity extends ListActivity {
     }
 
     private void loadModelFromAssets() {
-
         ContentUtils.showListDialog(this, lang.Get(Tokens.items),
-                        new String[]{
-                                lang.Get(Tokens.scull),
-                                lang.Get(Tokens.heart),
-                                lang.Get(Tokens.map),
-                                lang.Get(Tokens.microscope),
-                                lang.Get(Tokens.back)
-                        },
+                        menu_items,
                         (dialog, which) ->
                         {
-                            LinkConventer.MuseamObj obj = new LinkConventer.MuseamObj("none", "none", "none");
+                            LinkConventer.MuseamObj obj = GetMuseamObjFromId(menu_items, which);
 
-                            Map<String, LinkConventer.MuseamObj> map = LinkConventer.GetInstance().ConvertManager;
-
-                            switch (which) {
-                                case 0:
-                                    if (map.containsKey(LinkConventer.skull_easter))
-                                        obj = map.get(LinkConventer.skull_easter);
-                                    break;
-                                case 1:
-                                    if (map.containsKey(LinkConventer.heart_easter))
-                                        obj = map.get(LinkConventer.heart_easter);
-                                    break;
-                                case 2:
-                                    if (map.containsKey(LinkConventer.map_easter))
-                                        obj = map.get(LinkConventer.map_easter);
-                                    break;
-                                case 3:
-                                    if (map.containsKey(LinkConventer.microscope_easter))
-                                        obj = map.get(LinkConventer.microscope_easter);
-                                    break;
-                                default:
-                                    return;
-                            }
+                            if (obj == null)
+                                return;
 
                             ContentUtils.provideAssets(this);
                             launchModelRendererActivity(Uri.parse("assets://" + getPackageName() + "/" + obj.local_link));

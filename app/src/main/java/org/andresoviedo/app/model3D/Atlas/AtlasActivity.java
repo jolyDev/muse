@@ -5,7 +5,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import org.andresoviedo.dddmodel2.R;
+import org.nnmu.R;
 
 import android.app.Activity;
 import android.app.DownloadManager;
