@@ -152,6 +152,9 @@ public class ModelActivity extends Activity {
             case R.id.model_info:
                 scene.toggleInfo();
                 break;
+            case R.id.model_background:
+                scene.toggleBlending();
+                break;
         }
 
         hideSystemUIDelayed();

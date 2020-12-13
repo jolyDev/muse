@@ -6,4 +6,12 @@
         android:orderInCategory="200"
         android:showAsAction="ifRoom"
         android:title="@string/toggle_wireframe"/>
+
+    <item
+        android:id="@+id/model_background"
+        android:icon="@android:drawable/ic_menu_compass"
+        android:orderInCategory="200"
+        android:showAsAction="ifRoom"
+        android:title="Background"/>
+
 </menu>
