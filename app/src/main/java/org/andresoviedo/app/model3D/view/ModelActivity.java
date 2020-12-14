@@ -23,7 +23,7 @@ import org.andresoviedo.android_3d_model_engine.services.SceneLoader;
 import org.andresoviedo.android_3d_model_engine.view.ModelRenderer;
 import org.andresoviedo.android_3d_model_engine.view.ModelSurfaceView;
 import org.andresoviedo.app.model3D.demo.DemoLoaderTask;
-import org.andresoviedo.dddmodel2.R;
+import org.nnmu.R;
 import org.andresoviedo.util.android.ContentUtils;
 import org.andresoviedo.util.event.EventListener;
 

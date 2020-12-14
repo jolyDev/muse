@@ -17,7 +17,7 @@ import android.widget.Toast;
 
 import org.andresoviedo.android_3d_model_engine.services.collada.ColladaLoader;
 import org.andresoviedo.android_3d_model_engine.services.wavefront.WavefrontLoader;
-import org.andresoviedo.dddmodel2.R;
+import org.nnmu.R;
 import org.andresoviedo.util.android.AndroidUtils;
 import org.andresoviedo.util.android.AssetUtils;
 import org.andresoviedo.util.android.ContentUtils;

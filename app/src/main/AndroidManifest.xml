@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
-    package="org.andresoviedo.dddmodel2"
+    package="org.nnmu"
     android:versionCode="29"
     android:versionName="3.1.0">
 
@@ -36,6 +36,11 @@
             android:parentActivityName="org.andresoviedo.app.model3D.MainActivity" >
         </activity>
         <activity
+            android:name="org.andresoviedo.app.model3D.Atlas.AtlasActivity"
+            android:label="AtlasText"
+            android:theme="@style/Theme.AppCompat.Light"
+            android:parentActivityName="org.andresoviedo.app.model3D.MainActivity" />
+        <activity
             android:name="org.andresoviedo.util.view.TextActivity"
             android:label="@string/title_activity_text"
             android:parentActivityName="org.andresoviedo.app.model3D.MainActivity" >
@@ -47,6 +52,10 @@
 
             <!-- android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" -->
         </activity>
+
+        <!-- "AR Optional" app, contains non-AR features that can be used when
+             "Google Play Services for AR" (ARCore) is not available. -->
+        <meta-data android:name="com.google.ar.core" android:value="optional" />
     </application>
 
 </manifest>
