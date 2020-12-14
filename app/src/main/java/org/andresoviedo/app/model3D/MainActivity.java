@@ -7,7 +7,7 @@ import android.view.Menu;
 
 import org.andresoviedo.app.model3D.view.MenuActivity;
 import org.andresoviedo.app.model3D.view.ModelActivity;
-import org.nnmu.R;
+import org.andresoviedo.dddmodel2.R;
 import org.andresoviedo.util.android.AndroidURLStreamHandlerFactory;
 
 import java.net.URL;
@@ -24,7 +24,7 @@ import java.net.URL;
 public class MainActivity extends Activity {
 
 
-    // Custom handler: org/andresoviedo/app/util/url/android/Handler.class
+    // Custom handler: org/andresoviedo/util/android/assets/Handler.class
     static {
         System.setProperty("java.protocol.handler.pkgs", "org.andresoviedo.util.android");
         URL.setURLStreamHandlerFactory(new AndroidURLStreamHandlerFactory());
