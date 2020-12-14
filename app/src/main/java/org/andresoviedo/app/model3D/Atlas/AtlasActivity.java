@@ -53,9 +53,8 @@ public class AtlasActivity extends Activity {
                         layout.getViewTreeObserver().removeOnGlobalLayoutListener(
                                 this);
 
-                        // avernyhora todo
-                        // if (MenuActivity.atlas_loading_dialog.isShowing())
-                        //     MenuActivity.atlas_loading_dialog.dismiss();
+                        if (MenuActivity.atlas_loading_dialog.isShowing())
+                             MenuActivity.atlas_loading_dialog.dismiss();
                     }
                 });
     }

@@ -1,11 +1,13 @@
 package org.andresoviedo.app.model3D.view;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -17,6 +19,13 @@ import android.widget.Toast;
 
 import org.andresoviedo.android_3d_model_engine.services.collada.ColladaLoader;
 import org.andresoviedo.android_3d_model_engine.services.wavefront.WavefrontLoader;
+import org.andresoviedo.app.model3D.Atlas.AtlasActivity;
+import org.andresoviedo.app.model3D.DevTools.ArCoreHelper;
+import org.andresoviedo.app.model3D.DevTools.LinkConventer;
+import org.andresoviedo.app.model3D.DevTools.MenuItemsHolder;
+import org.andresoviedo.app.model3D.DevTools.PermissionManager;
+import org.andresoviedo.lang.LanguageManager;
+import org.andresoviedo.lang.Tokens;
 import org.nnmu.R;
 import org.andresoviedo.util.android.AndroidUtils;
 import org.andresoviedo.util.android.AssetUtils;
@@ -43,78 +52,174 @@ public class MenuActivity extends ListActivity {
     private static final int REQUEST_CODE_LOAD_MODEL = 1101;
     private static final int REQUEST_CODE_OPEN_MATERIAL = 1102;
     private static final int REQUEST_CODE_OPEN_TEXTURE = 1103;
+    private static final int REQUEST_CODE_QR_CODE = 1104;
+    private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 1105;
     private static final int REQUEST_CODE_ADD_FILES = 1200;
     private static final String SUPPORTED_FILE_TYPES_REGEX = "(?i).*\\.(obj|stl|dae)";
-
-
-    private enum Action {
-        LOAD_MODEL, GITHUB, SETTINGS, HELP, ABOUT, EXIT, UNKNOWN, DEMO
-    }
 
     /**
      * Load file user data
      */
     private Map<String, Object> loadModelParameters = new HashMap<>();
+    private LanguageManager lang = LanguageManager.GetInstance();
+    SharedPreferences sPref;
+    public static ProgressDialog atlas_loading_dialog = null;
+    private final String prefsId = "ui";
+    private final String languageId = "style";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        PermissionManager.CheckAndAskAll(MenuActivity.this);
+
+        _loadLanguagePreferences();
         setContentView(R.layout.activity_menu);
-        setListAdapter(new ArrayAdapter<>(this, R.layout.activity_menu_item,
-                getResources().getStringArray(R.array.menu_items)));
+        UpdateMenuItems();
     }
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        String selectedItem = (String) getListView().getItemAtPosition(position);
-        // Toast.makeText(getApplicationContext(), "Click ListItem '" + selectedItem + "'", Toast.LENGTH_LONG).show();
-        String selectedAction = selectedItem.replace(' ', '_').toUpperCase(Locale.getDefault());
-        Action action = Action.UNKNOWN;
         try {
-            action = Action.valueOf(selectedAction);
-        } catch (IllegalArgumentException ex) {
+            String option = (String) getListView().getItemAtPosition(position);
+            if (option.equals(lang.Get(Tokens.scanQR_AR)))
+                startQRActivity(ArCoreHelper.checkAR_Permission(MenuActivity.this));
+            else if (option.equals(lang.Get(Tokens.debug_load)))
+                loadModel();
+            else if (option.equals(lang.Get(Tokens.AR)))
+                AR();
+            else if (option.equals(lang.Get(Tokens.atlas)))
+                RunAtlas();
+            else if (option.equals(lang.Get(Tokens.viewItems)))
+                loadModelFromAssets();
+            else if(option.equals(lang.Get(Tokens.scanQR)))
+                startQRActivity(false);
+            else if (option.equals(lang.Get(Tokens.language)))
+                LanguageSettings();
+            else if (option.equals(lang.Get(Tokens.about)))
+                about();
+            else if (option.equals(lang.Get(Tokens.help)))
+                help();
+            else if (option.equals(lang.Get(Tokens.exit)))
+                MenuActivity.this.finish();
+        }
+        catch (Exception ex) {
             Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
         }
-        try {
-            switch (action) {
-                case DEMO:
-                    Intent demoIntent = new Intent(MenuActivity.this.getApplicationContext(), ModelActivity.class);
-                    demoIntent.putExtra("immersiveMode", "false");
-                    demoIntent.putExtra("backgroundColor", "0 0 0 1");
-                    MenuActivity.this.startActivity(demoIntent);
-                    break;
-                case GITHUB:
-                    AndroidUtils.openUrl(this, "https://github.com/andresoviedo/android-3D-model-viewer");
-                    break;
-                case LOAD_MODEL:
-                    loadModel();
-                    break;
-                case ABOUT:
-                    Intent aboutIntent = new Intent(MenuActivity.this.getApplicationContext(), TextActivity.class);
-                    aboutIntent.putExtra("title", selectedItem);
-                    aboutIntent.putExtra("text", getResources().getString(R.string.about_text));
-                    MenuActivity.this.startActivity(aboutIntent);
-                    break;
-                case HELP:
-                    Intent helpIntent = new Intent(MenuActivity.this.getApplicationContext(), TextActivity.class);
-                    helpIntent.putExtra("title", selectedItem);
-                    helpIntent.putExtra("text", getResources().getString(R.string.help_text));
-                    MenuActivity.this.startActivity(helpIntent);
-                    break;
-                case SETTINGS:
-                    break;
-                case EXIT:
-                    MenuActivity.this.finish();
-                    break;
-                case UNKNOWN:
-                    Toast.makeText(getApplicationContext(), "Unrecognized action '" + selectedAction + "'",
-                            Toast.LENGTH_LONG).show();
-                    break;
-            }
-        } catch (Exception ex) {
-            Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
-        }
+    }
 
+    public void UpdateMenuItems()
+    {
+        setListAdapter(new ArrayAdapter<>(this, R.layout.activity_menu_item,
+                MenuItemsHolder.GetMainMenuItems(ArCoreHelper.checkAR_Permission(MenuActivity.this))));
+    }
+
+    public void AR()
+    {
+        if (ArCoreHelper.checkAR_Permission(MenuActivity.this))
+        {
+            String[] menu_items = MenuItemsHolder.GetLocalObjectsMenuItems();
+            ContentUtils.showListDialog(this, lang.Get(Tokens.items),
+                    menu_items,
+                    (dialog, which) ->
+                    {
+                        LinkConventer.MuseamObj obj = LinkConventer.GetMuseamObjFromId(menu_items, which);
+                        if (obj == null)
+                            return;
+                        ArCoreHelper.showArObject(
+                                getApplicationContext(),
+                                obj.ar_link,
+                                lang.Get(obj.name));
+                    });
+        }
+    }
+
+    private void startQRActivity(boolean isAR)
+    {
+        Intent qrCodeIntent = new Intent(MenuActivity.this.getApplicationContext(), SimpleScannerActivity.class);
+        qrCodeIntent.putExtra(SimpleScannerActivity.AR_Status, isAR);
+        MenuActivity.this.startActivityForResult(qrCodeIntent, REQUEST_CODE_QR_CODE);
+    }
+
+    private void LanguageSettings(){
+        ContentUtils.showListDialog(this, lang.Get(Tokens.language),
+                new String[]{
+                        lang.Get(Tokens.english),
+                        lang.Get(Tokens.ukrainian),
+                        lang.Get(Tokens.russian),
+                        lang.Get(Tokens.back)
+                },
+                (dialog, which) ->
+                {
+                    switch(which) {
+                        case 0:
+                            lang.code = lang.ENG;
+                            break;
+                        case 1:
+                            lang.code = lang.UA;
+                            break;
+                        case 2:
+                            lang.code = lang.RUS;
+                            break;
+                        default:
+                            return;
+                    }
+                    _saveLanguagePreferences();
+                    UpdateMenuItems();
+                });
+    }
+
+
+    void _loadLanguagePreferences()
+    {
+        sPref = getSharedPreferences(prefsId, MODE_PRIVATE);
+        lang.code = sPref.getInt(languageId, lang.ENG);
+    }
+
+    void _saveLanguagePreferences()
+    {
+        sPref = getSharedPreferences(prefsId, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sPref.edit();
+        editor.putInt(languageId, lang.code);
+        editor.apply();
+    }
+
+    void about()
+    {
+        Intent aboutIntent = new Intent(MenuActivity.this.getApplicationContext(), TextActivity.class);
+        aboutIntent.putExtra("title", lang.Get(Tokens.about));
+        aboutIntent.putExtra("text", "# Unimplemented");
+        MenuActivity.this.startActivity(aboutIntent);
+    }
+
+    void help()
+    {
+        Intent helpIntent = new Intent(MenuActivity.this.getApplicationContext(), TextActivity.class);
+        helpIntent.putExtra("title", lang.Get(Tokens.help));
+        helpIntent.putExtra("text", getResources().getString(R.string.help_text));
+        MenuActivity.this.startActivity(helpIntent);
+    }
+
+    private void RunAtlas()
+    {
+        atlas_loading_dialog = new ProgressDialog(MenuActivity.this);
+        atlas_loading_dialog.setCancelable(false);
+        atlas_loading_dialog.setMessage(lang.Get(Tokens.loading));
+        atlas_loading_dialog.show();
+        Intent atlas = new Intent(MenuActivity.this.getApplicationContext(), AtlasActivity.class);
+        atlas.putExtra("title", lang.Get(Tokens.atlas));
+        MenuActivity.this.startActivity(atlas);
+    }
+
+    //////////////////////////////////////////////////////////
+    ////////////////////// Loading ///////////////////////////
+    //////////////////////////////////////////////////////////
+
+    private void launch(String file){
+        if (file != null) {
+            ContentUtils.provideAssets(this);
+            launchModelRendererActivity(Uri.parse("assets://" + getPackageName() + "/" + file));
+        }
     }
 
     private void loadModel() {
@@ -228,8 +333,16 @@ public class MenuActivity extends ListActivity {
         ContentUtils.setThreadActivity(this);
         try {
             switch (requestCode) {
+                case REQUEST_CODE_QR_CODE:
+                    if(resultCode != Activity.RESULT_CANCELED && data != null){
+                        launch(data.getStringExtra("file"));
+                    }
+                    break;
                 case REQUEST_READ_EXTERNAL_STORAGE:
                     loadModelFromSdCard();
+                    break;
+                case REQUEST_WRITE_EXTERNAL_STORAGE:
+                    RunAtlas();
                     break;
                 case REQUEST_READ_CONTENT_PROVIDER:
                     loadModelFromContentProvider();

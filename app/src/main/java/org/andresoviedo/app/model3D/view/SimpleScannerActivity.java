@@ -11,7 +11,7 @@ import android.widget.Toast;
 import com.google.zxing.Result;
 
 import org.andresoviedo.app.model3D.DevTools.LinkConventer;
-import org.andresoviedo.app.model3D.arcorehelpers.ArCoreHelper;
+import org.andresoviedo.app.model3D.DevTools.ArCoreHelper;
 import org.andresoviedo.lang.Tokens;
 
 import java.util.Map;

@@ -1,4 +1,4 @@
-package org.andresoviedo.app.model3D.arcorehelpers;
+package org.andresoviedo.app.model3D.DevTools;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -11,7 +11,10 @@ import com.google.ar.core.ArCoreApk;
 import com.google.ar.core.exceptions.UnavailableDeviceNotCompatibleException;
 import com.google.ar.core.exceptions.UnavailableUserDeclinedInstallationException;
 
+import org.andresoviedo.app.model3D.view.MenuActivity;
 import org.andresoviedo.lang.Tokens;
+
+import static com.google.ar.core.ArCoreApk.InstallStatus.INSTALLED;
 
 public class ArCoreHelper {
     /**
@@ -74,5 +77,33 @@ public class ArCoreHelper {
         sceneViewerIntent.setPackage("com.google.android.googlequicksearchbox");
         context.startActivity(sceneViewerIntent);
     }
+
+
+    public static boolean checkAR_Permission(MenuActivity activity)
+    {
+        ArCoreApk.Availability availability = ArCoreApk.getInstance().checkAvailability(activity.getApplicationContext());
+        if(availability.isSupported())
+        {
+            try {
+                return ArCoreApk.getInstance().requestInstall(activity, true) == INSTALLED;
+            }
+            catch (Exception e) {
+                // uninstalled for somereason
+                return false;
+            }
+        }
+        else if (availability.isTransient()) {
+            // Re-query at 5Hz while compatibility is checked in the background.
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    checkAR_Permission(activity);
+                    activity.UpdateMenuItems();
+                }
+            }, 200);
+        }
+        return false;
+    }
+
 }
 

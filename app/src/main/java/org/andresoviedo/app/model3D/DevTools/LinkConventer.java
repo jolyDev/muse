@@ -57,6 +57,30 @@ public class LinkConventer {
         ConvertManager.put(t4, new MuseamObj("termokauter4", "models/Scull.gltf", t4));
     }
 
+
+    public static MuseamObj GetMuseamObjFromId(String[] menu_items, int id)
+    {
+        LanguageManager lang = LanguageManager.GetInstance();
+
+        MuseamObj obj = new MuseamObj("none", "none", "none");
+        Map<String, MuseamObj> map = GetInstance().ConvertManager;
+
+        String item = menu_items[id];
+        if (item.equals(lang.Get(Tokens.scull)))
+            obj = map.get(LinkConventer.skull_easter);
+        else if (item.equals(lang.Get(Tokens.heart)))
+            obj = map.get(LinkConventer.heart_easter);
+        else if (item.equals(lang.Get(Tokens.map)))
+            obj = map.get(LinkConventer.map_easter);
+        else if (item.equals(lang.Get(Tokens.microscope)))
+            obj = map.get(LinkConventer.microscope_easter);
+        else if (item.equals(lang.Get(Tokens.termokauter)))
+            obj = map.get(LinkConventer.termokauter_easter);
+        else if (item.equals(lang.Get(Tokens.back)))
+            obj = null;
+        return obj;
+    }
+
     public static final String skull_easter = "https://raw.githubusercontent.com/jolyDev/muse_data_storage/main/EasterEggBase.png";
     public static final String skull_origin = "https://github.com/jolyDev/muse_data_storage/blob/main/android.glb?raw=true";
 
