@@ -7,6 +7,7 @@ import org.andresoviedo.android_3d_model_engine.model.CubeMap;
 import org.andresoviedo.android_3d_model_engine.model.Object3DData;
 import org.andresoviedo.util.android.ContentUtils;
 import org.andresoviedo.util.io.IOUtils;
+import org.nnmu.R;
 
 import java.io.IOException;
 import java.net.URI;
@@ -71,11 +72,11 @@ public class SkyBox {
         }
     }
 
-    public final URI[] images;
+    public final Integer[] images;
 
     private CubeMap cubeMap = null;
 
-    public SkyBox(URI[] images) throws IOException {
+    public SkyBox(Integer[] images) throws IOException {
         if (images == null || images.length != 6)
             throw new IllegalArgumentException("skybox must contain exactly 6 faces");
         this.images = images;
@@ -103,15 +104,32 @@ public class SkyBox {
      *
      * @return
      */
-    public static SkyBox getSkyBox2() {
+    public static SkyBox[] getSkyBoxes() {
         try {
-            return new SkyBox(new URI[]{
-                    URI.create("android://org.andresoviedo.dddmodel2/res/drawable/posx.png"),
-                    URI.create("android://org.andresoviedo.dddmodel2/res/drawable/negx.png"),
-                    URI.create("android://org.andresoviedo.dddmodel2/res/drawable/posy.png"),
-                    URI.create("android://org.andresoviedo.dddmodel2/res/drawable/negy.png"),
-                    URI.create("android://org.andresoviedo.dddmodel2/res/drawable/posz.png"),
-                    URI.create("android://org.andresoviedo.dddmodel2/res/drawable/negz.png")});
+            return new SkyBox[]
+                    {
+                            new SkyBox(new Integer[]{
+                                    R.drawable.urban_px,
+                                    R.drawable.urban_nx,
+                                    R.drawable.urban_py,
+                                    R.drawable.urban_ny,
+                                    R.drawable.urban_pz,
+                                    R.drawable.urban_nz}),
+
+                            new SkyBox(new Integer[]{
+                                    R.drawable.posx,
+                                    R.drawable.negx,
+                                    R.drawable.posy,
+                                    R.drawable.negy,
+                                    R.drawable.posz,
+                                    R.drawable.negz}),
+                    };
+                    // URI.create("android://org.andresoviedo.dddmodel2/res/drawable/posx.png"),
+                    // URI.create("android://org.andresoviedo.dddmodel2/res/drawable/negx.png"),
+                    //URI.create("android://org.andresoviedo.dddmodel2/res/drawable/posy.png"),
+                    //URI.create("android://org.andresoviedo.dddmodel2/res/drawable/negy.png"),
+                    //URI.create("android://org.andresoviedo.dddmodel2/res/drawable/posz.png"),
+                    //URI.create("android://org.andresoviedo.dddmodel2/res/drawable/negz.png")});
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -122,20 +140,6 @@ public class SkyBox {
      *
      * @return
      */
-    public static SkyBox getSkyBox1() {
-        try {
-            return new SkyBox(new URI[]{
-                    URI.create("android://org.andresoviedo.dddmodel2/res/drawable/right.png"),
-                    URI.create("android://org.andresoviedo.dddmodel2/res/drawable/left.png"),
-                    URI.create("android://org.andresoviedo.dddmodel2/res/drawable/top.png"),
-                    URI.create("android://org.andresoviedo.dddmodel2/res/drawable/bottom.png"),
-                    URI.create("android://org.andresoviedo.dddmodel2/res/drawable/front.png"),
-                    URI.create("android://org.andresoviedo.dddmodel2/res/drawable/back.png")});
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public static Object3DData build(SkyBox skyBox) throws IOException {
 
         Object3DData ret = new Object3DData(IOUtils.createFloatBuffer(VERTEX_DATA.length).put(VERTEX_DATA)).setId("skybox");
