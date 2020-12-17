@@ -54,7 +54,7 @@ public class AtlasActivity extends Activity {
                                 this);
 
                         if (MenuActivity.atlas_loading_dialog.isShowing())
-                            MenuActivity.atlas_loading_dialog.dismiss();
+                             MenuActivity.atlas_loading_dialog.dismiss();
                     }
                 });
     }

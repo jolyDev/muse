@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+          xmlns:tools="http://schemas.android.com/tools"
     package="org.nnmu"
-    android:versionCode="21"
-    android:versionName="2.5.1">
+    android:versionCode="29"
+    android:versionName="3.1.0">
 
-    <uses-sdk tools:overrideLibrary="android.support.compat, android.arch.lifecycle" />
+    <uses-sdk
+        tools:overrideLibrary="android.support.compat, android.arch.lifecycle" />
 
     <uses-feature
         android:glEsVersion="0x00020000"
         android:required="true" />
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
 
@@ -19,12 +20,11 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
-
-        <activity android:name="org.andresoviedo.app.model3D.view.SimpleScannerActivity"/>
+        android:theme="@style/AppTheme" android:largeHeap="true"
+        android:requestLegacyExternalStorage="true">
         <activity
             android:name="org.andresoviedo.app.model3D.MainActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -34,20 +34,22 @@
         <activity
             android:name="org.andresoviedo.app.model3D.view.MenuActivity"
             android:label="@string/title_activity_menu"
-            android:parentActivityName="org.andresoviedo.app.model3D.MainActivity" />
+            android:parentActivityName="org.andresoviedo.app.model3D.MainActivity" >
+        </activity>
         <activity
-        android:name="org.andresoviedo.app.model3D.Atlas.AtlasActivity"
-        android:label="AtlasText"
+            android:name="org.andresoviedo.app.model3D.Atlas.AtlasActivity"
+            android:label="AtlasText"
             android:theme="@style/Theme.AppCompat.Light"
-        android:parentActivityName="org.andresoviedo.app.model3D.MainActivity" />
+            android:parentActivityName="org.andresoviedo.app.model3D.MainActivity" />
         <activity
             android:name="org.andresoviedo.util.view.TextActivity"
             android:label="@string/title_activity_text"
-            android:parentActivityName="org.andresoviedo.app.model3D.MainActivity" />
+            android:parentActivityName="org.andresoviedo.app.model3D.MainActivity" >
+        </activity>
         <activity
             android:name="org.andresoviedo.app.model3D.view.ModelActivity"
             android:label="@string/title_activity_model"
-            android:parentActivityName="org.andresoviedo.app.model3D.MainActivity">
+            android:parentActivityName="org.andresoviedo.app.model3D.MainActivity" >
 
             <!-- android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" -->
         </activity>
@@ -55,7 +57,6 @@
         <!-- "AR Optional" app, contains non-AR features that can be used when
              "Google Play Services for AR" (ARCore) is not available. -->
         <meta-data android:name="com.google.ar.core" android:value="optional" />
-
     </application>
 
 </manifest>

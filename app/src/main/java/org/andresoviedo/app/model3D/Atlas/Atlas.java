@@ -18,7 +18,7 @@ public class Atlas {
 
     private int LAST_DOWNLOAD = 0;
     private int IMAGE_SIZE = 49;
-    private int CAPACITY_HALF = 2;
+    private int CAPACITY = 3;
     private ArrayList<Integer> images;
     private HashMap<Integer, Bitmap> bitmaps;
     private Resources resources;
@@ -38,33 +38,33 @@ public class Atlas {
         }
 
         public void run() {
-        NetworkManager network = NetworkManager.GetInstance();
-        LocalStorageManager storage = LocalStorageManager.GetInstance();
+            NetworkManager network = NetworkManager.GetInstance();
+            LocalStorageManager storage = LocalStorageManager.GetInstance();
 
-        Bitmap result = storage.GetBitmapForPage(index);
+            Bitmap result = storage.GetBitmapForPage(index);
 
-        if (index >= 0 && index < images.size())
-            result = decodeSampledBitmapFromResource(resources,images.get(index));
+            if (index >= 0 && index < images.size())
+                result = decodeSampledBitmapFromResource(resources,images.get(index));
 
-        if (result == null)
-        {
-            network.DownloadPage(index, manager);
-            for (int i = 0; result == null && i < 10; i++)
-            {
-                try {
-                    sleep(500);
-                    result = storage.GetBitmapForPage(index);
-                } catch (InterruptedException e) {
-                    result = storage.GetBitmapForPage(index);
-                }
-            }
             if (result == null)
-                return;
-        }
+            {
+                network.DownloadPage(index, manager);
+                for (int i = 0; result == null && i < 10; i++)
+                {
+                    try {
+                        sleep(500);
+                        result = storage.GetBitmapForPage(index);
+                    } catch (InterruptedException e) {
+                        result = storage.GetBitmapForPage(index);
+                    }
+                }
+                if (result == null)
+                    return;
+            }
 
-        LAST_DOWNLOAD = Math.max(LAST_DOWNLOAD, index);
-        bitmaps.put(index, result);
-        loadingThreads.remove(index);
+            LAST_DOWNLOAD = Math.max(LAST_DOWNLOAD, index);
+            bitmaps.put(index, result);
+            loadingThreads.remove(index);
         }
     }
 
@@ -122,10 +122,6 @@ public class Atlas {
         return screenHeight;
     }
 
-    public void setCapacity(int capacity) {
-        CAPACITY_HALF = capacity/2;
-    }
-
     public Bitmap get(int page) {
         if (page >= IMAGE_SIZE) return null;
         callPreviousLoadingStart(page);
@@ -162,15 +158,15 @@ public class Atlas {
     }
 
     private void callPreviousLoadingStart(int curPage) {
-        if (Math.abs(curPage - lastPreLoadPage) >= CAPACITY_HALF / 2) { // if moved to half of preloaded pages, preload again
+        if (Math.abs(curPage - lastPreLoadPage) >= CAPACITY / 2) { // if moved to half of preloaded pages, preload again
             previousLoadingStart(curPage);
         }
     }
 
     private void previousLoadingStart(int curPage) { // start to load pages in advance
         lastPreLoadPage = curPage;
-        int start = Math.max(curPage - (CAPACITY_HALF), 0); // previous capacity/2 pages (or first page)
-        int end = Math.min(curPage + (CAPACITY_HALF), IMAGE_SIZE - 1); // next capacity/2 pages (or last)
+        int start = Math.max(curPage - 1, 0); // previous capacity/2 pages (or first page)
+        int end = Math.min(curPage + (CAPACITY), IMAGE_SIZE - 1); // next capacity/2 pages (or last)
         recyclePages(start, end);
         for (int i = start; i <= end; i++) { // loading
             if (bitmaps.get(i) == null && loadingThreads.get(i) == null) { // if not loaded and not loading
