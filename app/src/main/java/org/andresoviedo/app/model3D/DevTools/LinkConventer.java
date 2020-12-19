@@ -43,10 +43,10 @@ public class LinkConventer {
     }
 
     public static final String partOneEasterLink = "https://raw.githubusercontent.com/jolyDev/muse_data_storage/main/EasterEggBase.png";
-    public static final String partOneOriginLink = "https://drive.google.com/uc?export=download&id=1NbM3ii1LUA_AD_Nd1bmY5LdICSDCNt9M";
+    public static final String partOneOriginLink = "https://drive.google.com/uc?export=download&id=1_gYsYcPDii9of51czgQRSNHr1qtr1vDO";
 
     public static final String partTwoEasterLink = "https://github.com/jolyDev/muse_data_storage/blob/main/TestEaster.jpg?raw=true";
-    public static final String partTwoOriginlink = "https://drive.google.com/uc?export=download&id=1JHE4nigfXBfhKu762ovBbWbvdQOerpiL";
+    public static final String partTwoOriginlink = "https://storage.googleapis.com/museum-storage/Scull_scaled.gltf";
 
     public static final String t  = "https://drive.google.com/uc?export=download&id=1WpjKZEnIzuFj6axqwCbs-ROPmbs8oinA";
     public static final String t2 = "https://drive.google.com/uc?export=download&id=122j1mwihUwsUZxFbSq9XJnAQWcesg1kb";

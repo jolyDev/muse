@@ -57,11 +57,13 @@ public class LanguageManager {
         data.put(Tokens.info, InitUIText(Tokens.info, "Інфо", "Инфо"));
         data.put(Tokens.back, InitUIText(Tokens.back, "Назад", "Назад"));
         data.put(Tokens.plane, InitUIText(Tokens.plane, "Літак", "Самолет"));
-        data.put(Tokens.incorrectQR, InitUIText(Tokens.incorrectQR, "Не корректний QR-код", "Не корректный QR-код"));
+        data.put(Tokens.incorrectQR, InitUIText(Tokens.incorrectQR, "Не коректний QR-код", "Не корректный QR-код"));
         data.put(Tokens.atlas, InitUIText(Tokens.atlas, "Атлас", "Атлас"));
         data.put(Tokens.teapot, InitUIText(Tokens.teapot, "Чайник", "Чайник"));
         data.put(Tokens.scull, InitUIText(Tokens.scull, "Череп", "Череп"));
         data.put(Tokens.microscope, InitUIText(Tokens.microscope, "Мікроскоп", "Микроскоп"));
+        data.put(Tokens.noUrl, InitUIText(Tokens.noUrl, "Ніякого url не було передано до відображувача картинок", "Никакого url не было передано в отображатель картинок"));
+        data.put(Tokens.imageNotFound, InitUIText(Tokens.imageNotFound, "Проблеми із завантаженням. Перевірте правильність url", "Проблемы с загрузкой. Проверьте правильность url"));
     }
 
     private Map<String, UIText> data = new HashMap<String, UIText>();

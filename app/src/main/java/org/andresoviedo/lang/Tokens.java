@@ -35,4 +35,6 @@ public class Tokens
     static public final String scull = "Scull";
     static public final String android = "Android";
     static public final String microscope = "Microscope";
+    public static final String imageNotFound = "Image cannot be loaded. Please check if the url is correct";
+    public static final String noUrl = "No url passed to image viewer";
 }

@@ -20,8 +20,9 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
-
-        <activity android:name="org.andresoviedo.app.model3D.view.SimpleScannerActivity"/>
+        <activity android:name="org.andresoviedo.app.model3D.view.TextActivity"></activity>
+        <activity android:name="org.andresoviedo.app.model3D.view.ImageActivity" />
+        <activity android:name="org.andresoviedo.app.model3D.view.SimpleScannerActivity" />
         <activity
             android:name="org.andresoviedo.app.model3D.MainActivity"
             android:label="@string/app_name">
@@ -36,10 +37,10 @@
             android:label="@string/title_activity_menu"
             android:parentActivityName="org.andresoviedo.app.model3D.MainActivity" />
         <activity
-        android:name="org.andresoviedo.app.model3D.Atlas.AtlasActivity"
-        android:label="AtlasText"
-            android:theme="@style/Theme.AppCompat.Light"
-        android:parentActivityName="org.andresoviedo.app.model3D.MainActivity" />
+            android:name="org.andresoviedo.app.model3D.Atlas.AtlasActivity"
+            android:label="AtlasText"
+            android:parentActivityName="org.andresoviedo.app.model3D.MainActivity"
+            android:theme="@style/Theme.AppCompat.Light" />
         <activity
             android:name="org.andresoviedo.util.view.TextActivity"
             android:label="@string/title_activity_text"
@@ -51,11 +52,13 @@
 
             <!-- android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" -->
         </activity>
-
-        <!-- "AR Optional" app, contains non-AR features that can be used when
-             "Google Play Services for AR" (ARCore) is not available. -->
-        <meta-data android:name="com.google.ar.core" android:value="optional" />
-
+        <!--
+ "AR Optional" app, contains non-AR features that can be used when
+             "Google Play Services for AR" (ARCore) is not available.
+        -->
+        <meta-data
+            android:name="com.google.ar.core"
+            android:value="optional" />
     </application>
 
 </manifest>
