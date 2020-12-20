@@ -31,6 +31,8 @@ public class Tokens
     static public final String info = "Info";
     static public final String incorrectQR = "incorrect QR was captured";
     static public final String back = "back";
+    public static final String imageNotFound = "Image cannot be loaded. Please check if the url is correct";
+    public static final String noUrl = "No url passed to image viewer";
 
     // items
     static public final String items = "Items";
