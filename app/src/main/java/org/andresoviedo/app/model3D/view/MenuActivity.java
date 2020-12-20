@@ -130,30 +130,29 @@ public class MenuActivity extends ListActivity {
     {
         if (checkAR_Permission())
         {
+            int size = LinkConventer.GetInstance().menuMap.keySet().size();
+            String[] items = new String[size+1];
+            LinkConventer.GetInstance().menuMap.keySet().toArray(items);
+            for(int i = 0;i < size;i++){
+                items[i] = lang.Get(items[i]);
+            }
+            items[size] = lang.Get(Tokens.back);
+
             ContentUtils.showListDialog(this, lang.Get(Tokens.language),
-                    new String[]{
-                            lang.Get(Tokens.scull),
-                            lang.Get(Tokens.microscope),
-                            lang.Get(Tokens.back)
-                    },
+                    items,
                     (dialog, which) ->
                     {
-                        LinkConventer.MuseamObj obj = new LinkConventer.MuseamObj("none", "none", "none");
+                        String item = items[which];
+                        if(item == null)
+                            return;
 
-                        Map<String, LinkConventer.MuseamObj> map = LinkConventer.GetInstance().ConvertManager;
+                        String link = LinkConventer.GetInstance().menuMap.get(item);
+                        if(link == null)
+                            return;
 
-                        switch (which) {
-                            case 0:
-                                if (map.containsKey(LinkConventer.partTwoEasterLink))
-                                    obj = map.get(LinkConventer.partTwoEasterLink);
-                                break;
-                            case 1:
-                                if (map.containsKey(LinkConventer.partOneEasterLink))
-                                    obj = map.get(LinkConventer.partOneEasterLink);
-                                break;
-                            default:
-                                return;
-                        }
+                        LinkConventer.MuseamObj obj = LinkConventer.GetInstance().ConvertManager.get(link);
+                        if(obj == null)
+                            return;
 
                         ArCoreHelper.showArObject(
                                 getApplicationContext(),

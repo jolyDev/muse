@@ -60,8 +60,11 @@ public class LanguageManager {
         data.put(Tokens.incorrectQR, InitUIText(Tokens.incorrectQR, "Не коректний QR-код", "Не корректный QR-код"));
         data.put(Tokens.atlas, InitUIText(Tokens.atlas, "Атлас", "Атлас"));
         data.put(Tokens.teapot, InitUIText(Tokens.teapot, "Чайник", "Чайник"));
-        data.put(Tokens.scull, InitUIText(Tokens.scull, "Череп", "Череп"));
+        data.put(Tokens.scull, InitUIText(Tokens.scull, "Череп з трепанаційним отвором", "Череп з трепанаційним отвором"));
         data.put(Tokens.microscope, InitUIText(Tokens.microscope, "Мікроскоп", "Микроскоп"));
+        data.put(Tokens.map, InitUIText(Tokens.map, "Маршрут експедиції д. Заболотного", "Маршрут экспедиции врача Заболотного"));
+        data.put(Tokens.heart, InitUIText(Tokens.heart, "Серце із штучним клапаном", "Сердце с искусственным клапаном"));
+        data.put(Tokens.termokauter, InitUIText(Tokens.termokauter, "Термокаутер", "Термокаутер"));
         data.put(Tokens.noUrl, InitUIText(Tokens.noUrl, "Ніякого url не було передано до відображувача картинок", "Никакого url не было передано в отображатель картинок"));
         data.put(Tokens.imageNotFound, InitUIText(Tokens.imageNotFound, "Проблеми із завантаженням. Перевірте правильність url", "Проблемы с загрузкой. Проверьте правильность url"));
     }

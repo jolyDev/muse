@@ -29,12 +29,15 @@ public class Tokens
     static public final String holo = "Holo";
     static public final String info = "Info";
     static public final String incorrectQR = "incorrect QR was captured";
-    static public final String back = "back";
+    static public final String back = "Back";
     static public final String plane = "Plane";
     static public final String teapot = "Teapot";
-    static public final String scull = "Scull";
-    static public final String android = "Android";
+    static public final String scull = "Skull with trepanation hole";
+    static public final String termokauter = "Сautery";
+    static public final String heart = "Heart with an artificial valve";
+    static public final String map = "The route of Dr. Zabolotny's expedition";
     static public final String microscope = "Microscope";
+    static public final String android = "Android";
     public static final String imageNotFound = "Image cannot be loaded. Please check if the url is correct";
     public static final String noUrl = "No url passed to image viewer";
 }
