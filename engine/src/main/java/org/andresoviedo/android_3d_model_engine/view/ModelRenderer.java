@@ -749,17 +749,7 @@ public class ModelRenderer implements GLSurfaceView.Renderer {
     }
 
     private void drawBoundingBox(float[] viewMatrix, float[] projectionMatrix, float[] lightPosInWorldSpace, float[] colorMask, float[] cameraPosInWorldSpace, Object3DData objData, boolean changed) {
-        Object3DData boundingBoxData = boundingBoxes.get(objData);
-        if (boundingBoxData == null || changed) {
-            Log.i("ModelRenderer", "Building bounding box... id: " + objData.getId());
-            boundingBoxData = BoundingBox.build(objData);
-            boundingBoxData.setColor(COLOR_WHITE);
-            boundingBoxes.put(objData, boundingBoxData);
-            Log.i("ModelRenderer", "Bounding box: " + boundingBoxData);
-        }
-        Renderer boundingBoxDrawer = drawer.getBoundingBoxDrawer();
-        boundingBoxDrawer.draw(boundingBoxData, projectionMatrix, viewMatrix, -1,
-                lightPosInWorldSpace, colorMask, cameraPosInWorldSpace);
+        return ;
     }
 
     public int getWidth() {
