@@ -58,7 +58,7 @@ public class LinkConventer {
                 , "models/microscope.obj", microscope));
         ConvertManager.put(termokauter, new MuseamObj(
                 LanguageManager.GetInstance().Get(Tokens.termokauter)
-                , "models/ToyPlane.obj", termokauter));
+                , "models/termocauter.dae", termokauter));
     }
 
     private void putInMaps(MuseamObj obj){

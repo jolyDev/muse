@@ -154,6 +154,7 @@ public class MenuActivity extends ListActivity {
                 if(obj == null)
                     return;
 
+                ContentUtils.provideAssets(this);
                 launchModelRendererActivity(Uri.parse("android://"+getPackageName()+"/assets/" + obj.local_link));
             });
     }
