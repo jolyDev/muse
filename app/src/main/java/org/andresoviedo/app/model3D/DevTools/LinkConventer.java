@@ -49,16 +49,16 @@ public class LinkConventer {
                 "models/heart.obj", heart));
         ConvertManager.put(scull, new MuseamObj(
                 LanguageManager.GetInstance().Get(Tokens.scull)
-                , "models/Scull.obj", scull));
+                , "models/Scull.dae", scull));
         ConvertManager.put(map, new MuseamObj(
                 LanguageManager.GetInstance().Get(Tokens.map)
-                , "models/map.dae", map));
+                , "models/globe.dae", map));
         ConvertManager.put(microscope, new MuseamObj(
         LanguageManager.GetInstance().Get(Tokens.microscope)
                 , "models/microscope.obj", microscope));
         ConvertManager.put(termokauter, new MuseamObj(
                 LanguageManager.GetInstance().Get(Tokens.termokauter)
-                , "models/termocauter.obj", termokauter));
+                , "models/ToyPlane.obj", termokauter));
     }
 
     private void putInMaps(MuseamObj obj){
