@@ -58,15 +58,16 @@ public class LanguageManager {
         data.put(Tokens.holo, InitUIText(Tokens.holo, "Голограма", "Голограмма"));
         data.put(Tokens.info, InitUIText(Tokens.info, "Інфо", "Инфо"));
         data.put(Tokens.back, InitUIText(Tokens.back, "Назад", "Назад"));
-        data.put(Tokens.plane, InitUIText(Tokens.plane, "Літак", "Самолет"));
         data.put(Tokens.incorrectQR, InitUIText(Tokens.incorrectQR, "Не коректний QR-код", "Не корректный QR-код"));
+
+        // items
         data.put(Tokens.atlas, InitUIText(Tokens.atlas, "Атлас", "Атлас"));
-        data.put(Tokens.teapot, InitUIText(Tokens.teapot, "Чайник", "Чайник"));
-        data.put(Tokens.scull, InitUIText(Tokens.scull, "Череп", "Череп"));
-        data.put(Tokens.heart, InitUIText(Tokens.heart, "Серце", "Сердце"));
-        data.put(Tokens.microscope, InitUIText(Tokens.microscope, "Мікроскоп", "Микроскоп"));
-        data.put(Tokens.map, InitUIText(Tokens.map, "Карта", "Карта"));
+        data.put(Tokens.scull, InitUIText(Tokens.scull, "Череп з трепанаційним отвором", "Череп з трепанаційним отвором"));
+        data.put(Tokens.map, InitUIText(Tokens.map, "Маршрут експедиції д. Заболотного", "Маршрут экспедиции врача Заболотного"));
+        data.put(Tokens.heart, InitUIText(Tokens.heart, "Серце із штучним клапаном", "Сердце с искусственным клапаном"));
         data.put(Tokens.termokauter, InitUIText(Tokens.termokauter, "Термокаутер", "Термокаутер"));
+        data.put(Tokens.microscope, InitUIText(Tokens.microscope, "Мікроскоп", "Микроскоп"));
+
     }
 
     private Map<String, UIText> data = new HashMap<String, UIText>();

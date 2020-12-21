@@ -14,14 +14,15 @@ import static com.google.ar.core.ArCoreApk.InstallStatus.INSTALLED;
 public class MenuItemsHolder {
     public static String[] GetLocalObjectsMenuItems()
     {
-        return new String[]{
-                lang.Get(Tokens.scull),
-                lang.Get(Tokens.heart),
-                lang.Get(Tokens.map),
-                lang.Get(Tokens.microscope),
-                lang.Get(Tokens.termokauter),
-                lang.Get(Tokens.back)
-        };
+        int size = LinkConventer.GetInstance().menuMap.keySet().size();
+        String[] items = new String[size+1];
+        LinkConventer.GetInstance().menuMap.keySet().toArray(items);
+        for(int i = 0;i < size;i++){
+            items[i] = lang.Get(items[i]);
+        }
+        items[size] = lang.Get(Tokens.back);
+
+        return items;
     }
 
     public static String[] GetMainMenuItems(boolean isAR_mode)

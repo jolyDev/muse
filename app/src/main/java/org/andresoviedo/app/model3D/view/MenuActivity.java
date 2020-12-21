@@ -91,7 +91,7 @@ public class MenuActivity extends ListActivity {
             else if (option.equals(lang.Get(Tokens.atlas)))
                 RunAtlas();
             else if (option.equals(lang.Get(Tokens.viewItems)))
-                loadModelFromAssets();
+                loadLocal();
             else if(option.equals(lang.Get(Tokens.scanQR)))
                 startQRActivity(false);
             else if (option.equals(lang.Get(Tokens.language)))
@@ -118,20 +118,44 @@ public class MenuActivity extends ListActivity {
     {
         if (ArCoreHelper.checkAR_Permission(MenuActivity.this))
         {
-            String[] menu_items = MenuItemsHolder.GetLocalObjectsMenuItems();
+            String[] items = MenuItemsHolder.GetLocalObjectsMenuItems();
             ContentUtils.showListDialog(this, lang.Get(Tokens.items),
-                    menu_items,
+                    items,
                     (dialog, which) ->
                     {
-                        LinkConventer.MuseamObj obj = LinkConventer.GetMuseamObjFromId(menu_items, which);
-                        if (obj == null)
+                        String item = items[which];
+                        if(item == null)
                             return;
+
+                        String link = LinkConventer.GetInstance().menuMap.get(item);
+                        if(link == null)
+                            return;
+
+                        LinkConventer.MuseamObj obj = LinkConventer.GetInstance().ConvertManager.get(link);
+                        if(obj == null)
+                            return;
+
                         ArCoreHelper.showArObject(
                                 getApplicationContext(),
                                 obj.ar_link,
                                 lang.Get(obj.name));
                     });
         }
+    }
+
+    public void loadLocal()
+    {
+    String[] items = MenuItemsHolder.GetLocalObjectsMenuItems();
+    ContentUtils.showListDialog(this, lang.Get(Tokens.items),
+            items,
+            (dialog, which) ->
+            {
+                LinkConventer.MuseamObj obj = LinkConventer.GetInstance().GetMuseamObjFromId(items[which]);
+                if(obj == null)
+                    return;
+
+                launchModelRendererActivity(Uri.parse("android://"+getPackageName()+"/assets/" + obj.local_link));
+            });
     }
 
     private void startQRActivity(boolean isAR)
