@@ -55,7 +55,7 @@ public class LinkConventer {
                 , "models/globe.dae", map));
         ConvertManager.put(microscope, new MuseamObj(
         LanguageManager.GetInstance().Get(Tokens.microscope)
-                , "models/microscope.obj", microscope));
+                , "models/micro.obj", microscope));
         ConvertManager.put(termokauter, new MuseamObj(
                 LanguageManager.GetInstance().Get(Tokens.termokauter)
                 , "models/termocauter.dae", termokauter));
