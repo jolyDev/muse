@@ -108,28 +108,71 @@ public class SkyBox {
         try {
             return new SkyBox[]
                     {
-                            new SkyBox(new Integer[]{
-                                    R.drawable.urban_px,
-                                    R.drawable.urban_nx,
-                                    R.drawable.urban_py,
-                                    R.drawable.urban_ny,
-                                    R.drawable.urban_pz,
-                                    R.drawable.urban_nz}),
+                        new SkyBox(new Integer[]{
+                                R.drawable.right,
+                                R.drawable.left,
+                                R.drawable.top,
+                                R.drawable.bottom,
+                                R.drawable.front,
+                                R.drawable.back}),
 
-                            new SkyBox(new Integer[]{
-                                    R.drawable.posx,
-                                    R.drawable.negx,
-                                    R.drawable.posy,
-                                    R.drawable.negy,
-                                    R.drawable.posz,
-                                    R.drawable.negz}),
+                        new SkyBox(new Integer[]{
+                                R.drawable.sand_px,
+                                R.drawable.sand_nx,
+                                R.drawable.sand_py,
+                                R.drawable.sand_ny,
+                                R.drawable.sand_pz,
+                                R.drawable.sand_nz}),
+
+                        new SkyBox(new Integer[]{
+                                R.drawable.dark_px,
+                                R.drawable.dark_nx,
+                                R.drawable.dark_py,
+                                R.drawable.dark_ny,
+                                R.drawable.dark_pz,
+                                R.drawable.dark_nz}),
+
+                        new SkyBox(new Integer[]{
+                                R.drawable.snow_px,
+                                R.drawable.snow_nx,
+                                R.drawable.snow_py,
+                                R.drawable.snow_ny,
+                                R.drawable.snow_pz,
+                                R.drawable.snow_nz}),
+
+                        new SkyBox(new Integer[]{
+                                R.drawable.rocks_px,
+                                R.drawable.rocks_nx,
+                                R.drawable.rocks_py,
+                                R.drawable.rocks_ny,
+                                R.drawable.rocks_pz,
+                                R.drawable.rocks_nz}),
+
+                        new SkyBox(new Integer[]{
+                                R.drawable.urban_px,
+                                R.drawable.urban_nx,
+                                R.drawable.urban_py,
+                                R.drawable.urban_ny,
+                                R.drawable.urban_pz,
+                                R.drawable.urban_nz}),
+
+                        new SkyBox(new Integer[]{
+                                R.drawable.shanhai_px,
+                                R.drawable.shanhai_nx,
+                                R.drawable.shanhai_py,
+                                R.drawable.shanhai_ny,
+                                R.drawable.shangai_pz,
+                                R.drawable.shanhai_nz}),
+
+                        new SkyBox(new Integer[]{
+                            R.drawable.surgery_px,
+                            R.drawable.surgery_nx,
+                            R.drawable.surgery_py,
+                            R.drawable.surgery_ny,
+                            R.drawable.surgery_pz,
+                            R.drawable.surgery_nz})
                     };
-                    // URI.create("android://org.andresoviedo.dddmodel2/res/drawable/posx.png"),
-                    // URI.create("android://org.andresoviedo.dddmodel2/res/drawable/negx.png"),
-                    //URI.create("android://org.andresoviedo.dddmodel2/res/drawable/posy.png"),
-                    //URI.create("android://org.andresoviedo.dddmodel2/res/drawable/negy.png"),
-                    //URI.create("android://org.andresoviedo.dddmodel2/res/drawable/posz.png"),
-                    //URI.create("android://org.andresoviedo.dddmodel2/res/drawable/negz.png")});
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

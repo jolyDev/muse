@@ -39,6 +39,8 @@ import java.util.Map;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import static org.andresoviedo.android_3d_model_engine.objects.SkyBox.getSkyBoxes;
+
 public class ModelRenderer implements GLSurfaceView.Renderer {
 
     public static class ViewEvent extends EventObject {
@@ -247,8 +249,8 @@ public class ModelRenderer implements GLSurfaceView.Renderer {
 
     public void toggleSkyBox() {
         isUseskyBoxId++;
-        if (isUseskyBoxId > 1) {
-            isUseskyBoxId = -3;
+        if (isUseskyBoxId >= 8) {
+            isUseskyBoxId = 0;
         }
         Log.i("ModelRenderer", "Toggled skybox. Idx: " + isUseskyBoxId);
     }
@@ -295,7 +297,7 @@ public class ModelRenderer implements GLSurfaceView.Renderer {
 
         // init variables having android context
         ContentUtils.setThreadActivity(main.getContext());
-        skyBoxes = SkyBox.getSkyBoxes();
+        skyBoxes = getSkyBoxes();
         skyBoxes3D = new Object3DData[skyBoxes.length];
     }
 
@@ -454,24 +456,8 @@ public class ModelRenderer implements GLSurfaceView.Renderer {
 
         // draw environment
         int skyBoxId = isUseskyBoxId;
-        if (skyBoxId == -3){
-            // draw all extra objects
-            for (int i = 0; i < extras.size(); i++) {
-                drawObject(viewMatrix, projectionMatrix, lightPosInWorldSpace, colorMask, cameraPosInWorldSpace, false, false, false, false, false, extras, i);
-            }
-        }
-        else if (skyBoxId == -2){
-            GLES20.glClearColor(backgroundColor[0], backgroundColor[1], backgroundColor[2], backgroundColor[3]);
-            // Draw background color
-            GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
-        }
-        else if (skyBoxId == -1){
-            // invert background color
-            GLES20.glClearColor(1-backgroundColor[0], 1-backgroundColor[1], 1-backgroundColor[2], 1-backgroundColor[3]);
-            // Draw background color
-            GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
-        }
-        else if (isDrawSkyBox && skyBoxId >= 0 && skyBoxId < skyBoxes3D.length) {
+
+        if (isDrawSkyBox && skyBoxId >= 0 && skyBoxId < skyBoxes3D.length) {
             GLES20.glDepthMask(false);
             try {
                 //skyBoxId = 1;
