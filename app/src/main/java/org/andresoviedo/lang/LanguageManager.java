@@ -58,6 +58,7 @@ public class LanguageManager {
         data.put(Tokens.holo, InitUIText(Tokens.holo, "Голограма", "Голограмма"));
         data.put(Tokens.info, InitUIText(Tokens.info, "Інфо", "Инфо"));
         data.put(Tokens.back, InitUIText(Tokens.back, "Назад", "Назад"));
+        data.put(Tokens.items, InitUIText(Tokens.items, "Моделі", "Модели"));
         data.put(Tokens.incorrectQR, InitUIText(Tokens.incorrectQR, "Не коректний QR-код", "Не корректный QR-код"));
 
         // items

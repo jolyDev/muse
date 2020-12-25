@@ -101,7 +101,7 @@ public class MenuActivity extends ListActivity {
             else if (option.equals(lang.Get(Tokens.help)))
                 help();
             else if (option.equals(lang.Get(Tokens.exit)))
-                MenuActivity.this.finish();
+                finishAndRemoveTask();
         }
         catch (Exception ex) {
             Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_LONG).show();

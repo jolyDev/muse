@@ -37,6 +37,7 @@
         <activity
             android:name="org.andresoviedo.app.model3D.view.MenuActivity"
             android:label="@string/title_activity_menu"
+            android:theme="@style/Theme.AppCompat.DayNight"
             android:parentActivityName="org.andresoviedo.app.model3D.MainActivity" >
         </activity>
         <activity
