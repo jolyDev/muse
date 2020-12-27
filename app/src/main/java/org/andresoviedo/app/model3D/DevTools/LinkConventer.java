@@ -70,7 +70,7 @@ public class LinkConventer {
     {
         LanguageManager lang = LanguageManager.GetInstance();
 
-        MuseamObj obj = new MuseamObj("none", "none", "none");
+        MuseamObj obj = null;
         Map<String, MuseamObj> map = GetInstance().ConvertManager;
 
         if (item.equals(lang.Get(Tokens.scull)))

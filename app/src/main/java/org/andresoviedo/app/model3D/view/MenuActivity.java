@@ -12,10 +12,15 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.util.Pair;
 
 import org.andresoviedo.android_3d_model_engine.services.collada.ColladaLoader;
 import org.andresoviedo.android_3d_model_engine.services.wavefront.WavefrontLoader;
@@ -23,6 +28,7 @@ import org.andresoviedo.app.model3D.Atlas.AtlasActivity;
 import org.andresoviedo.app.model3D.DevTools.ArCoreHelper;
 import org.andresoviedo.app.model3D.DevTools.LinkConventer;
 import org.andresoviedo.app.model3D.DevTools.MenuItemsHolder;
+import org.andresoviedo.app.model3D.DevTools.NetworkManager;
 import org.andresoviedo.app.model3D.DevTools.PermissionManager;
 import org.andresoviedo.lang.LanguageManager;
 import org.andresoviedo.lang.Tokens;
@@ -37,14 +43,14 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 public class MenuActivity extends ListActivity {
-
-    private static final String REPO_URL = "https://github.com/andresoviedo/android-3D-model-viewer/raw/master/models/index";
     private static final int REQUEST_READ_EXTERNAL_STORAGE = 1000;
     private static final int REQUEST_INTERNET_ACCESS = 1001;
     private static final int REQUEST_READ_CONTENT_PROVIDER = 1002;
@@ -56,6 +62,7 @@ public class MenuActivity extends ListActivity {
     private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 1105;
     private static final int REQUEST_CODE_ADD_FILES = 1200;
     private static final String SUPPORTED_FILE_TYPES_REGEX = "(?i).*\\.(obj|stl|dae)";
+    private static final String REPO_URL = "https://github.com/andresoviedo/android-3D-model-viewer/raw/master/models/index";
 
     /**
      * Load file user data
@@ -91,7 +98,7 @@ public class MenuActivity extends ListActivity {
             else if (option.equals(lang.Get(Tokens.atlas)))
                 RunAtlas();
             else if (option.equals(lang.Get(Tokens.viewItems)))
-                loadLocal();
+                new ObjSelectorTask(NetworkManager.GitCompatIndexLink).execute();
             else if(option.equals(lang.Get(Tokens.scanQR)))
                 startQRActivity(false);
             else if (option.equals(lang.Get(Tokens.language)))
@@ -151,12 +158,13 @@ public class MenuActivity extends ListActivity {
             (dialog, which) ->
             {
                 LinkConventer.MuseamObj obj = LinkConventer.GetInstance().GetMuseamObjFromId(items[which]);
-                if(obj == null)
-                    return;
 
-                ContentUtils.provideAssets(this);
-                launchModelRendererActivity(Uri.parse("android://"+getPackageName()+"/assets/" + obj.local_link));
-            });
+                if(obj != null) {
+                    ContentUtils.provideAssets(this);
+                    launchModelRendererActivity(Uri.parse("android://" + getPackageName() + "/assets/" + obj.local_link));
+                }
+
+                });
     }
 
     private void startQRActivity(boolean isAR)
@@ -316,9 +324,9 @@ public class MenuActivity extends ListActivity {
                             launchModelRendererActivity(Uri.parse(file));
                         }
                     });
+
         }
     }
-
     private void loadModelFromSdCard() {
         // check permission starting from android API 23 - Marshmallow
         if (AndroidUtils.checkPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE, REQUEST_READ_EXTERNAL_STORAGE)) {
@@ -542,7 +550,7 @@ public class MenuActivity extends ListActivity {
         }
     }
 
-    private void launchModelRendererActivity(Uri uri) {
+    public void launchModelRendererActivity(Uri uri) {
         Log.i("Menu", "Launching renderer for '" + uri + "'");
         Intent intent = new Intent(getApplicationContext(), ModelActivity.class);
         try {
@@ -567,5 +575,107 @@ public class MenuActivity extends ListActivity {
         }
 
         startActivity(intent);
+    }
+
+    ///////////////////////////////////////////////////
+    /////////// Loader Task ///////////////////////////
+    ///////////////////////////////////////////////////
+
+    public class ObjSelectorTask extends AsyncTask<Void, Integer, List<String>> {
+
+        private final ProgressDialog dialog;
+        private String link = "";
+        private String[] localItems = MenuItemsHolder.GetLocalObjectsMenuItems();
+        private String[] remoteItems = null;
+
+        public ObjSelectorTask(String link) {
+            this.link = link;
+            this.dialog = new ProgressDialog(MenuActivity.this);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            this.dialog.setMessage("Loading...");
+            this.dialog.setCancelable(false);
+            this.dialog.show();
+        }
+
+        @Override
+        protected List<String> doInBackground(Void... voids) {
+            return ContentUtils.getIndex(link);
+        }
+
+        private String[] GetRemoteDialogList(List<String> strings)
+        {
+            remoteItems = new String[strings.size() / 2];
+
+            for (int i = 0; i < strings.size(); i+=2)
+                remoteItems[i / 2] = strings.get(i).split(",")[LanguageManager.GetInstance().code];
+
+            return remoteItems;
+        }
+
+        private String ExtractRemoteObjLink(int index, List<String> raw_git_index_file_content)
+        {
+            if (index >= 0)
+                return raw_git_index_file_content.get(index * 2 + 1);
+
+            return "";
+        }
+
+        private String[] GetDialogItemsList(List<String> strings)
+        {
+            String[] remote = GetRemoteDialogList(strings);
+
+            String[] result = new String[remote.length + localItems.length];
+
+            int i = 0;
+            for (; i < remote.length; i++)
+                result[i] = remote[i];
+
+            for (int j = 0; j < localItems.length; j++, i++)
+                result[i] = localItems[j];
+
+            return result;
+        }
+
+        private void ClickHandler(int index, List<String> strings)
+        {
+            if (index >= 0) {
+                if (index < remoteItems.length)
+                {
+                    launchModelRendererActivity(Uri.parse(
+                            ExtractRemoteObjLink(index, strings)));
+                }
+                else if (index >= remoteItems.length && index < localItems.length) {
+                    if (localItems[index] != LanguageManager.GetInstance().Get(Tokens.back)) {
+                        LinkConventer.MuseamObj obj = LinkConventer.GetInstance().GetMuseamObjFromId(localItems[index - remoteItems.length]);
+
+                        if(obj != null) {
+                            ContentUtils.provideAssets(MenuActivity.this);
+                            launchModelRendererActivity(Uri.parse("android://"+getPackageName()+"/assets/" + obj.local_link));
+                        }
+                    }
+                }
+            }
+        }
+
+        @Override
+        protected void onPostExecute(List<String> strings) {
+            if (dialog.isShowing()) {
+                dialog.dismiss();
+            }
+            if (strings == null) {
+                Toast.makeText(MenuActivity.this, "Couldn't load repo index", Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            ContentUtils.showListDialog(MenuActivity.this, LanguageManager.GetInstance().Get(Tokens.items),
+                    GetDialogItemsList(strings),
+                    (dialog, which) -> {
+                        ClickHandler(which, strings);
+                    });
+        }
     }
 }
