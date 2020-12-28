@@ -39,7 +39,7 @@ import java.util.Map;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import static org.andresoviedo.android_3d_model_engine.objects.SkyBox.getSkyBoxes;
+import static org.andresoviedo.android_3d_model_engine.objects.SkyBox.getSkyBox;
 
 public class ModelRenderer implements GLSurfaceView.Renderer {
 
@@ -196,7 +196,6 @@ public class ModelRenderer implements GLSurfaceView.Renderer {
     private int isUseskyBoxId = 0;
     private final float[] projectionMatrixSkyBox = new float[16];
     private final float[] viewMatrixSkyBox = new float[16];
-    private SkyBox[] skyBoxes = null;
     private Object3DData[] skyBoxes3D = null;
 
     /**
@@ -297,8 +296,8 @@ public class ModelRenderer implements GLSurfaceView.Renderer {
 
         // init variables having android context
         ContentUtils.setThreadActivity(main.getContext());
-        skyBoxes = getSkyBoxes();
-        skyBoxes3D = new Object3DData[skyBoxes.length];
+        SkyBox.InitSkyBoxSettings();
+        skyBoxes3D = new Object3DData[SkyBox.skybox_count];
     }
 
     @Override
@@ -464,10 +463,10 @@ public class ModelRenderer implements GLSurfaceView.Renderer {
                 // lazy building of the 3d object
                 if (skyBoxes3D[skyBoxId] == null) {
                     Log.i("ModelRenderer", "Loading sky box textures to GPU... skybox: " + skyBoxId);
-                    int textureId = GLUtil.loadCubeMap(skyBoxes[skyBoxId].getCubeMap());
+                    int textureId = GLUtil.loadCubeMap(SkyBox.getSkyBox(skyBoxId).getCubeMap());
                     Log.d("ModelRenderer", "Loaded textures to GPU... id: " + textureId);
                     if (textureId != -1) {
-                        skyBoxes3D[skyBoxId] = SkyBox.build(skyBoxes[skyBoxId]);
+                        skyBoxes3D[skyBoxId] = SkyBox.build(SkyBox.getSkyBox(skyBoxId));
                     } else {
                         Log.e("ModelRenderer", "Error loading sky box textures to GPU. ");
                         isDrawSkyBox = false;

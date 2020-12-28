@@ -102,38 +102,21 @@ public class SkyBox {
         return cubeMap;
     }
 
-    public static void UpdateSkyBoxList()
-    {
-
-    }
-
     private static List<String> skybox_links = null;
     public static int skybox_count = 0;
+    private static SkyBox[] cachedBoxes = null;
 
-    private static SkyBox[] skyboxes = null;
-
-    private static void InitSkyBoxSettings()
+    public static void InitSkyBoxSettings()
     {
         if (skybox_links != null)
             return;
 
         skybox_links = ContentUtils.getIndex("https://raw.githubusercontent.com/nnmuApp/mobile_data_storage/master/skybox/index.txt");
-        skybox_count = skybox_links.size() / 6;
-        
         while (skybox_links.remove(""));
 
-        skyboxes = new SkyBox[skybox_count];
-        for (int i = 0; i < skybox_count; i++) {
-            Uri[] uri_list = new Uri[6];
-            for (int j = 0; j < 6; j++)
-                uri_list[j] = Uri.parse(skybox_links.get(i + j));
+        skybox_count = skybox_links.size() / 6;
 
-            try {
-                skyboxes[i] = new SkyBox(uri_list);
-            } catch(Exception e) {
-
-            }
-        }
+        cachedBoxes = new SkyBox[skybox_count];
     }
 
     /**
@@ -141,10 +124,25 @@ public class SkyBox {
      *
      * @return
      */
-    public static SkyBox[] getSkyBoxes() {
-            InitSkyBoxSettings();
+    public static SkyBox getSkyBox(int index) {
+        InitSkyBoxSettings();
 
-            return skyboxes;
+        if (index > skybox_count)
+            return null;
+
+        if (cachedBoxes[index] != null)
+            return cachedBoxes[index];
+
+        Uri[] uri_list = new Uri[6];
+        for (int i = 0; i < 6; i++)
+            uri_list[i] = Uri.parse(skybox_links.get(index * 6 + i));
+
+        try {
+            cachedBoxes[index] = new SkyBox(uri_list);
+            return cachedBoxes[index];
+        } catch(Exception e) {
+            return null;
+        }
     }
 
     /**
