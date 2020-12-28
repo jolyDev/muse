@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 
+import org.andresoviedo.app.model3D.view.GridMenu;
 import org.andresoviedo.app.model3D.view.MenuActivity;
 import org.andresoviedo.app.model3D.view.ModelActivity;
 import org.nmmu.R;
@@ -36,10 +37,10 @@ public class MainActivity extends Activity {
 
 		// Set main layout controls.
 		// Basically, this is a screen with the app name just in the middle of the scree
-		setContentView(R.layout.activity_main);
+//		setContentView(R.layout.activity_main);
 
 		// Start Model activity.
-		MainActivity.this.startActivity(new Intent(MainActivity.this.getApplicationContext(), MenuActivity.class));
+		MainActivity.this.startActivity(new Intent(MainActivity.this.getApplicationContext(), GridMenu.class));
 		MainActivity.this.finish();
 	}
 
