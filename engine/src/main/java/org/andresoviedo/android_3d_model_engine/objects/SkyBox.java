@@ -1,5 +1,6 @@
 package org.andresoviedo.android_3d_model_engine.objects;
 
+import android.net.Uri;
 import android.opengl.GLES20;
 import android.util.Log;
 
@@ -11,6 +12,8 @@ import org.nmmu.core.R;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Skyboxes downloaded from:
@@ -72,11 +75,11 @@ public class SkyBox {
         }
     }
 
-    public final Integer[] images;
+    public final Uri[] images;
 
     private CubeMap cubeMap = null;
 
-    public SkyBox(Integer[] images) throws IOException {
+    public SkyBox(Uri[] images) throws IOException {
         if (images == null || images.length != 6)
             throw new IllegalArgumentException("skybox must contain exactly 6 faces");
         this.images = images;
@@ -99,83 +102,49 @@ public class SkyBox {
         return cubeMap;
     }
 
+    public static void UpdateSkyBoxList()
+    {
+
+    }
+
+    private static List<String> skybox_links = null;
+    public static int skybox_count = 0;
+
+    private static SkyBox[] skyboxes = null;
+
+    private static void InitSkyBoxSettings()
+    {
+        if (skybox_links != null)
+            return;
+
+        skybox_links = ContentUtils.getIndex("https://raw.githubusercontent.com/nnmuApp/mobile_data_storage/master/skybox/index.txt");
+        skybox_count = skybox_links.size() / 6;
+        
+        while (skybox_links.remove(""));
+
+        skyboxes = new SkyBox[skybox_count];
+        for (int i = 0; i < skybox_count; i++) {
+            Uri[] uri_list = new Uri[6];
+            for (int j = 0; j < 6; j++)
+                uri_list[j] = Uri.parse(skybox_links.get(i + j));
+
+            try {
+                skyboxes[i] = new SkyBox(uri_list);
+            } catch(Exception e) {
+
+            }
+        }
+    }
+
     /**
      * skybox downloaded from https://github.com/mobialia/jmini3d
      *
      * @return
      */
     public static SkyBox[] getSkyBoxes() {
-        try {
-            return new SkyBox[]
-                    {
-                        new SkyBox(new Integer[]{
-                                R.drawable.right,
-                                R.drawable.left,
-                                R.drawable.top,
-                                R.drawable.bottom,
-                                R.drawable.front,
-                                R.drawable.back}),
+            InitSkyBoxSettings();
 
-                        new SkyBox(new Integer[]{
-                                R.drawable.sand_px,
-                                R.drawable.sand_nx,
-                                R.drawable.sand_py,
-                                R.drawable.sand_ny,
-                                R.drawable.sand_pz,
-                                R.drawable.sand_nz}),
-
-                        new SkyBox(new Integer[]{
-                                R.drawable.dark_px,
-                                R.drawable.dark_nx,
-                                R.drawable.dark_py,
-                                R.drawable.dark_ny,
-                                R.drawable.dark_pz,
-                                R.drawable.dark_nz}),
-
-                        new SkyBox(new Integer[]{
-                                R.drawable.snow_px,
-                                R.drawable.snow_nx,
-                                R.drawable.snow_py,
-                                R.drawable.snow_ny,
-                                R.drawable.snow_pz,
-                                R.drawable.snow_nz}),
-
-                        new SkyBox(new Integer[]{
-                                R.drawable.rocks_px,
-                                R.drawable.rocks_nx,
-                                R.drawable.rocks_py,
-                                R.drawable.rocks_ny,
-                                R.drawable.rocks_pz,
-                                R.drawable.rocks_nz}),
-
-                        new SkyBox(new Integer[]{
-                                R.drawable.urban_px,
-                                R.drawable.urban_nx,
-                                R.drawable.urban_py,
-                                R.drawable.urban_ny,
-                                R.drawable.urban_pz,
-                                R.drawable.urban_nz}),
-
-                        new SkyBox(new Integer[]{
-                                R.drawable.shanhai_px,
-                                R.drawable.shanhai_nx,
-                                R.drawable.shanhai_py,
-                                R.drawable.shanhai_ny,
-                                R.drawable.shangai_pz,
-                                R.drawable.shanhai_nz}),
-
-                        new SkyBox(new Integer[]{
-                            R.drawable.surgery_px,
-                            R.drawable.surgery_nx,
-                            R.drawable.surgery_py,
-                            R.drawable.surgery_ny,
-                            R.drawable.surgery_pz,
-                            R.drawable.surgery_nz})
-                    };
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+            return skyboxes;
     }
 
     /**
