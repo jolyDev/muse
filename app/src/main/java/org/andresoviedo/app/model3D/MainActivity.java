@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.Menu;
 
 import org.andresoviedo.app.model3D.view.GridMenu;
-import org.andresoviedo.app.model3D.view.MenuActivity;
 import org.andresoviedo.app.model3D.view.ModelActivity;
 import org.nmmu.R;
 import org.andresoviedo.util.android.AndroidURLStreamHandlerFactory;

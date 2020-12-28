@@ -33,6 +33,7 @@ public class Tokens
     static public final String back = "Back";
     public static final String imageNotFound = "Image cannot be loaded. Please check if the url is correct";
     public static final String noUrl = "No url passed to image viewer";
+    public static final String museName = "NATIONAL MUSEUM OF MEDICINE OF UKRAINE";
 
     // items
     static public final String items = "Items";

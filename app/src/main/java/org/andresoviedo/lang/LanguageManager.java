@@ -60,6 +60,7 @@ public class LanguageManager {
         data.put(Tokens.back, InitUIText(Tokens.back, "Назад", "Назад"));
         data.put(Tokens.items, InitUIText(Tokens.items, "Моделі", "Модели"));
         data.put(Tokens.incorrectQR, InitUIText(Tokens.incorrectQR, "Не коректний QR-код", "Не корректный QR-код"));
+        data.put(Tokens.museName, InitUIText(Tokens.museName, "НАЦІОНАЛЬНИЙ МУЗЕЙ МЕДИЦИНИ УКРАЇНИ", "НАЦИОНАЛЬНЫЙ МУЗЕЙ МЕДИЦИНЫ УКРАИНЫ"));
 
         // items
         data.put(Tokens.atlas, InitUIText(Tokens.atlas, "Атлас", "Атлас"));
