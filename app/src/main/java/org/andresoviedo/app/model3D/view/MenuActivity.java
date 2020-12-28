@@ -136,18 +136,14 @@ public class MenuActivity extends ListActivity {
                         if(item == null)
                             return;
 
-                        String link = LinkConventer.GetInstance().menuMap.get(item);
-                        if(link == null)
-                            return;
+                        // LinkConventer.MuseamObj obj = LinkConventer.GetInstance().ConvertManager.get(link);
+                        // if(obj == null)
+                        //     return;
 
-                        LinkConventer.MuseamObj obj = LinkConventer.GetInstance().ConvertManager.get(link);
-                        if(obj == null)
-                            return;
-
-                        ArCoreHelper.showArObject(
-                                getApplicationContext(),
-                                obj.ar_link,
-                                lang.Get(obj.name));
+                        //ArCoreHelper.showArObject(
+                               // getApplicationContext(),
+                               // obj.ar_link,
+                                // lang.Get(obj.name));
                     });
         }
     }
@@ -159,11 +155,11 @@ public class MenuActivity extends ListActivity {
             items,
             (dialog, which) ->
             {
-                LinkConventer.MuseamObj obj = LinkConventer.GetInstance().GetMuseamObjFromId(items[which]);
+                String obj_link = LinkConventer.GetInstance().GetObjLinkFromId(items[which]);
 
-                if(obj != null) {
+                if(obj_link != null) {
                     ContentUtils.provideAssets(this);
-                    launchModelRendererActivity(Uri.parse("android://" + getPackageName() + "/assets/" + obj.local_link));
+                    launchModelRendererActivity(Uri.parse("android://" + getPackageName() + "/assets/" + obj_link));
                 }
 
                 });
@@ -223,7 +219,7 @@ public class MenuActivity extends ListActivity {
     {
         Intent aboutIntent = new Intent(MenuActivity.this.getApplicationContext(), TextActivity.class);
         aboutIntent.putExtra("title", lang.Get(Tokens.about));
-        aboutIntent.putExtra("text", "# Unimplemented");
+        aboutIntent.putExtra("text", lang.Get(Tokens.aboutDescription));
         MenuActivity.this.startActivity(aboutIntent);
     }
 
@@ -612,13 +608,9 @@ public class MenuActivity extends ListActivity {
         {
             List<String> items = new ArrayList<String>();
 
-            int remoteIndex = 0;
             for (int i = 0; i < strings.size(); i++)
                 if(strings.get(i).length() > 0 && strings.get(i).charAt(0) == '+')
-                {
                     items.add(strings.get(i).split(",")[LanguageManager.GetInstance().code + 1]);
-                    remoteIndex++;
-                }
 
             return items.stream().toArray(String[]::new);
         }
@@ -665,13 +657,14 @@ public class MenuActivity extends ListActivity {
                     launchModelRendererActivity(Uri.parse(
                             ExtractRemoteObjLink(index, strings)));
                 }
-                else if (index >= remoteItems.length && index < localItems.length) {
+                else if (index >= remoteItems.length && index < localItems.length + remoteItems.length) {
+                    index -= remoteItems.length; // make index relative to locals
                     if (localItems[index] != LanguageManager.GetInstance().Get(Tokens.back)) {
-                        LinkConventer.MuseamObj obj = LinkConventer.GetInstance().GetMuseamObjFromId(localItems[index - remoteItems.length]);
+                        String obj_link = LinkConventer.GetInstance().GetObjLinkFromId(localItems[index]);
 
-                        if(obj != null) {
+                        if(obj_link != null) {
                             ContentUtils.provideAssets(MenuActivity.this);
-                            launchModelRendererActivity(Uri.parse("android://"+getPackageName()+"/assets/" + obj.local_link));
+                            launchModelRendererActivity(Uri.parse("android://"+getPackageName()+"/assets/" + obj_link));
                         }
                     }
                 }

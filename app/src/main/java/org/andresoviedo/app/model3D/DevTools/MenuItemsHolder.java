@@ -14,22 +14,19 @@ import static com.google.ar.core.ArCoreApk.InstallStatus.INSTALLED;
 public class MenuItemsHolder {
     public static String[] GetLocalObjectsMenuItems()
     {
-        int size = LinkConventer.GetInstance().menuMap.keySet().size();
-        String[] items = new String[size+1];
-        LinkConventer.GetInstance().menuMap.keySet().toArray(items);
-        for(int i = 0;i < size;i++){
-            items[i] = lang.Get(items[i]);
-        }
-        items[size] = lang.Get(Tokens.back);
-
-        return items;
+        return new String[] {
+                lang.Get(Tokens.map),
+                lang.Get(Tokens.scull),
+                lang.Get(Tokens.termokauter),
+                lang.Get(Tokens.microscope),
+                lang.Get(Tokens.back)
+        };
     }
 
     public static String[] GetMainMenuItems(boolean isAR_mode)
     {
         if (isAR_mode)
             return new String[] {
-                    lang.Get(Tokens.debug_load),
                     lang.Get(Tokens.scanQR_AR),
                     lang.Get(Tokens.AR),
                     lang.Get(Tokens.atlas),
@@ -39,7 +36,6 @@ public class MenuItemsHolder {
             };
         else
            return new String[]{
-                   lang.Get(Tokens.debug_load),
                     lang.Get(Tokens.scanQR),
                     lang.Get(Tokens.viewItems),
                     lang.Get(Tokens.atlas),

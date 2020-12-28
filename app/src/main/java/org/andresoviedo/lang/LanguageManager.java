@@ -49,7 +49,7 @@ public class LanguageManager {
         data.put(Tokens.exit, InitUIText(Tokens.exit, "Вихід", "Выход"));
         data.put(Tokens.noUrl, InitUIText(Tokens.noUrl, "Ніякого url не було передано до відображувача картинок", "Никакого url не было передано в отображатель картинок"));
         data.put(Tokens.imageNotFound, InitUIText(Tokens.imageNotFound, "Проблеми із завантаженням. Перевірте правильність url", "Проблемы с загрузкой. Проверьте правильность url"));
-        data.put(Tokens.scanQR, InitUIText(Tokens.scanQR, "Сканувати QR", "Сканировать QR"));
+        data.put(Tokens.scanQR, InitUIText(Tokens.scanQR, "Сканувати QR-код", "Сканировать QR-код"));
         data.put(Tokens.viewItems, InitUIText(Tokens.viewItems, "Експонати", "Экспонаты"));
         data.put(Tokens.theme, InitUIText(Tokens.theme, "Стиль", "Стиль"));
         data.put(Tokens.deviceDefault, InitUIText(Tokens.deviceDefault, "Стиль системи", "Стиль системы"));

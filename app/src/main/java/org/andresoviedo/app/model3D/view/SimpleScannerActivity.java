@@ -65,45 +65,46 @@ public class SimpleScannerActivity extends Activity implements ZXingScannerView.
 
     @Override
     public void handleResult(Result rawResult) {
-        String link_key = rawResult.getText();
-        Log.i("Scanner result", "model = " + link_key);
-        if(link_key.isEmpty()){
-            Toast.makeText(this, Tokens.incorrectQR, Toast.LENGTH_SHORT).show();
-        }
+        try {
+            String link_key = rawResult.getText();
+            Log.i("Scanner result", "model = " + link_key);
+            if (link_key.isEmpty()) {
+                Toast.makeText(this, Tokens.incorrectQR, Toast.LENGTH_SHORT).show();
+            }
 
-        if(imageExts.contains(FilenameUtils.getExtension(link_key))){
-            Intent imageIntent = new Intent(SimpleScannerActivity.this.getApplicationContext(), ImageActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putString("url", link_key);
-            imageIntent.putExtras(bundle);
-            SimpleScannerActivity.this.startActivity(imageIntent);
-        } else if(FilenameUtils.getExtension(link_key).endsWith("txt")){
-            Intent textIntent = new Intent(SimpleScannerActivity.this.getApplicationContext(), TextActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putString("url", link_key);
-            textIntent.putExtras(bundle);
-            SimpleScannerActivity.this.startActivity(textIntent);
-        } else {
-            Map<String, LinkConventer.MuseamObj> linkManager = LinkConventer.GetInstance().ConvertManager;
-
-            if (linkManager.containsKey(link_key)) {
-                LinkConventer.MuseamObj obj = linkManager.get(link_key);
-
+            if (imageExts.contains(FilenameUtils.getExtension(link_key))) {
+                Intent imageIntent = new Intent(SimpleScannerActivity.this.getApplicationContext(), ImageActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("url", link_key);
+                imageIntent.putExtras(bundle);
+                SimpleScannerActivity.this.startActivity(imageIntent);
+            } else if (FilenameUtils.getExtension(link_key).endsWith("txt")) {
+                Intent textIntent = new Intent(SimpleScannerActivity.this.getApplicationContext(), TextActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("url", link_key);
+                textIntent.putExtras(bundle);
+                SimpleScannerActivity.this.startActivity(textIntent);
+            } else {
                 if (getIntent().getBooleanExtra(SimpleScannerActivity.AR_Status, false)) {
 
                     ArCoreHelper.showArObject(
                             getApplicationContext(),
-                            obj.ar_link,
-                            obj.name);
+                            link_key,
+                            "Name please calculate");
                 } else {
-                    Intent resultIntent = new Intent();
-                    resultIntent.putExtra("file", obj.local_link);
-                    setResult(Activity.RESULT_OK, resultIntent);
+                    String obj_link = LinkConventer.GetInstance().GetObjLinkFromId(link_key);
+
+                    if (obj_link != null) {
+                        Intent resultIntent = new Intent();
+                        resultIntent.putExtra("file", obj_link);
+                        setResult(Activity.RESULT_OK, resultIntent);
+                    }
                 }
 
-            } else {
-                Toast.makeText(this, Tokens.incorrectQR, Toast.LENGTH_SHORT).show();
             }
+        }
+        catch(Exception e){
+            Toast.makeText(this, Tokens.incorrectQR, Toast.LENGTH_SHORT).show();
         }
 
         finish();
