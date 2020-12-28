@@ -28,7 +28,7 @@ public class SimpleScannerActivity extends Activity implements ZXingScannerView.
 
     public static final String AR_Status = "AR status";
 
-    private final Set<String> imageExts = new HashSet<>(Arrays.asList("png", "jpg", "jpeg", "gif"));
+    private final Set<String> imageExts = new HashSet<>(Arrays.asList("png", "jpg", "jpeg", "gif", "PNG", "JPG", "JPEG", "GIF"));
 
     @Override
     public void onCreate(Bundle state) {

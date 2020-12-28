@@ -227,14 +227,18 @@ public class ContentUtils {
             fileListArray[i] = model.substring(model.lastIndexOf("/") + 1);
         }
         builder.setItems(fileListArray, (DialogInterface dialog, int which) -> {
-            documentsProvided.clear();
-            for (String asset : fileListAssets) {
-                documentsProvided.put(asset.substring(asset.lastIndexOf("/") + 1), Uri.parse(asset));
-            }
             callback.onClick(fileListModels.get(which));
         });
 
         builder.create().show();
+    }
+
+    public static void UpdateAssetsList(List<String> fileListAssets)
+    {
+        documentsProvided.clear();
+        for (String asset : fileListAssets) {
+            documentsProvided.put(asset.substring(asset.lastIndexOf("/") + 1), Uri.parse(asset));
+        }
     }
 
     public static List<String> getIndex(String indexURL) {

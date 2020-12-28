@@ -1,7 +1,7 @@
 package org.andresoviedo.app.model3D.view;
 
 import android.app.Activity;
-import org.nnmu.R;
+import org.nmmu.R;
 import org.andresoviedo.lang.Tokens;
 
 import android.os.Bundle;

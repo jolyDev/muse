@@ -6,7 +6,7 @@ import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import org.andresoviedo.app.model3D.view.MenuActivity;
-import org.nnmu.R;
+import org.nmmu.R;
 
 import android.app.Activity;
 import android.app.DownloadManager;

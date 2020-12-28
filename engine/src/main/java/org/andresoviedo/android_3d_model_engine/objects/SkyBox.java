@@ -7,7 +7,7 @@ import org.andresoviedo.android_3d_model_engine.model.CubeMap;
 import org.andresoviedo.android_3d_model_engine.model.Object3DData;
 import org.andresoviedo.util.android.ContentUtils;
 import org.andresoviedo.util.io.IOUtils;
-import org.nnmu.R;
+import org.nmmu.R;
 
 import java.io.IOException;
 import java.net.URI;

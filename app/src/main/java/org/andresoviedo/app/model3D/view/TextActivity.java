@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.widget.TextView;
 
-import org.nnmu.R;
+import org.nmmu.R;
 
 import java.io.BufferedReader;
 import java.io.IOException;

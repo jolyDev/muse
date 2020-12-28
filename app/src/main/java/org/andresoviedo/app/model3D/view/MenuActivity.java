@@ -32,7 +32,7 @@ import org.andresoviedo.app.model3D.DevTools.NetworkManager;
 import org.andresoviedo.app.model3D.DevTools.PermissionManager;
 import org.andresoviedo.lang.LanguageManager;
 import org.andresoviedo.lang.Tokens;
-import org.nnmu.R;
+import org.nmmu.R;
 import org.andresoviedo.util.android.AndroidUtils;
 import org.andresoviedo.util.android.AssetUtils;
 import org.andresoviedo.util.android.ContentUtils;
@@ -43,6 +43,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -88,12 +89,13 @@ public class MenuActivity extends ListActivity {
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         try {
+            boolean isARModeOn = ArCoreHelper.checkAR_Permission(MenuActivity.this);
             String option = (String) getListView().getItemAtPosition(position);
-            if (option.equals(lang.Get(Tokens.scanQR_AR)))
+            if (isARModeOn && option.equals(lang.Get(Tokens.scanQR_AR)))
                 startQRActivity(ArCoreHelper.checkAR_Permission(MenuActivity.this));
             else if (option.equals(lang.Get(Tokens.debug_load)))
                 loadModel();
-            else if (option.equals(lang.Get(Tokens.AR)))
+            else if (isARModeOn && option.equals(lang.Get(Tokens.AR)))
                 AR();
             else if (option.equals(lang.Get(Tokens.atlas)))
                 RunAtlas();
@@ -608,31 +610,46 @@ public class MenuActivity extends ListActivity {
 
         private String[] GetRemoteDialogList(List<String> strings)
         {
-            remoteItems = new String[strings.size() / 2];
+            List<String> items = new ArrayList<String>();
 
-            for (int i = 0; i < strings.size(); i+=2)
-                remoteItems[i / 2] = strings.get(i).split(",")[LanguageManager.GetInstance().code];
+            int remoteIndex = 0;
+            for (int i = 0; i < strings.size(); i++)
+                if(strings.get(i).length() > 0 && strings.get(i).charAt(0) == '+')
+                {
+                    items.add(strings.get(i).split(",")[LanguageManager.GetInstance().code + 1]);
+                    remoteIndex++;
+                }
 
-            return remoteItems;
+            return items.stream().toArray(String[]::new);
         }
 
         private String ExtractRemoteObjLink(int index, List<String> raw_git_index_file_content)
         {
-            if (index >= 0)
-                return raw_git_index_file_content.get(index * 2 + 1);
+            if (index < 0)
+                return "";
+
+            int index_iter = 0;
+            for (int i = 0; i < raw_git_index_file_content.size(); i++)
+                if(raw_git_index_file_content.get(i).length() > 0 && raw_git_index_file_content.get(i).charAt(0) == '+')
+                {
+                    if (index_iter == index)
+                        return raw_git_index_file_content.get(i + 1);
+
+                    index_iter++;
+                }
 
             return "";
         }
 
         private String[] GetDialogItemsList(List<String> strings)
         {
-            String[] remote = GetRemoteDialogList(strings);
+            remoteItems = GetRemoteDialogList(strings);
 
-            String[] result = new String[remote.length + localItems.length];
+            String[] result = new String[remoteItems.length + localItems.length];
 
             int i = 0;
-            for (; i < remote.length; i++)
-                result[i] = remote[i];
+            for (; i < remoteItems.length; i++)
+                result[i] = remoteItems[i];
 
             for (int j = 0; j < localItems.length; j++, i++)
                 result[i] = localItems[j];
@@ -674,6 +691,7 @@ public class MenuActivity extends ListActivity {
             ContentUtils.showListDialog(MenuActivity.this, LanguageManager.GetInstance().Get(Tokens.items),
                     GetDialogItemsList(strings),
                     (dialog, which) -> {
+                        ContentUtils.UpdateAssetsList(strings);
                         ClickHandler(which, strings);
                     });
         }

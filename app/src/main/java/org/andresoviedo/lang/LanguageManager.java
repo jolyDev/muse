@@ -34,8 +34,8 @@ public class LanguageManager {
     }
     private LanguageManager()
     {
-        data.put(Tokens.AR, InitUIText(Tokens.AR, "☆ AR ☆", "☆ AR ☆"));
-        data.put(Tokens.scanQR_AR, InitUIText(Tokens.scanQR_AR, "☆ Сканувати QR ☆", "☆ Сканировать QR ☆"));
+        data.put(Tokens.AR, InitUIText(Tokens.AR, "Доповнена реальність", "Дополненная реальность"));
+        data.put(Tokens.scanQR_AR, InitUIText(Tokens.scanQR_AR, "Сканувати QR-код", "Сканировать QR-код"));
         data.put(Tokens.menu, InitUIText(Tokens.menu, "Меню", "Меню"));
         data.put(Tokens.language, InitUIText(Tokens.language, "Мова", "Язык"));
         data.put(Tokens.settings, InitUIText(Tokens.settings, "Мова", "Язык"));
@@ -44,7 +44,7 @@ public class LanguageManager {
         data.put(Tokens.ukrainian, InitUIText(Tokens.ukrainian, Tokens.ua_flag + "Українська", Tokens.ua_flag + "Украинский"));
         data.put(Tokens.russian, InitUIText(Tokens.russian, Tokens.ru_flag + "Російська", Tokens.ru_flag + "Русский"));
         data.put(Tokens.help, InitUIText(Tokens.help, "Допомога", "Помощь"));
-        data.put(Tokens.about, InitUIText(Tokens.about, "Інфо", "Інфо"));
+        data.put(Tokens.about, InitUIText(Tokens.about, "Про нас", "О нас"));
         data.put(Tokens.load, InitUIText(Tokens.load, "Завантажити", "Загрузить"));
         data.put(Tokens.exit, InitUIText(Tokens.exit, "Вихід", "Выход"));
         data.put(Tokens.noUrl, InitUIText(Tokens.noUrl, "Ніякого url не було передано до відображувача картинок", "Никакого url не было передано в отображатель картинок"));
@@ -69,6 +69,8 @@ public class LanguageManager {
         data.put(Tokens.termokauter, InitUIText(Tokens.termokauter, "Термокаутер", "Термокаутер"));
         data.put(Tokens.microscope, InitUIText(Tokens.microscope, "Мікроскоп", "Микроскоп"));
 
+        // description
+        data.put(Tokens.aboutDescription, InitUIText(Tokens.aboutDescription, descriptionUA, descriptionRU));
     }
 
     private Map<String, UIText> data = new HashMap<String, UIText>();
@@ -95,4 +97,18 @@ public class LanguageManager {
     {
         return new UIText(new String[]{eng, ua, rus});
     }
+
+    public static final String descriptionUA = new StringBuilder()
+            .append("    Національний музей медицини України є одним з найбільших медичних музеїв не тільки в Україні, але і у Європі.\n")
+            .append("    В музеї представлено розвиток медицини в Україні з стародавніх часів до наших днів. В основу організації музею була покладена новітня концепція музеєзнавства, яка дозволила використати науково-методичні і документальні матеріали та експонати у комплексі з архітектурними, художньо-технічними і аудіовізуальними засобами. Крім стендової експозиції, в музеї створені оригінальні інтер'єри, з портретними фігурами відомих вчених і лікарів, та діорами, присвячені найбільш визначним подіям в українській медицині. В експозиції музею широко представлені і твори українського образотворчого мистецтва, що пов'язане з медичною тематикою.\n")
+            .append("    Робота по створенню цього музею була у 1983 р. відзначена Державною премією України у галузі науки і техніки. Указом Президента України від 15 лютого 1999 р. наданий статус Національного.\n")
+            .append("    Додаток було сворено студентами Національного технічного університету України «Київський політехнічний інститу́т імені Ігоря Сікорського»")
+            .toString();
+
+    public static final String descriptionRU = new StringBuilder()
+            .append("    Национальный музей медицины Украины является одним из крупнейших медицинских музеев не только в Украине, но и в Европе.\n")
+            .append("    В музее представлено развитие медицины в Украине с древнейших времен до наших дней. В основу организации музея была положена новейшая концепция музееведения, которая позволила использовать научно-методические и документальные материалы и экспонаты в комплексе с архитектурными, художественно-техническими и аудиовизуальными средствами. Кроме стендовой экспозиции, в музее созданы оригинальные интерьеры, с портретными фигурами известных ученых и врачей, и диорамы, посвященные наиболее выдающимся событиям в украинской медицине. В экспозиции музея широко представлены и произведения украинского изобразительного искусства, связано с медицинской тематикой.\n")
+            .append("    Работа по созданию этого музея была в 1983 отмечена Государственной премией Украины в области науки и техники. Указом Президента Украины от 15 февраля 1999 присвоен статус Национального.\n")
+            .append("    Приложения было создано студентами Национального технического университета Украины «Киевский политехнический институт имени Игоря Сикорского»")
+            .toString();
 };
