@@ -1,6 +1,7 @@
 package org.andresoviedo.app.model3D.view;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
@@ -21,6 +22,7 @@ public class TextActivity extends Activity {
 
     TextView textView;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,8 +42,11 @@ public class TextActivity extends Activity {
         String text = "";
         String url;
 
+        private final ProgressDialog dialog;
+
         public Loader(String url){
             this.url = url;
+            this.dialog = new ProgressDialog(TextActivity.this);
         }
 
         @Override
@@ -65,10 +70,21 @@ public class TextActivity extends Activity {
             return null;
         }
 
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            this.dialog.setMessage("Loading...");
+            this.dialog.setCancelable(false);
+            this.dialog.show();
+        }
+
 
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            if (dialog.isShowing()) {
+                dialog.dismiss();
+            }
             textView.setText(text);
         }
     }
