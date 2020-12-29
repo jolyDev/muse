@@ -648,7 +648,9 @@ public class GridMenu extends Activity {
 
         @Override
         protected List<String> doInBackground(Void... voids) {
-            return ContentUtils.getIndex(link);
+            List<String> result = ContentUtils.getIndex(link);
+            ContentUtils.UpdateAssetsList(result);
+            return result;
         }
 
         private String[] GetRemoteDialogList(List<String> strings)
@@ -724,14 +726,13 @@ public class GridMenu extends Activity {
                 dialog.dismiss();
             }
             if (strings == null) {
-                Toast.makeText(GridMenu.this, "Couldn't load repo index", Toast.LENGTH_LONG).show();
+                Toast.makeText(GridMenu.this, "No internet!", Toast.LENGTH_LONG).show();
                 return;
             }
 
             ContentUtils.showListDialog(GridMenu.this, LanguageManager.GetInstance().Get(Tokens.items),
                     GetDialogItemsList(strings),
                     (dialog, which) -> {
-                        ContentUtils.UpdateAssetsList(strings);
                         ClickHandler(which, strings);
                     });
         }

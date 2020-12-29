@@ -12,6 +12,7 @@ import com.google.zxing.Result;
 
 import org.andresoviedo.app.model3D.DevTools.LinkConventer;
 import org.andresoviedo.app.model3D.DevTools.ArCoreHelper;
+import org.andresoviedo.lang.LanguageManager;
 import org.andresoviedo.lang.Tokens;
 import org.apache.commons.io.FilenameUtils;
 
@@ -81,7 +82,12 @@ public class SimpleScannerActivity extends Activity implements ZXingScannerView.
             } else if (FilenameUtils.getExtension(link_key).endsWith("txt")) {
                 Intent textIntent = new Intent(SimpleScannerActivity.this.getApplicationContext(), TextActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putString("url", link_key);
+
+                String langSpecificFileName = LanguageManager.GetInstance().GetPrefix()
+                        + link_key.substring(link_key.lastIndexOf("/") + 1);
+                String originBase = link_key.substring(0, link_key.lastIndexOf("/") + 1);
+
+                bundle.putString("url", originBase + langSpecificFileName);
                 textIntent.putExtras(bundle);
                 SimpleScannerActivity.this.startActivity(textIntent);
             } else {

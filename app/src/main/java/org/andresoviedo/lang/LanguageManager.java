@@ -3,11 +3,23 @@ package org.andresoviedo.lang;
 import java.util.*;
 
 public class LanguageManager {
-    public final int ENG = 0;
-    public final int UA = 1;
-    public final int RUS = 2;
+    public static final int ENG = 0;
+    public static final int UA = 1;
+    public static final int RUS = 2;
     public final int languages_count = 3;
-    public int code = ENG;
+    public static int code = ENG;
+
+    public static String GetPrefix()
+    {
+       if (code == ENG)
+           return "en_";
+       if (code == UA)
+           return "ua_";
+       if (code == RUS)
+           return "rus_";
+
+       return "";
+    }
 
     public String Get(String key)
     {
