@@ -13,8 +13,12 @@ import com.google.zxing.Result;
 import org.andresoviedo.app.model3D.DevTools.LinkConventer;
 import org.andresoviedo.app.model3D.DevTools.ArCoreHelper;
 import org.andresoviedo.lang.Tokens;
+import org.apache.commons.io.FilenameUtils;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
@@ -23,6 +27,8 @@ public class SimpleScannerActivity extends Activity implements ZXingScannerView.
     private static final int MY_CAMERA_REQUEST_CODE = 100;
 
     public static final String AR_Status = "AR status";
+
+    private final Set<String> imageExts = new HashSet<>(Arrays.asList("png", "jpg", "jpeg", "gif", "PNG", "JPG", "JPEG", "GIF"));
 
     @Override
     public void onCreate(Bundle state) {
@@ -59,30 +65,47 @@ public class SimpleScannerActivity extends Activity implements ZXingScannerView.
 
     @Override
     public void handleResult(Result rawResult) {
-        String link_key = rawResult.getText();
-        Log.i("Scanner result", "model = " + link_key);
-
-        Map<String, LinkConventer.MuseamObj> linkManager = LinkConventer.GetInstance().ConvertManager;
-
-        if (linkManager.containsKey(link_key))
-        {
-            LinkConventer.MuseamObj obj = linkManager.get(link_key);
-
-            if (getIntent().getBooleanExtra(SimpleScannerActivity.AR_Status, false)) {
-
-                ArCoreHelper.showArObject(
-                        getApplicationContext(),
-                        obj.ar_link,
-                        obj.name);
+        try {
+            String link_key = rawResult.getText();
+            Log.i("Scanner result", "model = " + link_key);
+            if (link_key.isEmpty()) {
+                Toast.makeText(this, Tokens.incorrectQR, Toast.LENGTH_SHORT).show();
             }
-            else {
-                Intent resultIntent = new Intent();
-                resultIntent.putExtra("file", obj.local_link);
-                setResult(Activity.RESULT_OK, resultIntent);
+
+            if (imageExts.contains(FilenameUtils.getExtension(link_key))) {
+                Intent imageIntent = new Intent(SimpleScannerActivity.this.getApplicationContext(), ImageActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("url", link_key);
+                imageIntent.putExtras(bundle);
+                SimpleScannerActivity.this.startActivity(imageIntent);
+            } else if (FilenameUtils.getExtension(link_key).endsWith("txt")) {
+                Intent textIntent = new Intent(SimpleScannerActivity.this.getApplicationContext(), TextActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("url", link_key);
+                textIntent.putExtras(bundle);
+                SimpleScannerActivity.this.startActivity(textIntent);
+            } else {
+                if (getIntent().getBooleanExtra(SimpleScannerActivity.AR_Status, false)) {
+
+                    ArCoreHelper.showArObject(
+                            getApplicationContext(),
+                            link_key,
+                            "Name please calculate");
+                } else {
+                    String obj_link = LinkConventer.GetInstance().GetObjLinkFromId(link_key);
+
+                    if (obj_link != null) {
+                        Intent resultIntent = new Intent();
+                        resultIntent.putExtra("file", obj_link);
+                        setResult(Activity.RESULT_OK, resultIntent);
+                    }
+                }
+
             }
         }
-        else
+        catch(Exception e){
             Toast.makeText(this, Tokens.incorrectQR, Toast.LENGTH_SHORT).show();
+        }
 
         finish();
     }

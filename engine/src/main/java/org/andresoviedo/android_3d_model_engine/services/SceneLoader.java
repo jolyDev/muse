@@ -105,7 +105,7 @@ public class SceneLoader implements LoadListener, EventListener {
     /**
      * Whether to draw bounding boxes around objects
      */
-    private boolean drawBoundingBox = false;
+    private final boolean drawBoundingBox = false;
     /**
      * Whether to draw face normals. Normally used to debug models
      */
@@ -121,7 +121,7 @@ public class SceneLoader implements LoadListener, EventListener {
     /**
      * Light toggle feature: we have 3 states: no light, light, light + rotation
      */
-    private boolean rotatingLight = true;
+    private boolean rotatingLight = false;
     /**
      * Light toggle feature: whether to draw using lights
      */
@@ -362,8 +362,8 @@ public class SceneLoader implements LoadListener, EventListener {
     }
 
     public final void toggleBoundingBox() {
-        this.drawBoundingBox = !drawBoundingBox;
-        requestRender();
+        // this.drawBoundingBox = !drawBoundingBox;
+        // requestRender();
     }
 
     public final boolean isDrawBoundingBox() {

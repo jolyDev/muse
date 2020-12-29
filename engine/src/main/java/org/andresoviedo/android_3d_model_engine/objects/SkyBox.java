@@ -1,5 +1,6 @@
 package org.andresoviedo.android_3d_model_engine.objects;
 
+import android.net.Uri;
 import android.opengl.GLES20;
 import android.util.Log;
 
@@ -7,10 +8,12 @@ import org.andresoviedo.android_3d_model_engine.model.CubeMap;
 import org.andresoviedo.android_3d_model_engine.model.Object3DData;
 import org.andresoviedo.util.android.ContentUtils;
 import org.andresoviedo.util.io.IOUtils;
-import org.nnmu.R;
+import org.nmmu.core.R;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Skyboxes downloaded from:
@@ -72,11 +75,11 @@ public class SkyBox {
         }
     }
 
-    public final Integer[] images;
+    public final Uri[] images;
 
     private CubeMap cubeMap = null;
 
-    public SkyBox(Integer[] images) throws IOException {
+    public SkyBox(Uri[] images) throws IOException {
         if (images == null || images.length != 6)
             throw new IllegalArgumentException("skybox must contain exactly 6 faces");
         this.images = images;
@@ -99,39 +102,46 @@ public class SkyBox {
         return cubeMap;
     }
 
+    private static List<String> skybox_links = null;
+    public static int skybox_count = 0;
+    private static SkyBox[] cachedBoxes = null;
+
+    public static void InitSkyBoxSettings()
+    {
+        if (skybox_links != null)
+            return;
+
+        skybox_links = ContentUtils.getIndex("https://raw.githubusercontent.com/nnmuApp/mobile_data_storage/master/skybox/index.txt");
+        while (skybox_links.remove(""));
+
+        skybox_count = skybox_links.size() / 6;
+
+        cachedBoxes = new SkyBox[skybox_count];
+    }
+
     /**
      * skybox downloaded from https://github.com/mobialia/jmini3d
      *
      * @return
      */
-    public static SkyBox[] getSkyBoxes() {
-        try {
-            return new SkyBox[]
-                    {
-                            new SkyBox(new Integer[]{
-                                    R.drawable.urban_px,
-                                    R.drawable.urban_nx,
-                                    R.drawable.urban_py,
-                                    R.drawable.urban_ny,
-                                    R.drawable.urban_pz,
-                                    R.drawable.urban_nz}),
+    public static SkyBox getSkyBox(int index) {
+        InitSkyBoxSettings();
 
-                            new SkyBox(new Integer[]{
-                                    R.drawable.posx,
-                                    R.drawable.negx,
-                                    R.drawable.posy,
-                                    R.drawable.negy,
-                                    R.drawable.posz,
-                                    R.drawable.negz}),
-                    };
-                    // URI.create("android://org.andresoviedo.dddmodel2/res/drawable/posx.png"),
-                    // URI.create("android://org.andresoviedo.dddmodel2/res/drawable/negx.png"),
-                    //URI.create("android://org.andresoviedo.dddmodel2/res/drawable/posy.png"),
-                    //URI.create("android://org.andresoviedo.dddmodel2/res/drawable/negy.png"),
-                    //URI.create("android://org.andresoviedo.dddmodel2/res/drawable/posz.png"),
-                    //URI.create("android://org.andresoviedo.dddmodel2/res/drawable/negz.png")});
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if (index > skybox_count)
+            return null;
+
+        if (cachedBoxes[index] != null)
+            return cachedBoxes[index];
+
+        Uri[] uri_list = new Uri[6];
+        for (int i = 0; i < 6; i++)
+            uri_list[i] = Uri.parse(skybox_links.get(index * 6 + i));
+
+        try {
+            cachedBoxes[index] = new SkyBox(uri_list);
+            return cachedBoxes[index];
+        } catch(Exception e) {
+            return null;
         }
     }
 

@@ -39,6 +39,8 @@ import java.util.Map;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import static org.andresoviedo.android_3d_model_engine.objects.SkyBox.getSkyBox;
+
 public class ModelRenderer implements GLSurfaceView.Renderer {
 
     public static class ViewEvent extends EventObject {
@@ -194,7 +196,6 @@ public class ModelRenderer implements GLSurfaceView.Renderer {
     private int isUseskyBoxId = 0;
     private final float[] projectionMatrixSkyBox = new float[16];
     private final float[] viewMatrixSkyBox = new float[16];
-    private SkyBox[] skyBoxes = null;
     private Object3DData[] skyBoxes3D = null;
 
     /**
@@ -247,8 +248,8 @@ public class ModelRenderer implements GLSurfaceView.Renderer {
 
     public void toggleSkyBox() {
         isUseskyBoxId++;
-        if (isUseskyBoxId > 1) {
-            isUseskyBoxId = -3;
+        if (isUseskyBoxId >= 8) {
+            isUseskyBoxId = 0;
         }
         Log.i("ModelRenderer", "Toggled skybox. Idx: " + isUseskyBoxId);
     }
@@ -295,8 +296,8 @@ public class ModelRenderer implements GLSurfaceView.Renderer {
 
         // init variables having android context
         ContentUtils.setThreadActivity(main.getContext());
-        skyBoxes = SkyBox.getSkyBoxes();
-        skyBoxes3D = new Object3DData[skyBoxes.length];
+        SkyBox.InitSkyBoxSettings();
+        skyBoxes3D = new Object3DData[SkyBox.skybox_count];
     }
 
     @Override
@@ -454,34 +455,18 @@ public class ModelRenderer implements GLSurfaceView.Renderer {
 
         // draw environment
         int skyBoxId = isUseskyBoxId;
-        if (skyBoxId == -3){
-            // draw all extra objects
-            for (int i = 0; i < extras.size(); i++) {
-                drawObject(viewMatrix, projectionMatrix, lightPosInWorldSpace, colorMask, cameraPosInWorldSpace, false, false, false, false, false, extras, i);
-            }
-        }
-        else if (skyBoxId == -2){
-            GLES20.glClearColor(backgroundColor[0], backgroundColor[1], backgroundColor[2], backgroundColor[3]);
-            // Draw background color
-            GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
-        }
-        else if (skyBoxId == -1){
-            // invert background color
-            GLES20.glClearColor(1-backgroundColor[0], 1-backgroundColor[1], 1-backgroundColor[2], 1-backgroundColor[3]);
-            // Draw background color
-            GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
-        }
-        else if (isDrawSkyBox && skyBoxId >= 0 && skyBoxId < skyBoxes3D.length) {
+
+        if (isDrawSkyBox && skyBoxId >= 0 && skyBoxId < skyBoxes3D.length) {
             GLES20.glDepthMask(false);
             try {
                 //skyBoxId = 1;
                 // lazy building of the 3d object
                 if (skyBoxes3D[skyBoxId] == null) {
                     Log.i("ModelRenderer", "Loading sky box textures to GPU... skybox: " + skyBoxId);
-                    int textureId = GLUtil.loadCubeMap(skyBoxes[skyBoxId].getCubeMap());
+                    int textureId = GLUtil.loadCubeMap(SkyBox.getSkyBox(skyBoxId).getCubeMap());
                     Log.d("ModelRenderer", "Loaded textures to GPU... id: " + textureId);
                     if (textureId != -1) {
-                        skyBoxes3D[skyBoxId] = SkyBox.build(skyBoxes[skyBoxId]);
+                        skyBoxes3D[skyBoxId] = SkyBox.build(SkyBox.getSkyBox(skyBoxId));
                     } else {
                         Log.e("ModelRenderer", "Error loading sky box textures to GPU. ");
                         isDrawSkyBox = false;
@@ -749,17 +734,7 @@ public class ModelRenderer implements GLSurfaceView.Renderer {
     }
 
     private void drawBoundingBox(float[] viewMatrix, float[] projectionMatrix, float[] lightPosInWorldSpace, float[] colorMask, float[] cameraPosInWorldSpace, Object3DData objData, boolean changed) {
-        Object3DData boundingBoxData = boundingBoxes.get(objData);
-        if (boundingBoxData == null || changed) {
-            Log.i("ModelRenderer", "Building bounding box... id: " + objData.getId());
-            boundingBoxData = BoundingBox.build(objData);
-            boundingBoxData.setColor(COLOR_WHITE);
-            boundingBoxes.put(objData, boundingBoxData);
-            Log.i("ModelRenderer", "Bounding box: " + boundingBoxData);
-        }
-        Renderer boundingBoxDrawer = drawer.getBoundingBoxDrawer();
-        boundingBoxDrawer.draw(boundingBoxData, projectionMatrix, viewMatrix, -1,
-                lightPosInWorldSpace, colorMask, cameraPosInWorldSpace);
+        return ;
     }
 
     public int getWidth() {
