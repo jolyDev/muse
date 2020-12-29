@@ -11,7 +11,7 @@ import com.google.ar.core.ArCoreApk;
 import com.google.ar.core.exceptions.UnavailableDeviceNotCompatibleException;
 import com.google.ar.core.exceptions.UnavailableUserDeclinedInstallationException;
 
-import org.andresoviedo.app.model3D.view.MenuActivity;
+import org.andresoviedo.app.model3D.view.GridMenu;
 import org.andresoviedo.lang.Tokens;
 
 import static com.google.ar.core.ArCoreApk.InstallStatus.INSTALLED;
@@ -79,7 +79,7 @@ public class ArCoreHelper {
     }
 
 
-    public static boolean checkAR_Permission(MenuActivity activity)
+    public static boolean checkAR_Permission(GridMenu activity)
     {
         ArCoreApk.Availability availability = ArCoreApk.getInstance().checkAvailability(activity.getApplicationContext());
         if(availability.isSupported())

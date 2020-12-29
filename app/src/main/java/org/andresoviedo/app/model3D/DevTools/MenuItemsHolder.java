@@ -5,7 +5,6 @@ import android.os.Handler;
 
 import com.google.ar.core.ArCoreApk;
 
-import org.andresoviedo.app.model3D.view.MenuActivity;
 import org.andresoviedo.lang.LanguageManager;
 import org.andresoviedo.lang.Tokens;
 
