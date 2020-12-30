@@ -16,7 +16,7 @@ public class LanguageManager {
        if (code == UA)
            return "ua_";
        if (code == RUS)
-           return "rus_";
+           return "ru_";
 
        return "";
     }
