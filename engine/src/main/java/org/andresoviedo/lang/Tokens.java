@@ -43,6 +43,23 @@ public class Tokens
     static public final String map = "The route of Dr. Zabolotny's expedition";
     static public final String microscope = "Microscope";
 
+    // Misc messages
+    static public final String load_complete = "Loaded - ";
+    static public final String seconds = "secs";
+    static public final String AnimationOn = "Animation On";
+    static public final String AnimationStopped = "Animation Stopped";
+    static public final String LoadingGeometry = "Loading geometry";
+    static public final String ProccessGeometries = "Processing geometries...";
+    static public final String LoadingFile = "Loading file...";
+    static public final String LoadingVisualNodes = "Loading visual nodes...";
+    static public final String LoadingMaterials = "Loading materials...";
+    static public final String LoadingVisualScene = "Loading visual scene...";
+    static public final String LoadingTextures = "Loading textures...";
+    static public final String LoadingSkinningData = "Loading skinning data...";
+    static public final String LoadingJoints = "Loading joints...";
+    static public final String LoadingAnimation = "Loading animation...";
+    static public final String ProcessingNormals = "Processing normals...";
+
     static public final String aboutDescription = new StringBuilder()
             .append("    The National Museum of Medicine of Ukraine is one of the largest medical museums in Ukraine and Europe.\n")
             .append("The museum presents the development of medicine in Ukraine from ancient times till present day.")

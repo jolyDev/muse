@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.widget.TextView;
 
+import org.andresoviedo.lang.LanguageManager;
+import org.andresoviedo.lang.Tokens;
 import org.nmmu.R;
 
 import java.io.BufferedReader;
@@ -73,7 +75,7 @@ public class TextActivity extends Activity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            this.dialog.setMessage("Loading...");
+            this.dialog.setMessage(LanguageManager.GetInstance().Get(Tokens.loading));
             this.dialog.setCancelable(false);
             this.dialog.show();
         }

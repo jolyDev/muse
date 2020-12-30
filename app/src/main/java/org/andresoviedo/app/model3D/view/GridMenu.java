@@ -356,7 +356,7 @@ public class GridMenu extends Activity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            this.dialog.setMessage("Loading...");
+            this.dialog.setMessage(LanguageManager.GetInstance().Get(Tokens.loading));
             this.dialog.setCancelable(false);
             this.dialog.show();
         }
@@ -654,7 +654,7 @@ public class GridMenu extends Activity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            this.dialog.setMessage("Loading...");
+            this.dialog.setMessage(lang.Get(Tokens.loading));
             this.dialog.setCancelable(false);
             this.dialog.show();
         }
@@ -768,7 +768,7 @@ public class GridMenu extends Activity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            this.dialog.setMessage("Loading...");
+            this.dialog.setMessage(lang.Get(Tokens.loading));
             this.dialog.setCancelable(false);
             this.dialog.show();
         }

@@ -21,6 +21,8 @@ import org.andresoviedo.android_3d_model_engine.services.collada.ColladaLoaderTa
 import org.andresoviedo.android_3d_model_engine.services.stl.STLLoaderTask;
 import org.andresoviedo.android_3d_model_engine.services.wavefront.WavefrontLoaderTask;
 import org.andresoviedo.android_3d_model_engine.view.ModelSurfaceView;
+import org.andresoviedo.lang.LanguageManager;
+import org.andresoviedo.lang.Tokens;
 import org.andresoviedo.util.android.ContentUtils;
 import org.andresoviedo.util.event.EventListener;
 import org.andresoviedo.util.io.IOUtils;
@@ -410,11 +412,11 @@ public class SceneLoader implements LoadListener, EventListener {
         if (!this.doAnimation) {
             this.doAnimation = true;
             this.showBindPose = false;
-            makeToastText("Animation on", Toast.LENGTH_SHORT);
+            makeToastText(LanguageManager.GetInstance().Get(Tokens.AnimationOn), Toast.LENGTH_SHORT);
         } else {
             this.doAnimation = false;
             this.showBindPose = true;
-            makeToastText("Bind pose", Toast.LENGTH_SHORT);
+            makeToastText(LanguageManager.GetInstance().Get(Tokens.AnimationStopped), Toast.LENGTH_SHORT);
         }
     }
 
@@ -636,8 +638,8 @@ public class SceneLoader implements LoadListener, EventListener {
         }
 
         // notify user
-        final String elapsed = (SystemClock.uptimeMillis() - startTime) / 1000 + " secs";
-        makeToastText("Load complete (" + elapsed + ")", Toast.LENGTH_LONG);
+        final String elapsed = (SystemClock.uptimeMillis() - startTime) / 1000 + LanguageManager.GetInstance().Get(Tokens.seconds) ;
+        makeToastText(LanguageManager.GetInstance().Get(Tokens.load_complete) + elapsed, Toast.LENGTH_LONG);
 
         // clear thread local
         ContentUtils.setThreadActivity(null);

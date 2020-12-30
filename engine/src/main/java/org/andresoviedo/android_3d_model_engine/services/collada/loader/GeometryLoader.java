@@ -6,6 +6,8 @@ import org.andresoviedo.android_3d_model_engine.model.Element;
 import org.andresoviedo.android_3d_model_engine.services.collada.entities.MeshData;
 import org.andresoviedo.android_3d_model_engine.services.collada.entities.Vertex;
 import org.andresoviedo.android_3d_model_engine.util.HoleCutter;
+import org.andresoviedo.lang.LanguageManager;
+import org.andresoviedo.lang.Tokens;
 import org.andresoviedo.util.xml.XmlNode;
 
 import java.util.ArrayList;
@@ -65,7 +67,7 @@ public class GeometryLoader {
             return null;
         }
 
-        Log.i("GeometryLoader", "Loading geometry '" + geometryId + " (" + geometryName + ")'...");
+        Log.i("GeometryLoader", LanguageManager.GetInstance().Get(Tokens.LoadingGeometry) + geometryId + " (" + geometryName + ")'...");
 
         final List<List<Integer>> oldElements = new ArrayList<>();
 

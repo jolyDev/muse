@@ -145,7 +145,7 @@ public class SimpleScannerActivity extends Activity implements ZXingScannerView.
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            this.dialog.setMessage("Loading...");
+            this.dialog.setMessage(LanguageManager.GetInstance().Get(Tokens.loading));
             this.dialog.setCancelable(false);
             this.dialog.show();
         }
