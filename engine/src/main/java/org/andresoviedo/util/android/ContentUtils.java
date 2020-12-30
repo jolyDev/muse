@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
+import android.view.Gravity;
+import android.widget.TextView;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -191,7 +193,10 @@ public class ContentUtils {
         builder.setMessage(message);
         builder.setPositiveButton(positiveButtonLabel, listener);
         builder.setNegativeButton(negativeButtonLabel, listener);
-        builder.create().show();
+        AlertDialog dialog = builder.create();
+        TextView messageView = (TextView)dialog.findViewById(android.R.id.message);
+        messageView.setGravity(Gravity.CENTER);
+        dialog.show();
     }
 
     public static void showListDialog(Activity activity, String title, String[] options, DialogInterface

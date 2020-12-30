@@ -41,6 +41,8 @@ import org.andresoviedo.android_3d_model_engine.model.Object3DData;
 import org.andresoviedo.android_3d_model_engine.services.LoadListener;
 import org.andresoviedo.android_3d_model_engine.services.collada.entities.MeshData;
 import org.andresoviedo.android_3d_model_engine.services.collada.entities.Vertex;
+import org.andresoviedo.lang.LanguageManager;
+import org.andresoviedo.lang.Tokens;
 import org.andresoviedo.util.android.ContentUtils;
 import org.andresoviedo.util.io.IOUtils;
 
@@ -114,13 +116,13 @@ public class WavefrontLoader {
             Log.i("WavefrontLoader", "Processing geometries... ");
 
             // notify listener
-            callback.onProgress("Processing geometries...");
+            callback.onProgress(LanguageManager.GetInstance().Get(Tokens.ProccessGeometries));
 
             // proces all meshes
             for (MeshData meshData : meshes) {
 
                 // notify listener
-                callback.onProgress("Processing normals...");
+                callback.onProgress(LanguageManager.GetInstance().Get(Tokens.ProcessingNormals));
 
                 // fix missing or wrong normals
                 meshData.fixNormals();
@@ -145,7 +147,7 @@ public class WavefrontLoader {
                 callback.onLoad(data3D);
 
                 // notify listener
-                callback.onProgress("Loading materials...");
+                callback.onProgress(LanguageManager.GetInstance().Get(Tokens.LoadingMaterials));
 
                 // load colors and textures
                 loadMaterials(meshData);

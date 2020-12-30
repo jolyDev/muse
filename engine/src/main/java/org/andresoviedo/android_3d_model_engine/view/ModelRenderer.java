@@ -193,7 +193,7 @@ public class ModelRenderer implements GLSurfaceView.Renderer {
 
     // skybox
     private boolean isDrawSkyBox = true;
-    private int isUseskyBoxId = 0;
+    public static int isUseskyBoxId;
     private final float[] projectionMatrixSkyBox = new float[16];
     private final float[] viewMatrixSkyBox = new float[16];
     private Object3DData[] skyBoxes3D = null;
@@ -248,7 +248,7 @@ public class ModelRenderer implements GLSurfaceView.Renderer {
 
     public void toggleSkyBox() {
         isUseskyBoxId++;
-        if (isUseskyBoxId >= 8) {
+        if (isUseskyBoxId >= SkyBox.skybox_count) {
             isUseskyBoxId = 0;
         }
         Log.i("ModelRenderer", "Toggled skybox. Idx: " + isUseskyBoxId);
@@ -469,7 +469,7 @@ public class ModelRenderer implements GLSurfaceView.Renderer {
                         skyBoxes3D[skyBoxId] = SkyBox.build(SkyBox.getSkyBox(skyBoxId));
                     } else {
                         Log.e("ModelRenderer", "Error loading sky box textures to GPU. ");
-                        isDrawSkyBox = false;
+
                     }
 
                 }
@@ -482,7 +482,7 @@ public class ModelRenderer implements GLSurfaceView.Renderer {
                 basicShader.draw(skyBoxes3D[skyBoxId], projectionMatrix, viewMatrixSkyBox, skyBoxes3D[skyBoxId].getMaterial().getTextureId(), null, cameraPosInWorldSpace);
             } catch (Throwable ex) {
                 Log.e("ModelRenderer", "Error rendering sky box. " + ex.getMessage(), ex);
-                isDrawSkyBox = false;
+
             }
             GLES20.glDepthMask(true);
         }

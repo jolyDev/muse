@@ -5,6 +5,8 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 
 import org.andresoviedo.android_3d_model_engine.model.Object3DData;
+import org.andresoviedo.lang.LanguageManager;
+import org.andresoviedo.lang.Tokens;
 
 import java.net.URI;
 import java.util.List;
@@ -43,7 +45,7 @@ public abstract class LoaderTask extends AsyncTask<Void, String, List<Object3DDa
 	@Override
 	protected void onPreExecute() {
 		super.onPreExecute();
-		this.dialog.setMessage("Loading...");
+		this.dialog.setMessage(LanguageManager.GetInstance().Get(Tokens.loading));
 		this.dialog.setCancelable(false);
 		//this.dialog.getWindow().setGravity(Gravity.BOTTOM);
 		this.dialog.show();

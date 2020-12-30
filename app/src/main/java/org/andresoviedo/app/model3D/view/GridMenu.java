@@ -7,6 +7,7 @@ import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -19,8 +20,12 @@ import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
 
+import com.google.zxing.Result;
+
+import org.andresoviedo.android_3d_model_engine.objects.SkyBox;
 import org.andresoviedo.android_3d_model_engine.services.collada.ColladaLoader;
 import org.andresoviedo.android_3d_model_engine.services.wavefront.WavefrontLoader;
+import org.andresoviedo.android_3d_model_engine.view.ModelRenderer;
 import org.andresoviedo.app.model3D.Atlas.AtlasActivity;
 import org.andresoviedo.app.model3D.DevTools.ArCoreHelper;
 import org.andresoviedo.app.model3D.DevTools.LinkConventer;
@@ -34,6 +39,7 @@ import org.andresoviedo.util.android.AssetUtils;
 import org.andresoviedo.util.android.ContentUtils;
 import org.andresoviedo.util.android.FileUtils;
 import org.andresoviedo.util.view.TextActivity;
+import org.apache.commons.io.FilenameUtils;
 import org.nmmu.R;
 
 import java.io.File;
@@ -41,9 +47,14 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
+import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 import static com.google.ar.core.ArCoreApk.InstallStatus.INSTALLED;
 
@@ -65,6 +76,12 @@ public class GridMenu extends Activity {
     private static final String SUPPORTED_FILE_TYPES_REGEX = "(?i).*\\.(obj|stl|dae)";
     private static final String REPO_URL = "https://github.com/andresoviedo/android-3D-model-viewer/raw/master/models/index";
 
+    private static GridMenu main = null;
+
+    public static GridMenu getThis() {
+        return main;
+    }
+
     /**
      * Load file user data
      */
@@ -73,7 +90,8 @@ public class GridMenu extends Activity {
     SharedPreferences sPref;
     public static ProgressDialog atlas_loading_dialog = null;
     private final String prefsId = "ui";
-    private final String languageId = "style";
+    private final String languageId = "lang";
+    private final String SkyBoxId = "skyboxID";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +107,7 @@ public class GridMenu extends Activity {
         UpdateMenuItems();
 
         addActionListeners();
-
+        main = GridMenu.this;
     }
 
     private void addActionListeners() {
@@ -119,7 +137,7 @@ public class GridMenu extends Activity {
                 });
             else if (isARModeOn && option.equals(lang.Get(Tokens.AR)))
                 container.setOnClickListener((View view)->{
-                    AR();
+                    new ObjSelectorTaskAR().execute();
                 });
             else if (option.equals(lang.Get(Tokens.atlas)))
                 container.setOnClickListener((View view)->{
@@ -127,7 +145,7 @@ public class GridMenu extends Activity {
                 });
             else if (option.equals(lang.Get(Tokens.viewItems)))
                 container.setOnClickListener((View view)->{
-                    new GridMenu.ObjSelectorTask(NetworkManager.GitCompatIndexLink).execute();
+                    new ObjSelectorTask().execute();
                 });
             else if(option.equals(lang.Get(Tokens.scanQR)))
                 container.setOnClickListener((View view)->{
@@ -147,6 +165,7 @@ public class GridMenu extends Activity {
                 });
             else if (option.equals(lang.Get(Tokens.exit)))
                 container.setOnClickListener((View view)->{
+                    _saveLanguagePreferences();
                     finishAndRemoveTask();
                 });
         }
@@ -159,6 +178,7 @@ public class GridMenu extends Activity {
     {
         sPref = getSharedPreferences(prefsId, MODE_PRIVATE);
         lang.code = sPref.getInt(languageId, lang.ENG);
+        ModelRenderer.isUseskyBoxId = sPref.getInt(SkyBoxId, 0);
     }
 
     public void UpdateMenuItems()
@@ -194,10 +214,7 @@ public class GridMenu extends Activity {
                         // if(obj == null)
                         //     return;
 
-                        //ArCoreHelper.showArObject(
-                        // getApplicationContext(),
-                        // obj.ar_link,
-                        // lang.Get(obj.name));
+
                     });
         }
     }
@@ -223,6 +240,7 @@ public class GridMenu extends Activity {
     {
         Intent qrCodeIntent = new Intent(GridMenu.this.getApplicationContext(), SimpleScannerActivity.class);
         qrCodeIntent.putExtra(SimpleScannerActivity.AR_Status, isAR);
+        qrCodeIntent.putExtra("package", getPackageName());
         GridMenu.this.startActivityForResult(qrCodeIntent, REQUEST_CODE_QR_CODE);
     }
 
@@ -259,6 +277,7 @@ public class GridMenu extends Activity {
         sPref = getSharedPreferences(prefsId, MODE_PRIVATE);
         SharedPreferences.Editor editor = sPref.edit();
         editor.putInt(languageId, lang.code);
+        editor.putInt(SkyBoxId, ModelRenderer.isUseskyBoxId);
         editor.apply();
     }
 
@@ -343,7 +362,7 @@ public class GridMenu extends Activity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            this.dialog.setMessage("Loading...");
+            this.dialog.setMessage(LanguageManager.GetInstance().Get(Tokens.loading));
             this.dialog.setCancelable(false);
             this.dialog.show();
         }
@@ -629,11 +648,11 @@ public class GridMenu extends Activity {
     public class ObjSelectorTask extends AsyncTask<Void, Integer, List<String>> {
 
         private final ProgressDialog dialog;
-        private String link = "";
+        private String link = NetworkManager.GetInstance().GitCompatIndexLink;
         private String[] localItems = MenuItemsHolder.GetLocalObjectsMenuItems();
         private String[] remoteItems = null;
 
-        public ObjSelectorTask(String link) {
+        public ObjSelectorTask() {
             this.link = link;
             this.dialog = new ProgressDialog(GridMenu.this);
         }
@@ -641,14 +660,16 @@ public class GridMenu extends Activity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            this.dialog.setMessage("Loading...");
+            this.dialog.setMessage(lang.Get(Tokens.loading));
             this.dialog.setCancelable(false);
             this.dialog.show();
         }
 
         @Override
         protected List<String> doInBackground(Void... voids) {
-            return ContentUtils.getIndex(link);
+            List<String> result = ContentUtils.getIndex(link);
+            ContentUtils.UpdateAssetsList(result);
+            return result;
         }
 
         private String[] GetRemoteDialogList(List<String> strings)
@@ -724,17 +745,77 @@ public class GridMenu extends Activity {
                 dialog.dismiss();
             }
             if (strings == null) {
-                Toast.makeText(GridMenu.this, "Couldn't load repo index", Toast.LENGTH_LONG).show();
+                Toast.makeText(GridMenu.this, "No internet!", Toast.LENGTH_LONG).show();
                 return;
             }
 
             ContentUtils.showListDialog(GridMenu.this, LanguageManager.GetInstance().Get(Tokens.items),
                     GetDialogItemsList(strings),
                     (dialog, which) -> {
-                        ContentUtils.UpdateAssetsList(strings);
                         ClickHandler(which, strings);
                     });
         }
     }
 
+    ///////////////////////////////////////////////////
+    /////////// Loader Task AR /////////////////////////
+    ///////////////////////////////////////////////////
+
+    public class ObjSelectorTaskAR extends AsyncTask<Void, Integer, List<String>> {
+
+        private final ProgressDialog dialog;
+        private String link = NetworkManager.GetInstance().GitARIndexLink;
+        private String[] remoteItems = null;
+
+        public ObjSelectorTaskAR() {
+            this.dialog = new ProgressDialog(GridMenu.this);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            this.dialog.setMessage(lang.Get(Tokens.loading));
+            this.dialog.setCancelable(false);
+            this.dialog.show();
+        }
+
+        @Override
+        protected List<String> doInBackground(Void... voids) {
+            List<String> result = ContentUtils.getIndex(link);
+            ContentUtils.UpdateAssetsList(result);
+            return result;
+        }
+
+        private String[] GetRemoteDialogList(List<String> strings)
+        {
+            remoteItems = new String[strings.size() / 2];
+
+            for (int i = 0; i < strings.size(); i+=2)
+                remoteItems[i / 2] = strings.get(i).split(",")[LanguageManager.GetInstance().code + 1];
+
+            return remoteItems;
+        }
+
+        @Override
+        protected void onPostExecute(List<String> strings) {
+            if (dialog.isShowing()) {
+                dialog.dismiss();
+            }
+            if (strings == null) {
+                Toast.makeText(GridMenu.this, "No internet!", Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            while (strings.remove(""));
+
+            ContentUtils.showListDialog(GridMenu.this, LanguageManager.GetInstance().Get(Tokens.items),
+                    GetRemoteDialogList(strings),
+                    (dialog, which) -> {
+                        if (which >= 0 && which < remoteItems.length)
+                        ArCoreHelper.showArObject(getApplicationContext(),
+                                strings.get(which * 2 + 1),
+                                strings.get(which * 2));
+                    });
+        }
+    }
 }

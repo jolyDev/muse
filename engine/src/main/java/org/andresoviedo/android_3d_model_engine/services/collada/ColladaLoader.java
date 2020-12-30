@@ -18,6 +18,8 @@ import org.andresoviedo.android_3d_model_engine.services.collada.loader.Geometry
 import org.andresoviedo.android_3d_model_engine.services.collada.loader.MaterialLoader;
 import org.andresoviedo.android_3d_model_engine.services.collada.loader.SkeletonLoader;
 import org.andresoviedo.android_3d_model_engine.services.collada.loader.SkinLoader;
+import org.andresoviedo.lang.LanguageManager;
+import org.andresoviedo.lang.Tokens;
 import org.andresoviedo.util.android.ContentUtils;
 import org.andresoviedo.util.io.IOUtils;
 import org.andresoviedo.util.xml.XmlNode;
@@ -56,7 +58,7 @@ public final class ColladaLoader {
         try (InputStream is = ContentUtils.getInputStream(uri)) {
 
             Log.i("ColladaLoaderTask", "Parsing file... " + uri.toString());
-            callback.onProgress("Loading file...");
+            callback.onProgress(LanguageManager.GetInstance().Get(Tokens.LoadingFile));
             final XmlNode xml = XmlParser.parse(is);
 
             // get authoring tool
@@ -74,7 +76,7 @@ public final class ColladaLoader {
             Log.i("ColladaLoaderTask", "--------------------------------------------------");
             Log.i("ColladaLoaderTask", "Loading visual nodes...");
             Log.i("ColladaLoaderTask", "--------------------------------------------------");
-            callback.onProgress("Loading visual nodes...");
+            callback.onProgress(LanguageManager.GetInstance().Get(Tokens.LoadingVisualNodes));
             Map<String, SkeletonData> skeletons = null;
             try {
                 // load joints
@@ -155,7 +157,7 @@ public final class ColladaLoader {
             Log.i("ColladaLoaderTask", "--------------------------------------------------");
             Log.i("ColladaLoaderTask", "Loading materials...");
             Log.i("ColladaLoaderTask", "--------------------------------------------------");
-            callback.onProgress("Loading materials...");
+            callback.onProgress(LanguageManager.GetInstance().Get(Tokens.LoadingMaterials));
             try {
                 final MaterialLoader materialLoader = new MaterialLoader(xml.getChild("library_materials"),
                         xml.getChild("library_effects"), xml.getChild("library_images"));
@@ -176,7 +178,7 @@ public final class ColladaLoader {
             Log.i("ColladaLoaderTask", "--------------------------------------------------");
             Log.i("ColladaLoaderTask", "Loading visual scene...");
             Log.i("ColladaLoaderTask", "--------------------------------------------------");
-            callback.onProgress("Loading visual scene...");
+            callback.onProgress(LanguageManager.GetInstance().Get(Tokens.LoadingVisualScene));
             //SkeletonData jointsData = null;
             try {
                 // load joints
@@ -306,7 +308,7 @@ public final class ColladaLoader {
                 if (library_controllers != null && !library_controllers.getChildren("controller").isEmpty()) {
 
                     // notify user
-                    callback.onProgress("Loading skinning data...");
+                    callback.onProgress(LanguageManager.GetInstance().Get(Tokens.LoadingSkinningData));
 
                     // load skin data
                     SkinLoader skinLoader = new SkinLoader(library_controllers, 3);
@@ -343,7 +345,7 @@ public final class ColladaLoader {
                     Log.i("ColladaLoaderTask", "--------------------------------------------------");
 
                     // notify user
-                    callback.onProgress("Loading joints...");
+                    callback.onProgress(LanguageManager.GetInstance().Get(Tokens.LoadingJoints));
 
                     // update joint indices
                     // - skinning needs joint indices because auto-generated skinning rely on joint indices
@@ -391,7 +393,7 @@ public final class ColladaLoader {
                     Log.i("ColladaLoaderTask", "--------------------------------------------------");
 
                     // notify user
-                    callback.onProgress("Loading animation...");
+                    callback.onProgress(LanguageManager.GetInstance().Get(Tokens.LoadingAnimation));
 
                     // load animation
                     final Animation animation = loader.load();

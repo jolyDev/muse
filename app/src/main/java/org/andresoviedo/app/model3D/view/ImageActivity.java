@@ -1,6 +1,8 @@
 package org.andresoviedo.app.model3D.view;
 
 import android.app.Activity;
+
+import org.andresoviedo.lang.LanguageManager;
 import org.nmmu.R;
 import org.andresoviedo.lang.Tokens;
 
@@ -34,7 +36,7 @@ public class ImageActivity extends Activity {
         if(b != null){
             try{
                 ProgressDialog dialog = new ProgressDialog(ImageActivity.this);
-                dialog.setMessage("Loading...");
+                dialog.setMessage(LanguageManager.GetInstance().Get(Tokens.loading));
                 dialog.setCancelable(false);
                 dialog.show();
                 String url = b.getString("url");

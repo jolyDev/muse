@@ -3,11 +3,23 @@ package org.andresoviedo.lang;
 import java.util.*;
 
 public class LanguageManager {
-    public final int ENG = 0;
-    public final int UA = 1;
-    public final int RUS = 2;
+    public static final int ENG = 0;
+    public static final int UA = 1;
+    public static final int RUS = 2;
     public final int languages_count = 3;
-    public int code = ENG;
+    public static int code = ENG;
+
+    public static String GetPrefix()
+    {
+       if (code == ENG)
+           return "en_";
+       if (code == UA)
+           return "ua_";
+       if (code == RUS)
+           return "ru_";
+
+       return "";
+    }
 
     public String Get(String key)
     {
@@ -35,11 +47,11 @@ public class LanguageManager {
     private LanguageManager()
     {
         data.put(Tokens.AR, InitUIText(Tokens.AR, "Доповнена реальність", "Дополненная реальность"));
-        data.put(Tokens.scanQR_AR, InitUIText(Tokens.scanQR_AR, "Сканувати QR-код", "Сканировать QR-код"));
+        data.put(Tokens.scanQR_AR, InitUIText(Tokens.scanQR_AR, "QR-код", "QR-код"));
         data.put(Tokens.menu, InitUIText(Tokens.menu, "Меню", "Меню"));
         data.put(Tokens.language, InitUIText(Tokens.language, "Мова", "Язык"));
         data.put(Tokens.settings, InitUIText(Tokens.settings, "Мова", "Язык"));
-        data.put(Tokens.loading, InitUIText(Tokens.loading, "Завантаження", "Загрузка"));
+        data.put(Tokens.loading, InitUIText(Tokens.loading, "Завантаження...", "Загрузка..."));
         data.put(Tokens.english, InitUIText(Tokens.english, Tokens.en_flag + "Англійська", Tokens.en_flag + "Английский"));
         data.put(Tokens.ukrainian, InitUIText(Tokens.ukrainian, Tokens.ua_flag + "Українська", Tokens.ua_flag + "Украинский"));
         data.put(Tokens.russian, InitUIText(Tokens.russian, Tokens.ru_flag + "Російська", Tokens.ru_flag + "Русский"));
@@ -49,7 +61,7 @@ public class LanguageManager {
         data.put(Tokens.exit, InitUIText(Tokens.exit, "Вихід", "Выход"));
         data.put(Tokens.noUrl, InitUIText(Tokens.noUrl, "Ніякого url не було передано до відображувача картинок", "Никакого url не было передано в отображатель картинок"));
         data.put(Tokens.imageNotFound, InitUIText(Tokens.imageNotFound, "Проблеми із завантаженням. Перевірте правильність url", "Проблемы с загрузкой. Проверьте правильность url"));
-        data.put(Tokens.scanQR, InitUIText(Tokens.scanQR, "Сканувати QR-код", "Сканировать QR-код"));
+        data.put(Tokens.scanQR, InitUIText(Tokens.scanQR, "QR-код", "QR-код"));
         data.put(Tokens.viewItems, InitUIText(Tokens.viewItems, "Експонати", "Экспонаты"));
         data.put(Tokens.theme, InitUIText(Tokens.theme, "Стиль", "Стиль"));
         data.put(Tokens.deviceDefault, InitUIText(Tokens.deviceDefault, "Стиль системи", "Стиль системы"));
@@ -61,6 +73,23 @@ public class LanguageManager {
         data.put(Tokens.items, InitUIText(Tokens.items, "Моделі", "Модели"));
         data.put(Tokens.incorrectQR, InitUIText(Tokens.incorrectQR, "Не коректний QR-код", "Не корректный QR-код"));
         data.put(Tokens.museName, InitUIText(Tokens.museName, "НАЦІОНАЛЬНИЙ МУЗЕЙ МЕДИЦИНИ УКРАЇНИ", "НАЦИОНАЛЬНЫЙ МУЗЕЙ МЕДИЦИНЫ УКРАИНЫ"));
+
+        // Load Steps
+        data.put(Tokens.load_complete, InitUIText(Tokens.load_complete, "Завантажено - ", "Загружено - "));
+        data.put(Tokens.seconds, InitUIText(Tokens.seconds, " сек", " сек"));
+        data.put(Tokens.AnimationOn, InitUIText(Tokens.AnimationOn, "анімація активна", "анимация активна"));
+        data.put(Tokens.AnimationStopped, InitUIText(Tokens.AnimationStopped, "анімація призупинена", "анимация приостановлена"));
+
+        data.put(Tokens.ProccessGeometries, InitUIText(Tokens.ProccessGeometries, "Обробка геометрій", "Обработка геометрий"));
+        data.put(Tokens.LoadingFile, InitUIText(Tokens.LoadingFile, "Завантаження файлу", "Загрузка файла"));
+        data.put(Tokens.LoadingVisualNodes, InitUIText(Tokens.LoadingVisualNodes, "Завантаження вузлів","Загрузка узлов"));
+        data.put(Tokens.LoadingMaterials, InitUIText(Tokens.LoadingMaterials, "Завантаження матеріалів", "Загрузка материалов"));
+        data.put(Tokens.LoadingVisualScene, InitUIText(Tokens.LoadingVisualScene, "Завантаження візуальної сцени", "Загрузка визуальной сцены"));
+        data.put(Tokens.LoadingTextures, InitUIText(Tokens.LoadingTextures, "Завантаження текстур", "Загрузка текстур"));
+        data.put(Tokens.LoadingSkinningData, InitUIText(Tokens.LoadingSkinningData, "Завантаження костяка", "Загрузка костяка"));
+        data.put(Tokens.LoadingJoints, InitUIText(Tokens.LoadingJoints, "Завантаження з'єднань", "Загрузка соединений"));
+        data.put(Tokens.LoadingAnimation, InitUIText(Tokens.LoadingAnimation, "Завантаження анімацій", "Загрузка анимации"));
+        data.put(Tokens.ProcessingNormals, InitUIText(Tokens.ProcessingNormals, "Обробка нормалей", "Обработка нормалей"));
 
         // items
         data.put(Tokens.atlas, InitUIText(Tokens.atlas, "Атлас", "Атлас"));

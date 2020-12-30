@@ -17,8 +17,6 @@ import android.widget.ScrollView;
 
 import org.nmmu.R;
 
-import org.andresoviedo.app.model3D.view.SimpleScannerActivity;
-
 import java.util.Arrays;
 
 public class BookLayout extends CustomRelativeLayout {
