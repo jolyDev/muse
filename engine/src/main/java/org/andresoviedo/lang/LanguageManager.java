@@ -76,7 +76,7 @@ public class LanguageManager {
 
         // Load Steps
         data.put(Tokens.load_complete, InitUIText(Tokens.load_complete, "Завантажено - ", "Загружено - "));
-        data.put(Tokens.seconds, InitUIText(Tokens.seconds, "сек", "сек"));
+        data.put(Tokens.seconds, InitUIText(Tokens.seconds, " сек", " сек"));
         data.put(Tokens.AnimationOn, InitUIText(Tokens.AnimationOn, "анімація активна", "анимация активна"));
         data.put(Tokens.AnimationStopped, InitUIText(Tokens.AnimationStopped, "анімація призупинена", "анимация приостановлена"));
 

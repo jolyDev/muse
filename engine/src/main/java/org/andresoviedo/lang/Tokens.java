@@ -45,7 +45,7 @@ public class Tokens
 
     // Misc messages
     static public final String load_complete = "Loaded - ";
-    static public final String seconds = "secs";
+    static public final String seconds = " sec";
     static public final String AnimationOn = "Animation On";
     static public final String AnimationStopped = "Animation Stopped";
     static public final String LoadingGeometry = "Loading geometry";

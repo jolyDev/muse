@@ -22,8 +22,10 @@ import androidx.cardview.widget.CardView;
 
 import com.google.zxing.Result;
 
+import org.andresoviedo.android_3d_model_engine.objects.SkyBox;
 import org.andresoviedo.android_3d_model_engine.services.collada.ColladaLoader;
 import org.andresoviedo.android_3d_model_engine.services.wavefront.WavefrontLoader;
+import org.andresoviedo.android_3d_model_engine.view.ModelRenderer;
 import org.andresoviedo.app.model3D.Atlas.AtlasActivity;
 import org.andresoviedo.app.model3D.DevTools.ArCoreHelper;
 import org.andresoviedo.app.model3D.DevTools.LinkConventer;
@@ -88,7 +90,8 @@ public class GridMenu extends Activity {
     SharedPreferences sPref;
     public static ProgressDialog atlas_loading_dialog = null;
     private final String prefsId = "ui";
-    private final String languageId = "style";
+    private final String languageId = "lang";
+    private final String SkyBoxId = "skyboxID";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,6 +165,7 @@ public class GridMenu extends Activity {
                 });
             else if (option.equals(lang.Get(Tokens.exit)))
                 container.setOnClickListener((View view)->{
+                    _saveLanguagePreferences();
                     finishAndRemoveTask();
                 });
         }
@@ -174,6 +178,7 @@ public class GridMenu extends Activity {
     {
         sPref = getSharedPreferences(prefsId, MODE_PRIVATE);
         lang.code = sPref.getInt(languageId, lang.ENG);
+        ModelRenderer.isUseskyBoxId = sPref.getInt(SkyBoxId, 0);
     }
 
     public void UpdateMenuItems()
@@ -272,6 +277,7 @@ public class GridMenu extends Activity {
         sPref = getSharedPreferences(prefsId, MODE_PRIVATE);
         SharedPreferences.Editor editor = sPref.edit();
         editor.putInt(languageId, lang.code);
+        editor.putInt(SkyBoxId, ModelRenderer.isUseskyBoxId);
         editor.apply();
     }
 
