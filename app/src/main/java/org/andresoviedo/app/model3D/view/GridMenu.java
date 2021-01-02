@@ -788,10 +788,14 @@ public class GridMenu extends Activity {
 
         private String[] GetRemoteDialogList(List<String> strings)
         {
-            remoteItems = new String[strings.size() / 2];
+            int remoteItemsCount = strings.size() / 2 + 1;
+            remoteItems = new String[remoteItemsCount];
 
             for (int i = 0; i < strings.size(); i+=2)
                 remoteItems[i / 2] = strings.get(i).split(",")[LanguageManager.GetInstance().code + 1];
+
+
+            remoteItems[remoteItemsCount - 1] = lang.Get(Tokens.back);
 
             return remoteItems;
         }
@@ -811,7 +815,7 @@ public class GridMenu extends Activity {
             ContentUtils.showListDialog(GridMenu.this, LanguageManager.GetInstance().Get(Tokens.items),
                     GetRemoteDialogList(strings),
                     (dialog, which) -> {
-                        if (which >= 0 && which < remoteItems.length)
+                        if (which >= 0 && which < remoteItems.length - 1)
                         ArCoreHelper.showArObject(getApplicationContext(),
                                 strings.get(which * 2 + 1),
                                 strings.get(which * 2));
