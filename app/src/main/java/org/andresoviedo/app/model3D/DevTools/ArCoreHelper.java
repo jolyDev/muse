@@ -75,6 +75,7 @@ public class ArCoreHelper {
         Log.i("in helper", "link=" + intentUri);
         sceneViewerIntent.setData(intentUri);
         sceneViewerIntent.setPackage("com.google.android.googlequicksearchbox");
+        sceneViewerIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
         context.startActivity(sceneViewerIntent);
     }
 
