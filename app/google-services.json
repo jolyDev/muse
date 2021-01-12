@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "103475971562",
+    "project_id": "muse-1e626",
+    "storage_bucket": "muse-1e626.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:103475971562:android:627eec2e1c50f5e0999e93",
+        "android_client_info": {
+          "package_name": "org.nmmu"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "103475971562-tj9l1bn64jfl3fjutl20ahdp5ssr5e5a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3D1jJKPKRZ4Q307y8cxJRpitGkLEw45U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "103475971562-tj9l1bn64jfl3fjutl20ahdp5ssr5e5a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

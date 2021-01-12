@@ -51,6 +51,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -176,8 +177,18 @@ public class GridMenu extends Activity {
 
     void _loadLanguagePreferences()
     {
+        // default language calculation
+        int code_default_lang = 0;
+        String x = Locale.getDefault().getLanguage();
+        if (x == "ua")
+            code_default_lang = 1;
+        if (x == "ru")
+            code_default_lang = 2;
+
+
         sPref = getSharedPreferences(prefsId, MODE_PRIVATE);
-        lang.code = sPref.getInt(languageId, lang.ENG);
+        lang.code = sPref.getInt(languageId, code_default_lang);
+
         ModelRenderer.isUseskyBoxId = sPref.getInt(SkyBoxId, 0);
     }
 
